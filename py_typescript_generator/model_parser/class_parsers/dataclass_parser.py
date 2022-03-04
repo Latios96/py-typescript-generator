@@ -1,4 +1,3 @@
-from dataclasses import _is_dataclass_instance  # type: ignore
 from dataclasses import fields
 from typing import Type
 
@@ -23,3 +22,12 @@ class DataclassParser(AbstractClassParser):
             return True
         except TypeError:
             return False
+
+    def parse(self, cls: Type) -> PyClass:
+        if not self.accepts_class(cls):
+            raise NotADataclassException(cls)
+        py_fields = []
+        for field in fields(cls):
+            py_fields.append(PyField(name=field.name, type=field.type))
+
+        return PyClass(name=cls.__name__, type=cls, fields=frozenset(py_fields))

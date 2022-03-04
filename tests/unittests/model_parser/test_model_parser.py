@@ -1,5 +1,6 @@
 from typing import Type
 
+import pytest
 from ordered_set import OrderedSet
 
 from py_typescript_generator.model.model import Model
@@ -8,7 +9,10 @@ from py_typescript_generator.model.py_field import PyField
 from py_typescript_generator.model_parser.class_parsers.abstract_class_parser import (
     AbstractClassParser,
 )
-from py_typescript_generator.model_parser.model_parser import ModelParser
+from py_typescript_generator.model_parser.model_parser import (
+    ModelParser,
+    NoParserForClassFoundException,
+)
 
 
 class SimpleDemoClass:
@@ -60,8 +64,17 @@ class DemoParser(AbstractClassParser):
 
 
 # todo single class supplied multiple times
-# todo no parser found for class
 # todo test cyclic dependencies
+
+
+def test_should_raise_exception_if_no_parser_for_class_was_found():
+    class UnknownClass:
+        pass
+
+    model_parser = ModelParser([UnknownClass], [DemoParser()])
+
+    with pytest.raises(NoParserForClassFoundException):
+        model_parser.parse()
 
 
 class TestParseSimpleClass:

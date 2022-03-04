@@ -11,6 +11,13 @@ from py_typescript_generator.model_parser.class_parsers.abstract_class_parser im
 P = TypeVar("P", bound=AbstractClassParser)
 
 
+class NoParserForClassFoundException(RuntimeError):
+    def __init__(self, cls: Type):
+        super(NoParserForClassFoundException, self).__init__(
+            f"No parser found for class {cls}."
+        )
+
+
 class ModelParser:
     def __init__(self, classes_to_parse: List[Type], parsers: List[P]):
         self._classes_to_parse = classes_to_parse
@@ -30,6 +37,8 @@ class ModelParser:
                 visited_classes.add(py_class)
                 self._parse_fields(py_class, visited_classes)
                 return
+
+        raise NoParserForClassFoundException(cls)
 
     def _parse_fields(
         self, py_class: PyClass, visited_classes: OrderedSet[PyClass]

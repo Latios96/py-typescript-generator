@@ -28,6 +28,14 @@ class ClassWithClassWithSimpleDemoClass:
     class_with_simple_demo_class: ClassWithSimpleDemoClass
 
 
+class FirstClassInCycle:
+    second = None  # type:  SecondClassInCycle
+
+
+class SecondClassInCycle:
+    first: FirstClassInCycle
+
+
 PY_CLASS_FOR_SIMPLE_DEMO_CLASS = PyClass(
     name="SimpleDemoClass", type=SimpleDemoClass, fields=frozenset()
 )
@@ -45,6 +53,18 @@ PY_CLASS_FOR_CLASS_WITH_CLASS_WITH_SIMPLE_DEMO_CLASS = PyClass(
     ),
 )
 
+PY_CLASS_FOR_FIRST_CLASS_IN_CYCLE = PyClass(
+    name="FirstClassInCycle",
+    type=FirstClassInCycle,
+    fields=frozenset({PyField(name="second", type=SecondClassInCycle)}),
+)
+
+PY_CLASS_FOR_SECOND_CLASS_IN_CYCLE = PyClass(
+    name="SecondClassInCycle",
+    type=SecondClassInCycle,
+    fields=frozenset({PyField(name="first", type=FirstClassInCycle)}),
+)
+
 
 class DemoParser(AbstractClassParser):
     def accepts_class(self, cls: Type) -> bool:
@@ -52,6 +72,8 @@ class DemoParser(AbstractClassParser):
             SimpleDemoClass,
             ClassWithSimpleDemoClass,
             ClassWithClassWithSimpleDemoClass,
+            FirstClassInCycle,
+            SecondClassInCycle,
         }
 
     def parse(self, cls: Type) -> PyClass:
@@ -61,10 +83,11 @@ class DemoParser(AbstractClassParser):
             return PY_CLASS_FOR_CLASS_WITH_SIMPLE_DEMO_CLASS
         elif cls == ClassWithClassWithSimpleDemoClass:
             return PY_CLASS_FOR_CLASS_WITH_CLASS_WITH_SIMPLE_DEMO_CLASS
+        elif cls == FirstClassInCycle:
+            return PY_CLASS_FOR_FIRST_CLASS_IN_CYCLE
+        elif cls == SecondClassInCycle:
+            return PY_CLASS_FOR_SECOND_CLASS_IN_CYCLE
         raise ValueError(f"Unsupported class: {cls}")
-
-
-# todo test cyclic dependencies
 
 
 def test_should_raise_exception_if_no_parser_for_class_was_found():
@@ -150,3 +173,30 @@ class TestClassWithClassWithSimpleDemoClass:
                 ]
             )
         )
+
+
+@pytest.mark.parametrize(
+    "class_combinations,parsed_order",
+    [
+        (
+            [FirstClassInCycle],
+            [PY_CLASS_FOR_FIRST_CLASS_IN_CYCLE, PY_CLASS_FOR_SECOND_CLASS_IN_CYCLE],
+        ),
+        (
+            [SecondClassInCycle],
+            [
+                PY_CLASS_FOR_SECOND_CLASS_IN_CYCLE,
+                PY_CLASS_FOR_FIRST_CLASS_IN_CYCLE,
+            ],
+        ),
+        (
+            [FirstClassInCycle, SecondClassInCycle],
+            [PY_CLASS_FOR_FIRST_CLASS_IN_CYCLE, PY_CLASS_FOR_SECOND_CLASS_IN_CYCLE],
+        ),
+    ],
+)
+def test_parsing_cycle_should_terminate(class_combinations, parsed_order):
+    model_parser = ModelParser(class_combinations, [DemoParser()])
+
+    model = model_parser.parse()
+    assert model == Model(classes=OrderedSet(parsed_order))

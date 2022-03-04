@@ -63,7 +63,6 @@ class DemoParser(AbstractClassParser):
         raise ValueError(f"Unsupported class: {cls}")
 
 
-# todo single class supplied multiple times
 # todo test cyclic dependencies
 
 
@@ -80,6 +79,15 @@ def test_should_raise_exception_if_no_parser_for_class_was_found():
 class TestParseSimpleClass:
     def test_model_should_contain_just_the_simple_class(self):
         model_parser = ModelParser([SimpleDemoClass], [DemoParser()])
+
+        model = model_parser.parse()
+
+        assert model == Model(classes=[PY_CLASS_FOR_SIMPLE_DEMO_CLASS])
+
+    def test_model_should_contain_just_the_simple_class_even_if_supplied_two_timed(
+        self,
+    ):
+        model_parser = ModelParser([SimpleDemoClass, SimpleDemoClass], [DemoParser()])
 
         model = model_parser.parse()
 

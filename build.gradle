@@ -1,0 +1,116 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+}
+
+plugins {
+    id 'ru.vyarus.use-python' version '2.3.0'
+    id "com.star-zero.gradle.githook" version "1.2.1"
+}
+
+allprojects {
+    repositories {
+        mavenCentral()
+    }
+}
+
+task install{
+}
+task check{
+}
+task build{
+
+}
+
+python.installVirtualenv = true
+python.envPath = ".venv"
+
+python{
+	pip "poetry:1.1.13"
+}
+
+githook {
+    hooks {
+        "pre-commit" {
+            task = "formatCheck"
+        }
+        "pre-push" {
+            task = "lint"
+        }
+    }
+}
+
+def pythonSourceFolders = ['py_typescript_generator', 'tests']
+
+task poetryInstall(type: PythonTask) {
+	dependsOn 'pipInstall'
+    command = "-m poetry install"
+    inputs.file('pyproject.toml')
+    inputs.file('poetry.lock')
+    outputs.file('poetryInstallOutput')
+}
+
+task pythonInstall{ // TODO inline this
+    dependsOn 'poetryInstall'
+}
+
+task pythonUnitTests(type: PythonTask){
+    dependsOn 'pythonInstall'
+    command = "-m pytest tests/unittests -v --html=tests/reports/unittests.html --self-contained-html"
+    pythonSourceFolders.forEach { inputs.dir(it) }
+    outputs.file('pytestOutput')
+}
+
+
+task poetryBuild(type: PythonTask){
+    dependsOn 'pythonInstall'
+    dependsOn 'pythonUnitTests'
+    command = '-m poetry build'
+    inputs.dir('py_typescript_generator')
+    inputs.file('pyproject.toml')
+    inputs.file('poetry.lock')
+    outputs.dir('dist')
+}
+
+install.dependsOn('pythonInstall')
+check.dependsOn('pythonUnitTests')
+check.dependsOn('pythonIntegrationTests')
+build.dependsOn('poetryBuild')
+
+task formatPythonCheck(type: PythonTask){
+    command = "-m black ${pythonSourceFolders.join(' ')} --check"
+    pythonSourceFolders.forEach { inputs.dir(it) }
+    outputs.file('formatPythonCheck')
+}
+
+task formatPython(type:PythonTask){
+    command = "-m black ${pythonSourceFolders.join(' ')}"
+    pythonSourceFolders.forEach { inputs.dir(it) }
+    outputs.file('formatPython')
+}
+
+task lintPython(type:PythonTask){
+    command = "-m flake8 ${pythonSourceFolders.join(' ')}"
+    pythonSourceFolders.forEach { inputs.dir(it) }
+    outputs.file('lintPython')
+}
+
+task mypyCheck(type:PythonTask){
+    command = "-m mypy -p ${pythonSourceFolders.join(' ')}"
+    pythonSourceFolders.forEach { inputs.dir(it) }
+    outputs.file('mypyCheck')
+}
+
+task formatCheck{
+    dependsOn 'formatPythonCheck'
+}
+
+task format{
+    dependsOn 'formatPython'
+}
+
+task lint{
+    dependsOn 'lintPython'
+    dependsOn 'mypyCheck'
+}

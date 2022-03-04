@@ -12,6 +12,7 @@ from py_typescript_generator.model_parser.class_parsers.abstract_class_parser im
 from py_typescript_generator.model_parser.model_parser import (
     ModelParser,
     NoParserForClassFoundException,
+    IsNotAClassException,
 )
 
 
@@ -73,6 +74,13 @@ def test_should_raise_exception_if_no_parser_for_class_was_found():
     model_parser = ModelParser([UnknownClass], [DemoParser()])
 
     with pytest.raises(NoParserForClassFoundException):
+        model_parser.parse()
+
+
+def test_should_raise_exception_if_passed_thing_is_not_a_class():
+    model_parser = ModelParser([lambda x: x], [DemoParser()])
+
+    with pytest.raises(IsNotAClassException):
         model_parser.parse()
 
 

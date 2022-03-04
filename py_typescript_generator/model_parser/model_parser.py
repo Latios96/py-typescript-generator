@@ -1,4 +1,5 @@
-from typing import List, Type, TypeVar
+import inspect
+from typing import List, Type, TypeVar, Any
 
 from ordered_set import OrderedSet
 
@@ -8,6 +9,10 @@ from py_typescript_generator.model_parser.class_parsers.abstract_class_parser im
     AbstractClassParser,
 )
 
+import logging
+
+logger = logging.getLogger(__name__)
+
 P = TypeVar("P", bound=AbstractClassParser)
 
 
@@ -15,6 +20,13 @@ class NoParserForClassFoundException(RuntimeError):
     def __init__(self, cls: Type):
         super(NoParserForClassFoundException, self).__init__(
             f"No parser found for class {cls}."
+        )
+
+
+class IsNotAClassException(RuntimeError):
+    def __init__(self, object: Any):
+        super(IsNotAClassException, self).__init__(
+            f"Passed object {object} is not a class."
         )
 
 
@@ -31,6 +43,9 @@ class ModelParser:
         return Model(classes=visited_classes)
 
     def _parse_class(self, cls: Type, visited_classes: OrderedSet[PyClass]) -> None:
+        if not inspect.isclass(cls):
+            raise IsNotAClassException(cls)
+
         for parser in self._parsers:
             if parser.accepts_class(cls):
                 py_class = parser.parse(cls)

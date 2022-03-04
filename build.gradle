@@ -73,11 +73,6 @@ task poetryBuild(type: PythonTask){
     outputs.dir('dist')
 }
 
-install.dependsOn('pythonInstall')
-check.dependsOn('pythonUnitTests')
-check.dependsOn('pythonIntegrationTests')
-build.dependsOn('poetryBuild')
-
 task formatPythonCheck(type: PythonTask){
     command = "-m black ${pythonSourceFolders.join(' ')} --check"
     pythonSourceFolders.forEach { inputs.dir(it) }
@@ -97,7 +92,7 @@ task lintPython(type:PythonTask){
 }
 
 task mypyCheck(type:PythonTask){
-    command = "-m mypy -p ${pythonSourceFolders.join(' ')}"
+    command = "-m mypy -p ${pythonSourceFolders.join(' -p ')}"
     pythonSourceFolders.forEach { inputs.dir(it) }
     outputs.file('mypyCheck')
 }
@@ -114,3 +109,9 @@ task lint{
     dependsOn 'lintPython'
     dependsOn 'mypyCheck'
 }
+
+install.dependsOn('pythonInstall')
+check.dependsOn('pythonUnitTests')
+check.dependsOn('pythonIntegrationTests')
+build.dependsOn('poetryBuild')
+build.dependsOn('lintPython')

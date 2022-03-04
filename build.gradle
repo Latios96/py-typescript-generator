@@ -74,24 +74,28 @@ task poetryBuild(type: PythonTask){
 }
 
 task formatPythonCheck(type: PythonTask){
+    dependsOn 'pythonInstall'
     command = "-m black ${pythonSourceFolders.join(' ')} --check"
     pythonSourceFolders.forEach { inputs.dir(it) }
     outputs.file('formatPythonCheck')
 }
 
 task formatPython(type:PythonTask){
+    dependsOn 'pythonInstall'
     command = "-m black ${pythonSourceFolders.join(' ')}"
     pythonSourceFolders.forEach { inputs.dir(it) }
     outputs.file('formatPython')
 }
 
 task lintPython(type:PythonTask){
+    dependsOn 'pythonInstall'
     command = "-m flake8 ${pythonSourceFolders.join(' ')}"
     pythonSourceFolders.forEach { inputs.dir(it) }
     outputs.file('lintPython')
 }
 
 task mypyCheck(type:PythonTask){
+    dependsOn 'pythonInstall'
     command = "-m mypy -p ${pythonSourceFolders.join(' -p ')}"
     pythonSourceFolders.forEach { inputs.dir(it) }
     outputs.file('mypyCheck')

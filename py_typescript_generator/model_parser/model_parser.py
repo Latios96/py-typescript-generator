@@ -6,7 +6,6 @@ from typing import (
     Type,
     TypeVar,
     Any,
-    get_args,
     Generic,
     get_origin,
     Union,
@@ -16,6 +15,7 @@ from uuid import UUID
 
 
 from ordered_set import OrderedSet
+from typing_inspect import get_args
 
 from py_typescript_generator.model.model import Model
 from py_typescript_generator.model.py_class import PyClass

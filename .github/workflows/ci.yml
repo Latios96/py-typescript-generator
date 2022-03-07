@@ -4,6 +4,7 @@ on: [push]
 
 jobs:
   build_ubuntu:
+    name: Ubuntu Python ${{ matrix.python }}
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -33,6 +34,7 @@ jobs:
           ./dist/*.whl
 
   build_windows:
+    name: Windows Python ${{ matrix.python }}
     runs-on: windows-latest
     strategy:
       matrix:

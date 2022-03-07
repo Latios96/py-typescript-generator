@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from typing import List, Dict
 
 import pytest
 
@@ -67,3 +68,59 @@ def test_parsing_a_non_dataclass_should_raise_NotADataclassException():
 
     with pytest.raises(NotADataclassException):
         dataclass_parser.parse(NotADataclass)
+
+
+def test_parse_dataclass_with_str_list():
+    @dataclass
+    class MyDataClass:
+        str_list: List[str]
+
+    dataclass_parser = DataclassParser()
+
+    py_class = dataclass_parser.parse(MyDataClass)
+
+    assert py_class == PyClass(
+        name="MyDataClass",
+        type=MyDataClass,
+        fields=frozenset([PyField(name="str_list", type=List[str])]),
+    )
+
+
+def test_parse_dataclass_with_custom_class_list():
+    class CustomClass:
+        pass
+
+    @dataclass
+    class MyDataClass:
+        the_list: List[CustomClass]
+
+    dataclass_parser = DataclassParser()
+
+    py_class = dataclass_parser.parse(MyDataClass)
+
+    assert py_class == PyClass(
+        name="MyDataClass",
+        type=MyDataClass,
+        fields=frozenset([PyField(name="the_list", type=List[CustomClass])]),
+    )
+
+
+def test_parse_dataclass_with_nested_generics():
+    class CustomClass:
+        pass
+
+    @dataclass
+    class MyDataClass:
+        the_dict: Dict[str, List[Dict[str, CustomClass]]]
+
+    dataclass_parser = DataclassParser()
+
+    py_class = dataclass_parser.parse(MyDataClass)
+
+    assert py_class == PyClass(
+        name="MyDataClass",
+        type=MyDataClass,
+        fields=frozenset(
+            [PyField(name="the_dict", type=Dict[str, List[Dict[str, CustomClass]]])]
+        ),
+    )

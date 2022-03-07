@@ -1,9 +1,12 @@
 from dataclasses import dataclass
 
+import pytest
+
 from py_typescript_generator.model.py_class import PyClass
 from py_typescript_generator.model.py_field import PyField
 from py_typescript_generator.model_parser.class_parsers.dataclass_parser import (
     DataclassParser,
+    NotADataclassException,
 )
 
 
@@ -54,3 +57,13 @@ def test_should_parse_dataclass_class():
         type=MyDataClass,
         fields=frozenset([PyField(name="value", type=int)]),
     )
+
+
+def test_parsing_a_non_dataclass_should_raise_NotADataclassException():
+    class NotADataclass:
+        pass
+
+    dataclass_parser = DataclassParser()
+
+    with pytest.raises(NotADataclassException):
+        dataclass_parser.parse(NotADataclass)

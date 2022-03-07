@@ -1,5 +1,16 @@
 from datetime import datetime
-from typing import Type, List
+from typing import (
+    Type,
+    List,
+    Set,
+    Dict,
+    Tuple,
+    Union,
+    FrozenSet,
+    DefaultDict,
+    Generic,
+    TypeVar,
+)
 from uuid import UUID
 
 import pytest
@@ -42,6 +53,29 @@ class ClassWithTerminatingType:
     an_int: int
 
 
+class ClassWithStrList:
+    str_list: List[str]
+
+
+class ClassWithStrStrDict:
+    str_dict: Dict[str, str]
+
+
+class ClassWithSimpleDemoClassList:
+    simple_demo_class_list: List[SimpleDemoClass]
+
+
+T = TypeVar("T")
+
+
+class ClassWithGenericMember(Generic[T]):
+    my_member: T
+
+
+class ClassWithDeepNestedGenerics:
+    my_dict: Dict[str, List[Dict[str, SimpleDemoClass]]]
+
+
 PY_CLASS_FOR_SIMPLE_DEMO_CLASS = PyClass(
     name="SimpleDemoClass", type=SimpleDemoClass, fields=frozenset()
 )
@@ -77,6 +111,40 @@ PY_CLASS_FOR_CLASS_WITH_TERMINATING_TYPE = PyClass(
     fields=frozenset({PyField(name="an_int", type=int)}),
 )
 
+PY_CLASS_FOR_CLASS_WITH_STR_LIST = PyClass(
+    name="ClassWithStrList",
+    type=ClassWithStrList,
+    fields=frozenset({PyField(name="str_list", type=List[str])}),
+)
+
+PY_CLASS_FOR_CLASS_WITH_STR_STR_DICT = PyClass(
+    name="ClassWithStrStrDict",
+    type=ClassWithStrStrDict,
+    fields=frozenset({PyField(name="str_dict", type=Dict[str, str])}),
+)
+
+PY_CLASS_FOR_CLASS_WITH_SIMPLE_DEMO_CLASS_LIST = PyClass(
+    name="ClassWithSimpleDemoClassList",
+    type=ClassWithSimpleDemoClassList,
+    fields=frozenset(
+        {PyField(name="simple_demo_class_list", type=List[SimpleDemoClass])}
+    ),
+)
+
+PY_CLASS_FOR_CLASS_WITH_GENERIC_MEMBER = PyClass(
+    name="ClassWithGenericMember",
+    type=ClassWithGenericMember,
+    fields=frozenset({PyField(name="my_member", type=T)}),  # type: ignore
+)
+
+PY_CLASS_FOR_CLASS_WITH_DEEP_NESTED_GENERICS = PyClass(
+    name="ClassWithDeepNestedGenerics",
+    type=ClassWithDeepNestedGenerics,
+    fields=frozenset(
+        {PyField(name="my_dict", type=Dict[str, List[Dict[str, SimpleDemoClass]]])}
+    ),
+)
+
 
 class DemoParser(AbstractClassParser):
     def accepts_class(self, cls: Type) -> bool:
@@ -87,6 +155,11 @@ class DemoParser(AbstractClassParser):
             FirstClassInCycle,
             SecondClassInCycle,
             ClassWithTerminatingType,
+            ClassWithStrList,
+            ClassWithSimpleDemoClassList,
+            ClassWithGenericMember,
+            ClassWithStrStrDict,
+            ClassWithDeepNestedGenerics,
         }
 
     def parse(self, cls: Type) -> PyClass:
@@ -102,6 +175,16 @@ class DemoParser(AbstractClassParser):
             return PY_CLASS_FOR_SECOND_CLASS_IN_CYCLE
         elif cls == ClassWithTerminatingType:
             return PY_CLASS_FOR_CLASS_WITH_TERMINATING_TYPE
+        elif cls == ClassWithStrList:
+            return PY_CLASS_FOR_CLASS_WITH_STR_LIST
+        elif cls == ClassWithSimpleDemoClassList:
+            return PY_CLASS_FOR_CLASS_WITH_SIMPLE_DEMO_CLASS_LIST
+        elif cls == ClassWithGenericMember:
+            return PY_CLASS_FOR_CLASS_WITH_GENERIC_MEMBER
+        elif cls == ClassWithStrStrDict:
+            return PY_CLASS_FOR_CLASS_WITH_STR_STR_DICT
+        elif cls == ClassWithDeepNestedGenerics:
+            return PY_CLASS_FOR_CLASS_WITH_DEEP_NESTED_GENERICS
         raise ValueError(f"Unsupported class: {cls}")
 
 
@@ -220,7 +303,24 @@ def test_parsing_cycle_should_terminate(
 
 
 @pytest.mark.parametrize(
-    "the_type", [int, float, complex, str, bytes, bool, datetime, UUID]
+    "the_type",
+    [
+        int,
+        float,
+        complex,
+        str,
+        bytes,
+        bool,
+        datetime,
+        UUID,
+        List[int],
+        Set[int],
+        Dict[str, str],
+        Tuple[int],
+        Union[str, int],
+        FrozenSet[int],
+        DefaultDict[str, str],
+    ],
 )
 def test_parse_builtin_terminating_types(the_type: Type) -> None:
     class_with_terminating_type = PyClass(
@@ -234,7 +334,6 @@ def test_parse_builtin_terminating_types(the_type: Type) -> None:
             return True
 
         def parse(self, cls: Type) -> PyClass:
-
             return class_with_terminating_type
 
     model_parser = ModelParser(
@@ -244,3 +343,63 @@ def test_parse_builtin_terminating_types(the_type: Type) -> None:
     model = model_parser.parse()
 
     assert model == Model(classes=OrderedSet([class_with_terminating_type]))
+
+
+class TestParseGenericTypes:
+    def test_parse_class_with_string_list(self):
+        model_parser = ModelParser([ClassWithStrList], [DemoParser()])
+
+        model = model_parser.parse()
+        assert model == Model(
+            classes=OrderedSet(
+                [
+                    PY_CLASS_FOR_CLASS_WITH_STR_LIST,
+                ]
+            )
+        )
+
+    def test_parse_class_with_str_str_dict(self):
+        model_parser = ModelParser([ClassWithStrStrDict], [DemoParser()])
+
+        model = model_parser.parse()
+        assert model == Model(
+            classes=OrderedSet(
+                [
+                    PY_CLASS_FOR_CLASS_WITH_STR_STR_DICT,
+                ]
+            )
+        )
+
+    def test_parse_class_with_simple_demo_class_list(self):
+        model_parser = ModelParser([ClassWithSimpleDemoClassList], [DemoParser()])
+
+        model = model_parser.parse()
+        assert model == Model(
+            classes=OrderedSet(
+                [
+                    PY_CLASS_FOR_CLASS_WITH_SIMPLE_DEMO_CLASS_LIST,
+                    PY_CLASS_FOR_SIMPLE_DEMO_CLASS,
+                ]
+            )
+        )
+
+    def test_should_parse_generic_class_with_type_var(self):
+        model_parser = ModelParser([ClassWithGenericMember], [DemoParser()])
+
+        model = model_parser.parse()
+        assert model == Model(
+            classes=OrderedSet([PY_CLASS_FOR_CLASS_WITH_GENERIC_MEMBER])
+        )
+
+    def test_should_parse_deeply_nested_generics(self):
+        model_parser = ModelParser([ClassWithDeepNestedGenerics], [DemoParser()])
+
+        model = model_parser.parse()
+        assert model == Model(
+            classes=OrderedSet(
+                [
+                    PY_CLASS_FOR_CLASS_WITH_DEEP_NESTED_GENERICS,
+                    PY_CLASS_FOR_SIMPLE_DEMO_CLASS,
+                ]
+            )
+        )

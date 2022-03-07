@@ -1,7 +1,19 @@
 import inspect
+from collections import defaultdict
 from datetime import datetime
-from typing import List, Type, TypeVar, Any
+from typing import (
+    List,
+    Type,
+    TypeVar,
+    Any,
+    get_args,
+    Generic,
+    get_origin,
+    Union,
+)
+from typing import _GenericAlias  # type: ignore
 from uuid import UUID
+
 
 from ordered_set import OrderedSet
 
@@ -41,6 +53,13 @@ TERMINATING_CLASSES = {
     bool,
     datetime,
     UUID,
+    list,
+    set,
+    dict,
+    frozenset,
+    tuple,
+    defaultdict,
+    Union,
 }
 
 
@@ -57,11 +76,15 @@ class ModelParser:
         return Model(classes=visited_classes)
 
     def _parse_class(self, cls: Type, visited_classes: OrderedSet[PyClass]) -> None:
-        if not inspect.isclass(cls):
+        if not self._is_class(cls):
             raise IsNotAClassException(cls)
 
-        is_terminating_class = cls in TERMINATING_CLASSES
-        if is_terminating_class:
+        has_generic_args = len(get_args(cls)) > 0
+        if has_generic_args:
+            for arg in get_args(cls):
+                self._parse_class(arg, visited_classes)
+
+        if self._is_terminating_class(cls):
             return
 
         for parser in self._parsers:
@@ -79,3 +102,20 @@ class ModelParser:
         for field in py_class.fields:
             if field.type not in {x.type for x in visited_classes}:
                 self._parse_class(field.type, visited_classes)
+
+    def _is_class(self, cls: Type) -> bool:
+        if (
+            isinstance(cls, _GenericAlias)
+            or isinstance(cls, Generic)  # type: ignore
+            or isinstance(cls, TypeVar)
+        ):
+            return True
+        return inspect.isclass(cls)
+
+    def _is_terminating_class(self, cls: Type) -> bool:
+        origin = get_origin(cls)
+        if origin:
+            return origin in TERMINATING_CLASSES
+        if isinstance(cls, TypeVar):
+            return True
+        return cls in TERMINATING_CLASSES

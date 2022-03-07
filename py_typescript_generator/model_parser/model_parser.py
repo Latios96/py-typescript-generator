@@ -7,7 +7,6 @@ from typing import (
     TypeVar,
     Any,
     Generic,
-    get_origin,
     Union,
 )
 from typing import _GenericAlias  # type: ignore
@@ -17,7 +16,7 @@ from uuid import UUID
 from ordered_set import OrderedSet
 
 # Note: this can be removed once support for Python 3.7 is dropped
-from typing_inspect import get_args  # type: ignore
+from typing_inspect import get_args, get_origin  # type: ignore
 
 from py_typescript_generator.model.model import Model
 from py_typescript_generator.model.py_class import PyClass

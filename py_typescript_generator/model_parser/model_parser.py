@@ -15,6 +15,8 @@ from uuid import UUID
 
 
 from ordered_set import OrderedSet
+
+# Note: this can be removed once support for Python 3.7 is dropped
 from typing_inspect import get_args  # type: ignore
 
 from py_typescript_generator.model.model import Model

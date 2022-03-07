@@ -114,6 +114,14 @@ task lint{
     dependsOn 'mypyCheck'
 }
 
+task poetryUpdate(type: PythonTask){
+    command = '-m poetry update'
+}
+
+task updateDependencies{
+    dependsOn 'poetryUpdate'
+}
+
 install.dependsOn('pythonInstall')
 check.dependsOn('pythonUnitTests')
 check.dependsOn('pythonIntegrationTests')

@@ -1,5 +1,7 @@
 import inspect
+from datetime import datetime
 from typing import List, Type, TypeVar, Any
+from uuid import UUID
 
 from ordered_set import OrderedSet
 
@@ -30,6 +32,18 @@ class IsNotAClassException(RuntimeError):
         )
 
 
+TERMINATING_CLASSES = {
+    int,
+    float,
+    complex,
+    str,
+    bytes,
+    bool,
+    datetime,
+    UUID,
+}
+
+
 class ModelParser:
     def __init__(self, classes_to_parse: List[Type], parsers: List[P]):
         self._classes_to_parse = classes_to_parse
@@ -45,6 +59,10 @@ class ModelParser:
     def _parse_class(self, cls: Type, visited_classes: OrderedSet[PyClass]) -> None:
         if not inspect.isclass(cls):
             raise IsNotAClassException(cls)
+
+        is_terminating_class = cls in TERMINATING_CLASSES
+        if is_terminating_class:
+            return
 
         for parser in self._parsers:
             if parser.accepts_class(cls):

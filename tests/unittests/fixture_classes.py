@@ -175,3 +175,11 @@ def class_with_str_str_dict():
     return ClassFixture(
         cls=ClassWithStrStrDict, py_class=PY_CLASS_FOR_CLASS_WITH_STR_STR_DICT
     )
+
+
+@pytest.fixture
+def class_with_simple_demo_class_list():
+    return ClassFixture(
+        cls=ClassWithSimpleDemoClassList,
+        py_class=PY_CLASS_FOR_CLASS_WITH_SIMPLE_DEMO_CLASS_LIST,
+    )

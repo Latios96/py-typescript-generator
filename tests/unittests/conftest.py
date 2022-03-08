@@ -7,4 +7,5 @@ from tests.unittests.fixture_classes import (  # noqa: F401
     class_with_terminating_type,
     class_with_str_list,
     class_with_str_str_dict,
+    class_with_simple_demo_class_list,
 )

@@ -313,14 +313,20 @@ class TestParseGenericTypes:
             )
         )
 
-    def test_parse_class_with_simple_demo_class_list(self, simple_demo_class):
-        model_parser = ModelParser([ClassWithSimpleDemoClassList], [DemoParser()])
+    def test_parse_class_with_simple_demo_class_list(
+        self,
+        simple_demo_class: ClassFixture,
+        class_with_simple_demo_class_list: ClassFixture,
+    ) -> None:
+        model_parser = ModelParser(
+            [class_with_simple_demo_class_list.cls], [DemoParser()]
+        )
 
         model = model_parser.parse()
         assert model == Model(
             classes=OrderedSet(
                 [
-                    PY_CLASS_FOR_CLASS_WITH_SIMPLE_DEMO_CLASS_LIST,
+                    class_with_simple_demo_class_list.py_class,
                     simple_demo_class.py_class,
                 ]
             )

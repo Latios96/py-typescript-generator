@@ -285,14 +285,16 @@ def test_parse_builtin_terminating_types(
 
 
 class TestParseGenericTypes:
-    def test_parse_class_with_string_list(self):
-        model_parser = ModelParser([ClassWithStrList], [DemoParser()])
+    def test_parse_class_with_string_list(
+        self, class_with_str_list: ClassFixture
+    ) -> None:
+        model_parser = ModelParser([class_with_str_list.cls], [DemoParser()])
 
         model = model_parser.parse()
         assert model == Model(
             classes=OrderedSet(
                 [
-                    PY_CLASS_FOR_CLASS_WITH_STR_LIST,
+                    class_with_str_list.py_class,
                 ]
             )
         )

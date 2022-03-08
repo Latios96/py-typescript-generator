@@ -163,3 +163,8 @@ def class_with_terminating_type():
     return ClassFixture(
         cls=ClassWithTerminatingType, py_class=PY_CLASS_FOR_CLASS_WITH_TERMINATING_TYPE
     )
+
+
+@pytest.fixture
+def class_with_str_list():
+    return ClassFixture(cls=ClassWithStrList, py_class=PY_CLASS_FOR_CLASS_WITH_STR_LIST)

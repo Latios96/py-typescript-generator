@@ -38,6 +38,19 @@ def test_should_compile_class_with_class_with_empty_class(
     )
 
 
+def test_should_compile_classes_with_cycle(first_class_in_cycle, second_class_in_cycle):
+    model = Model.of_classes(
+        [first_class_in_cycle.py_class, second_class_in_cycle.py_class]
+    )
+    model_compiler = TypescriptModelCompiler()
+
+    ts_model = model_compiler.compile(model)
+
+    assert ts_model == TsModel.of_object_types(
+        [first_class_in_cycle.ts_object_type, second_class_in_cycle.ts_object_type]
+    )
+
+
 @pytest.mark.parametrize(
     "fixture_name",
     [

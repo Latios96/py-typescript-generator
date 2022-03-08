@@ -156,3 +156,10 @@ def second_class_in_cycle():
     return ClassFixture(
         cls=SecondClassInCycle, py_class=PY_CLASS_FOR_SECOND_CLASS_IN_CYCLE
     )
+
+
+@pytest.fixture
+def class_with_terminating_type():
+    return ClassFixture(
+        cls=ClassWithTerminatingType, py_class=PY_CLASS_FOR_CLASS_WITH_TERMINATING_TYPE
+    )

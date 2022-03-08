@@ -4,4 +4,5 @@ from tests.unittests.fixture_classes import (  # noqa: F401
     class_with_class_with_simple_demo_class,
     first_class_in_cycle,
     second_class_in_cycle,
+    class_with_terminating_type,
 )

@@ -183,3 +183,11 @@ def class_with_simple_demo_class_list():
         cls=ClassWithSimpleDemoClassList,
         py_class=PY_CLASS_FOR_CLASS_WITH_SIMPLE_DEMO_CLASS_LIST,
     )
+
+
+@pytest.fixture
+def class_with_generic_member():
+    return ClassFixture(
+        cls=ClassWithGenericMember,
+        py_class=PY_CLASS_FOR_CLASS_WITH_GENERIC_MEMBER,
+    )

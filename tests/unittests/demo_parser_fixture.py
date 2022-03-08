@@ -29,12 +29,34 @@ from tests.unittests.fixture_classes import (
     PY_CLASS_FOR_CLASS_WITH_GENERIC_MEMBER,
     PY_CLASS_FOR_CLASS_WITH_STR_STR_DICT,
     PY_CLASS_FOR_CLASS_WITH_DEEP_NESTED_GENERICS,
+    ClassWithFloat,
+    ClassWithStr,
+    ClassWithBytes,
+    ClassWithBool,
+    ClassWithDatetime,
+    ClassWithUUID,
+    ClassWithStrSet,
+    ClassWithStrTuple,
+    ClassWithStrIntUnion,
+    ClassWithStrFrozenSet,
+    ClassWithStrStrDefaultDict,
+    PY_CLASS_FOR_CLASS_WITH_FLOAT,
+    PY_CLASS_FOR_CLASS_WITH_BYTES,
+    PY_CLASS_FOR_CLASS_WITH_STR,
+    PY_CLASS_FOR_CLASS_WITH_BOOL,
+    PY_CLASS_FOR_CLASS_WITH_DATETIME,
+    PY_CLASS_FOR_CLASS_WITH_UUID,
+    PY_CLASS_FOR_CLASS_WITH_STR_SET,
+    PY_CLASS_FOR_CLASS_WITH_STR_TUPLE,
+    PY_CLASS_FOR_CLASS_WITH_STR_INT_UNION,
+    PY_CLASS_FOR_CLASS_WITH_STR_FROZEN_SET,
+    PY_CLASS_FOR_CLASS_WITH_STR_STR_DEFAULT_DICT,
 )
 
 
 class DemoParser(AbstractClassParser):
     def accepts_class(self, cls: Type) -> bool:
-        return cls in {
+        return cls in [
             SimpleDemoClass,
             ClassWithSimpleDemoClass,
             ClassWithClassWithSimpleDemoClass,
@@ -46,7 +68,18 @@ class DemoParser(AbstractClassParser):
             ClassWithGenericMember,
             ClassWithStrStrDict,
             ClassWithDeepNestedGenerics,
-        }
+            ClassWithFloat,
+            ClassWithStr,
+            ClassWithBytes,
+            ClassWithBool,
+            ClassWithDatetime,
+            ClassWithUUID,
+            ClassWithStrSet,
+            ClassWithStrTuple,
+            ClassWithStrIntUnion,
+            ClassWithStrFrozenSet,
+            ClassWithStrStrDefaultDict,
+        ]
 
     def parse(self, cls: Type) -> PyClass:
         if cls == SimpleDemoClass:
@@ -71,6 +104,28 @@ class DemoParser(AbstractClassParser):
             return PY_CLASS_FOR_CLASS_WITH_STR_STR_DICT
         elif cls == ClassWithDeepNestedGenerics:
             return PY_CLASS_FOR_CLASS_WITH_DEEP_NESTED_GENERICS
+        elif cls == ClassWithFloat:
+            return PY_CLASS_FOR_CLASS_WITH_FLOAT
+        elif cls == ClassWithStr:
+            return PY_CLASS_FOR_CLASS_WITH_STR
+        elif cls == ClassWithBytes:
+            return PY_CLASS_FOR_CLASS_WITH_BYTES
+        elif cls == ClassWithBool:
+            return PY_CLASS_FOR_CLASS_WITH_BOOL
+        elif cls == ClassWithDatetime:
+            return PY_CLASS_FOR_CLASS_WITH_DATETIME
+        elif cls == ClassWithUUID:
+            return PY_CLASS_FOR_CLASS_WITH_UUID
+        elif cls == ClassWithStrSet:
+            return PY_CLASS_FOR_CLASS_WITH_STR_SET
+        elif cls == ClassWithStrTuple:
+            return PY_CLASS_FOR_CLASS_WITH_STR_TUPLE
+        elif cls == ClassWithStrIntUnion:
+            return PY_CLASS_FOR_CLASS_WITH_STR_INT_UNION
+        elif cls == ClassWithStrFrozenSet:
+            return PY_CLASS_FOR_CLASS_WITH_STR_FROZEN_SET
+        elif cls == ClassWithStrStrDefaultDict:
+            return PY_CLASS_FOR_CLASS_WITH_STR_STR_DEFAULT_DICT
         raise ValueError(f"Unsupported class: {cls}")
 
 

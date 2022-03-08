@@ -7,7 +7,7 @@ from py_typescript_generator.model.py_class import PyClass
 
 
 @dataclass
-class Model:
+class Model:  # todo rename to PyModel
     classes: OrderedSet[PyClass]
 
     @staticmethod

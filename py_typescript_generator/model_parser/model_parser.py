@@ -26,7 +26,9 @@ from py_typescript_generator.model_parser.class_parsers.abstract_class_parser im
 
 import logging
 
-from py_typescript_generator.typing_utils import get_wrapped_type_from_optional
+from py_typescript_generator.typing_utils.typing_utils import (
+    get_wrapped_type_from_optional,
+)
 
 logger = logging.getLogger(__name__)
 

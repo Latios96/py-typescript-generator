@@ -8,13 +8,13 @@ from py_typescript_generator.model_parser.class_parsers.abstract_class_parser im
 )
 from tests.unittests.fixture_classes import (
     EmptyClass,
-    ClassWithSimpleDemoClass,
-    ClassWithClassWithSimpleDemoClass,
+    ClassWithEmptyClass,
+    ClassWithClassWithEmptyClass,
     FirstClassInCycle,
     SecondClassInCycle,
     ClassWithInt,
     ClassWithStrList,
-    ClassWithSimpleDemoClassList,
+    ClassWithEmptyClassList,
     ClassWithGenericMember,
     ClassWithStrStrDict,
     ClassWithDeepNestedGenerics,
@@ -58,13 +58,13 @@ class DemoParser(AbstractClassParser):
     def accepts_class(self, cls: Type) -> bool:
         return cls in [
             EmptyClass,
-            ClassWithSimpleDemoClass,
-            ClassWithClassWithSimpleDemoClass,
+            ClassWithEmptyClass,
+            ClassWithClassWithEmptyClass,
             FirstClassInCycle,
             SecondClassInCycle,
             ClassWithInt,
             ClassWithStrList,
-            ClassWithSimpleDemoClassList,
+            ClassWithEmptyClassList,
             ClassWithGenericMember,
             ClassWithStrStrDict,
             ClassWithDeepNestedGenerics,
@@ -84,9 +84,9 @@ class DemoParser(AbstractClassParser):
     def parse(self, cls: Type) -> PyClass:
         if cls == EmptyClass:
             return PY_CLASS_FOR_EMPTY_CLASS
-        elif cls == ClassWithSimpleDemoClass:
+        elif cls == ClassWithEmptyClass:
             return PY_CLASS_FOR_CLASS_WITH_EMPTY_CLASS
-        elif cls == ClassWithClassWithSimpleDemoClass:
+        elif cls == ClassWithClassWithEmptyClass:
             return PY_CLASS_FOR_CLASS_WITH_CLASS_WITH_EMPTY_CLASS
         elif cls == FirstClassInCycle:
             return PY_CLASS_FOR_FIRST_CLASS_IN_CYCLE
@@ -96,7 +96,7 @@ class DemoParser(AbstractClassParser):
             return PY_CLASS_FOR_CLASS_WITH_INT
         elif cls == ClassWithStrList:
             return PY_CLASS_FOR_CLASS_WITH_STR_LIST
-        elif cls == ClassWithSimpleDemoClassList:
+        elif cls == ClassWithEmptyClassList:
             return PY_CLASS_FOR_CLASS_WITH_EMPTY_CLASS_LIST
         elif cls == ClassWithGenericMember:
             return PY_CLASS_FOR_CLASS_WITH_GENERIC_MEMBER

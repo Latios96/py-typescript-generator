@@ -110,7 +110,7 @@ class TestParseClassWithSimpleClass:
         )
 
 
-class TestClassWithClassWithSimpleDemoClass:
+class TestClassWithClassWithEmptyClass:
     def test_should_parse_through_three_levels(
         self,
         empty_class: ClassFixture,

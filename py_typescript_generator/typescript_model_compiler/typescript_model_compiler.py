@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Type
+from typing import Type, Optional
 from uuid import UUID
 
 from ordered_set import OrderedSet
@@ -31,11 +31,18 @@ class TypescriptModelCompiler:
         fields = []
         for py_field in py_class.fields:
             fields.append(
-                TsField(name=py_field.name, type=self._map_type(py_field.type))
+                TsField(name=py_field.name, type=self._compile_type(py_field.type))
             )
         return TsObjectType(name=py_class.name, fields=frozenset(fields))
 
-    def _map_type(self, cls: Type) -> TsType:
+    def _compile_type(self, cls: Type) -> TsType:
+        mapped_type = self._map_type(cls)
+        if mapped_type:
+            return mapped_type
+
+        return TsType(name=cls.__name__)
+
+    def _map_type(self, cls: Type) -> Optional[TsType]:
         if cls == str:
             return TS_STRING
         elif cls == float:
@@ -50,4 +57,4 @@ class TypescriptModelCompiler:
             return TS_STRING
         elif cls == UUID:
             return TS_STRING
-        raise ValueError("could not map")  # todo do this properly
+        return None

@@ -1,3 +1,4 @@
+from tests.unittests.demo_parser_fixture import demo_parser  # noqa: F401
 from tests.unittests.fixture_classes import (  # noqa: F401
     simple_demo_class,
     class_with_simple_demo_class,

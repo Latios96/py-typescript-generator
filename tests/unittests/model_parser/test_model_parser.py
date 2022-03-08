@@ -25,87 +25,24 @@ from py_typescript_generator.model_parser.model_parser import (
     NoParserForClassFoundException,
     IsNotAClassException,
 )
+from tests.unittests.demo_parser_fixture import DemoParser
 from tests.unittests.fixture_classes import (
-    SimpleDemoClass,
-    ClassWithSimpleDemoClass,
-    ClassWithClassWithSimpleDemoClass,
-    FirstClassInCycle,
-    SecondClassInCycle,
-    ClassWithTerminatingType,
-    ClassWithStrList,
-    ClassWithStrStrDict,
-    ClassWithSimpleDemoClassList,
-    ClassWithGenericMember,
-    ClassWithDeepNestedGenerics,
-    PY_CLASS_FOR_SIMPLE_DEMO_CLASS,
-    PY_CLASS_FOR_CLASS_WITH_SIMPLE_DEMO_CLASS,
-    PY_CLASS_FOR_CLASS_WITH_CLASS_WITH_SIMPLE_DEMO_CLASS,
-    PY_CLASS_FOR_FIRST_CLASS_IN_CYCLE,
-    PY_CLASS_FOR_SECOND_CLASS_IN_CYCLE,
-    PY_CLASS_FOR_CLASS_WITH_TERMINATING_TYPE,
-    PY_CLASS_FOR_CLASS_WITH_STR_LIST,
-    PY_CLASS_FOR_CLASS_WITH_STR_STR_DICT,
-    PY_CLASS_FOR_CLASS_WITH_SIMPLE_DEMO_CLASS_LIST,
-    PY_CLASS_FOR_CLASS_WITH_GENERIC_MEMBER,
-    PY_CLASS_FOR_CLASS_WITH_DEEP_NESTED_GENERICS,
     ClassFixture,
 )
 
 
-class DemoParser(AbstractClassParser):
-    def accepts_class(self, cls: Type) -> bool:
-        return cls in {
-            SimpleDemoClass,
-            ClassWithSimpleDemoClass,
-            ClassWithClassWithSimpleDemoClass,
-            FirstClassInCycle,
-            SecondClassInCycle,
-            ClassWithTerminatingType,
-            ClassWithStrList,
-            ClassWithSimpleDemoClassList,
-            ClassWithGenericMember,
-            ClassWithStrStrDict,
-            ClassWithDeepNestedGenerics,
-        }
-
-    def parse(self, cls: Type) -> PyClass:
-        if cls == SimpleDemoClass:
-            return PY_CLASS_FOR_SIMPLE_DEMO_CLASS
-        elif cls == ClassWithSimpleDemoClass:
-            return PY_CLASS_FOR_CLASS_WITH_SIMPLE_DEMO_CLASS
-        elif cls == ClassWithClassWithSimpleDemoClass:
-            return PY_CLASS_FOR_CLASS_WITH_CLASS_WITH_SIMPLE_DEMO_CLASS
-        elif cls == FirstClassInCycle:
-            return PY_CLASS_FOR_FIRST_CLASS_IN_CYCLE
-        elif cls == SecondClassInCycle:
-            return PY_CLASS_FOR_SECOND_CLASS_IN_CYCLE
-        elif cls == ClassWithTerminatingType:
-            return PY_CLASS_FOR_CLASS_WITH_TERMINATING_TYPE
-        elif cls == ClassWithStrList:
-            return PY_CLASS_FOR_CLASS_WITH_STR_LIST
-        elif cls == ClassWithSimpleDemoClassList:
-            return PY_CLASS_FOR_CLASS_WITH_SIMPLE_DEMO_CLASS_LIST
-        elif cls == ClassWithGenericMember:
-            return PY_CLASS_FOR_CLASS_WITH_GENERIC_MEMBER
-        elif cls == ClassWithStrStrDict:
-            return PY_CLASS_FOR_CLASS_WITH_STR_STR_DICT
-        elif cls == ClassWithDeepNestedGenerics:
-            return PY_CLASS_FOR_CLASS_WITH_DEEP_NESTED_GENERICS
-        raise ValueError(f"Unsupported class: {cls}")
-
-
-def test_should_raise_exception_if_no_parser_for_class_was_found():
+def test_should_raise_exception_if_no_parser_for_class_was_found(demo_parser):
     class UnknownClass:
         pass
 
-    model_parser = ModelParser([UnknownClass], [DemoParser()])
+    model_parser = ModelParser([UnknownClass], [demo_parser])
 
     with pytest.raises(NoParserForClassFoundException):
         model_parser.parse()
 
 
-def test_should_raise_exception_if_passed_thing_is_not_a_class():
-    model_parser = ModelParser([lambda x: x], [DemoParser()])
+def test_should_raise_exception_if_passed_thing_is_not_a_class(demo_parser):
+    model_parser = ModelParser([lambda x: x], [demo_parser])
 
     with pytest.raises(IsNotAClassException):
         model_parser.parse()
@@ -113,19 +50,19 @@ def test_should_raise_exception_if_passed_thing_is_not_a_class():
 
 class TestParseSimpleClass:
     def test_model_should_contain_just_the_simple_class(
-        self, simple_demo_class: ClassFixture
+        self, simple_demo_class: ClassFixture, demo_parser: DemoParser
     ) -> None:
-        model_parser = ModelParser([simple_demo_class.cls], [DemoParser()])
+        model_parser = ModelParser([simple_demo_class.cls], [demo_parser])
 
         model = model_parser.parse()
 
         assert model == Model(classes=OrderedSet([simple_demo_class.py_class]))
 
     def test_model_should_contain_just_the_simple_class_even_if_supplied_two_timed(
-        self, simple_demo_class: ClassFixture
+        self, simple_demo_class: ClassFixture, demo_parser: DemoParser
     ) -> None:
         model_parser = ModelParser(
-            [simple_demo_class.cls, simple_demo_class.cls], [DemoParser()]
+            [simple_demo_class.cls, simple_demo_class.cls], [demo_parser]
         )
 
         model = model_parser.parse()
@@ -138,8 +75,9 @@ class TestParseClassWithSimpleClass:
         self,
         simple_demo_class: ClassFixture,
         class_with_simple_demo_class: ClassFixture,
+        demo_parser: DemoParser,
     ) -> None:
-        model_parser = ModelParser([class_with_simple_demo_class.cls], [DemoParser()])
+        model_parser = ModelParser([class_with_simple_demo_class.cls], [demo_parser])
 
         model = model_parser.parse()
 
@@ -156,9 +94,10 @@ class TestParseClassWithSimpleClass:
         self,
         simple_demo_class: ClassFixture,
         class_with_simple_demo_class: ClassFixture,
+        demo_parser: DemoParser,
     ) -> None:
         model_parser = ModelParser(
-            [class_with_simple_demo_class.cls, simple_demo_class.cls], [DemoParser()]
+            [class_with_simple_demo_class.cls, simple_demo_class.cls], [demo_parser]
         )
 
         model = model_parser.parse()
@@ -179,9 +118,10 @@ class TestClassWithClassWithSimpleDemoClass:
         simple_demo_class: ClassFixture,
         class_with_simple_demo_class: ClassFixture,
         class_with_class_with_simple_demo_class: ClassFixture,
+        demo_parser: DemoParser,
     ) -> None:
         model_parser = ModelParser(
-            [class_with_class_with_simple_demo_class.cls], [DemoParser()]
+            [class_with_class_with_simple_demo_class.cls], [demo_parser]
         )
 
         model = model_parser.parse()
@@ -198,9 +138,12 @@ class TestClassWithClassWithSimpleDemoClass:
 
 class TestParsingCycleShouldTerminate:
     def test_parse_only_first_class_in_cycle(
-        self, first_class_in_cycle: ClassFixture, second_class_in_cycle: ClassFixture
+        self,
+        first_class_in_cycle: ClassFixture,
+        second_class_in_cycle: ClassFixture,
+        demo_parser: DemoParser,
     ) -> None:
-        model_parser = ModelParser([first_class_in_cycle.cls], [DemoParser()])
+        model_parser = ModelParser([first_class_in_cycle.cls], [demo_parser])
 
         model = model_parser.parse()
         assert model == Model(
@@ -210,9 +153,12 @@ class TestParsingCycleShouldTerminate:
         )
 
     def test_parse_only_second_class_in_cycle(
-        self, first_class_in_cycle: ClassFixture, second_class_in_cycle: ClassFixture
+        self,
+        first_class_in_cycle: ClassFixture,
+        second_class_in_cycle: ClassFixture,
+        demo_parser: DemoParser,
     ) -> None:
-        model_parser = ModelParser([second_class_in_cycle.cls], [DemoParser()])
+        model_parser = ModelParser([second_class_in_cycle.cls], [demo_parser])
 
         model = model_parser.parse()
         assert model == Model(
@@ -225,10 +171,13 @@ class TestParsingCycleShouldTerminate:
         )
 
     def test_parse_all_in_cycle(
-        self, first_class_in_cycle: ClassFixture, second_class_in_cycle: ClassFixture
+        self,
+        first_class_in_cycle: ClassFixture,
+        second_class_in_cycle: ClassFixture,
+        demo_parser: DemoParser,
     ) -> None:
         model_parser = ModelParser(
-            [first_class_in_cycle.cls, second_class_in_cycle.cls], [DemoParser()]
+            [first_class_in_cycle.cls, second_class_in_cycle.cls], [demo_parser]
         )
 
         model = model_parser.parse()
@@ -286,9 +235,9 @@ def test_parse_builtin_terminating_types(
 
 class TestParseGenericTypes:
     def test_parse_class_with_string_list(
-        self, class_with_str_list: ClassFixture
+        self, class_with_str_list: ClassFixture, demo_parser: DemoParser
     ) -> None:
-        model_parser = ModelParser([class_with_str_list.cls], [DemoParser()])
+        model_parser = ModelParser([class_with_str_list.cls], [demo_parser])
 
         model = model_parser.parse()
         assert model == Model(
@@ -300,9 +249,9 @@ class TestParseGenericTypes:
         )
 
     def test_parse_class_with_str_str_dict(
-        self, class_with_str_str_dict: ClassFixture
+        self, class_with_str_str_dict: ClassFixture, demo_parser: DemoParser
     ) -> None:
-        model_parser = ModelParser([class_with_str_str_dict.cls], [DemoParser()])
+        model_parser = ModelParser([class_with_str_str_dict.cls], [demo_parser])
 
         model = model_parser.parse()
         assert model == Model(
@@ -317,9 +266,10 @@ class TestParseGenericTypes:
         self,
         simple_demo_class: ClassFixture,
         class_with_simple_demo_class_list: ClassFixture,
+        demo_parser: DemoParser,
     ) -> None:
         model_parser = ModelParser(
-            [class_with_simple_demo_class_list.cls], [DemoParser()]
+            [class_with_simple_demo_class_list.cls], [demo_parser]
         )
 
         model = model_parser.parse()
@@ -333,9 +283,9 @@ class TestParseGenericTypes:
         )
 
     def test_should_parse_generic_class_with_type_var(
-        self, class_with_generic_member: ClassFixture
+        self, class_with_generic_member: ClassFixture, demo_parser: DemoParser
     ) -> None:
-        model_parser = ModelParser([class_with_generic_member.cls], [DemoParser()])
+        model_parser = ModelParser([class_with_generic_member.cls], [demo_parser])
 
         model = model_parser.parse()
         assert model == Model(classes=OrderedSet([class_with_generic_member.py_class]))
@@ -344,10 +294,9 @@ class TestParseGenericTypes:
         self,
         simple_demo_class: ClassFixture,
         class_with_deep_nested_generics: ClassFixture,
+        demo_parser: DemoParser,
     ) -> None:
-        model_parser = ModelParser(
-            [class_with_deep_nested_generics.cls], [DemoParser()]
-        )
+        model_parser = ModelParser([class_with_deep_nested_generics.cls], [demo_parser])
 
         model = model_parser.parse()
         assert model == Model(

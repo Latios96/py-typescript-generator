@@ -149,3 +149,10 @@ def first_class_in_cycle():
     return ClassFixture(
         cls=FirstClassInCycle, py_class=PY_CLASS_FOR_FIRST_CLASS_IN_CYCLE
     )
+
+
+@pytest.fixture
+def second_class_in_cycle():
+    return ClassFixture(
+        cls=SecondClassInCycle, py_class=PY_CLASS_FOR_SECOND_CLASS_IN_CYCLE
+    )

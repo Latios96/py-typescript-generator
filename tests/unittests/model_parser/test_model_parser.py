@@ -197,38 +197,44 @@ class TestClassWithClassWithSimpleDemoClass:
 
 
 class TestParsingCycleShouldTerminate:
-    def test_parse_only_first_class_in_cycle(self, first_class_in_cycle):
+    def test_parse_only_first_class_in_cycle(
+        self, first_class_in_cycle: ClassFixture, second_class_in_cycle: ClassFixture
+    ) -> None:
         model_parser = ModelParser([first_class_in_cycle.cls], [DemoParser()])
 
         model = model_parser.parse()
         assert model == Model(
             classes=OrderedSet(
-                [first_class_in_cycle.py_class, PY_CLASS_FOR_SECOND_CLASS_IN_CYCLE]
+                [first_class_in_cycle.py_class, second_class_in_cycle.py_class]
             )
         )
 
-    def test_parse_only_second_class_in_cycle(self, first_class_in_cycle):
-        model_parser = ModelParser([SecondClassInCycle], [DemoParser()])
+    def test_parse_only_second_class_in_cycle(
+        self, first_class_in_cycle: ClassFixture, second_class_in_cycle: ClassFixture
+    ) -> None:
+        model_parser = ModelParser([second_class_in_cycle.cls], [DemoParser()])
 
         model = model_parser.parse()
         assert model == Model(
             classes=OrderedSet(
                 [
-                    PY_CLASS_FOR_SECOND_CLASS_IN_CYCLE,
+                    second_class_in_cycle.py_class,
                     first_class_in_cycle.py_class,
                 ]
             )
         )
 
-    def test_parse_all_in_cycle(self, first_class_in_cycle):
+    def test_parse_all_in_cycle(
+        self, first_class_in_cycle: ClassFixture, second_class_in_cycle: ClassFixture
+    ) -> None:
         model_parser = ModelParser(
-            [first_class_in_cycle.cls, SecondClassInCycle], [DemoParser()]
+            [first_class_in_cycle.cls, second_class_in_cycle.cls], [DemoParser()]
         )
 
         model = model_parser.parse()
         assert model == Model(
             classes=OrderedSet(
-                [first_class_in_cycle.py_class, PY_CLASS_FOR_SECOND_CLASS_IN_CYCLE]
+                [first_class_in_cycle.py_class, second_class_in_cycle.py_class]
             )
         )
 

@@ -1,4 +1,7 @@
-from typing import List, Dict, TypeVar, Generic
+from dataclasses import dataclass
+from typing import List, Dict, TypeVar, Generic, Type
+
+import pytest
 
 from py_typescript_generator.model.py_class import PyClass
 from py_typescript_generator.model.py_field import PyField
@@ -110,3 +113,17 @@ PY_CLASS_FOR_CLASS_WITH_DEEP_NESTED_GENERICS = PyClass(
         {PyField(name="my_dict", type=Dict[str, List[Dict[str, SimpleDemoClass]]])}
     ),
 )
+
+
+@dataclass
+class ClassFixture:
+    cls: Type
+    py_class: PyClass
+
+
+# todo classes for each terminating type
+
+
+@pytest.fixture
+def simple_demo_class():  # todo rename to EmptyDemoClass
+    return ClassFixture(cls=SimpleDemoClass, py_class=PY_CLASS_FOR_SIMPLE_DEMO_CLASS)

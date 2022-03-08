@@ -48,6 +48,7 @@ from tests.unittests.fixture_classes import (
     PY_CLASS_FOR_CLASS_WITH_SIMPLE_DEMO_CLASS_LIST,
     PY_CLASS_FOR_CLASS_WITH_GENERIC_MEMBER,
     PY_CLASS_FOR_CLASS_WITH_DEEP_NESTED_GENERICS,
+    ClassFixture,
 )
 
 
@@ -111,26 +112,30 @@ def test_should_raise_exception_if_passed_thing_is_not_a_class():
 
 
 class TestParseSimpleClass:
-    def test_model_should_contain_just_the_simple_class(self) -> None:
-        model_parser = ModelParser([SimpleDemoClass], [DemoParser()])
+    def test_model_should_contain_just_the_simple_class(
+        self, simple_demo_class: ClassFixture
+    ) -> None:
+        model_parser = ModelParser([simple_demo_class.cls], [DemoParser()])
 
         model = model_parser.parse()
 
-        assert model == Model(classes=OrderedSet([PY_CLASS_FOR_SIMPLE_DEMO_CLASS]))
+        assert model == Model(classes=OrderedSet([simple_demo_class.py_class]))
 
     def test_model_should_contain_just_the_simple_class_even_if_supplied_two_timed(
-        self,
+        self, simple_demo_class: ClassFixture
     ) -> None:
-        model_parser = ModelParser([SimpleDemoClass, SimpleDemoClass], [DemoParser()])
+        model_parser = ModelParser(
+            [simple_demo_class.cls, simple_demo_class.cls], [DemoParser()]
+        )
 
         model = model_parser.parse()
 
-        assert model == Model(classes=OrderedSet([PY_CLASS_FOR_SIMPLE_DEMO_CLASS]))
+        assert model == Model(classes=OrderedSet([simple_demo_class.py_class]))
 
 
 class TestParseClassWithSimpleClass:
     def test_model_should_contain_both_classes_when_passing_only_with_simple_class(
-        self,
+        self, simple_demo_class: ClassFixture
     ) -> None:
         model_parser = ModelParser([ClassWithSimpleDemoClass], [DemoParser()])
 
@@ -140,14 +145,16 @@ class TestParseClassWithSimpleClass:
             classes=OrderedSet(
                 [
                     PY_CLASS_FOR_CLASS_WITH_SIMPLE_DEMO_CLASS,
-                    PY_CLASS_FOR_SIMPLE_DEMO_CLASS,
+                    simple_demo_class.py_class,
                 ]
             )
         )
 
-    def test_model_should_contain_both_classes_when_passing_both_classes(self) -> None:
+    def test_model_should_contain_both_classes_when_passing_both_classes(
+        self, simple_demo_class: ClassFixture
+    ) -> None:
         model_parser = ModelParser(
-            [ClassWithSimpleDemoClass, SimpleDemoClass], [DemoParser()]
+            [ClassWithSimpleDemoClass, simple_demo_class.cls], [DemoParser()]
         )
 
         model = model_parser.parse()
@@ -156,14 +163,16 @@ class TestParseClassWithSimpleClass:
             classes=OrderedSet(
                 [
                     PY_CLASS_FOR_CLASS_WITH_SIMPLE_DEMO_CLASS,
-                    PY_CLASS_FOR_SIMPLE_DEMO_CLASS,
+                    simple_demo_class.py_class,
                 ]
             )
         )
 
 
 class TestClassWithClassWithSimpleDemoClass:
-    def test_should_parse_through_three_levels(self) -> None:
+    def test_should_parse_through_three_levels(
+        self, simple_demo_class: ClassFixture
+    ) -> None:
         model_parser = ModelParser([ClassWithClassWithSimpleDemoClass], [DemoParser()])
 
         model = model_parser.parse()
@@ -172,7 +181,7 @@ class TestClassWithClassWithSimpleDemoClass:
                 [
                     PY_CLASS_FOR_CLASS_WITH_CLASS_WITH_SIMPLE_DEMO_CLASS,
                     PY_CLASS_FOR_CLASS_WITH_SIMPLE_DEMO_CLASS,
-                    PY_CLASS_FOR_SIMPLE_DEMO_CLASS,
+                    simple_demo_class.py_class,
                 ]
             )
         )
@@ -275,7 +284,7 @@ class TestParseGenericTypes:
             )
         )
 
-    def test_parse_class_with_simple_demo_class_list(self):
+    def test_parse_class_with_simple_demo_class_list(self, simple_demo_class):
         model_parser = ModelParser([ClassWithSimpleDemoClassList], [DemoParser()])
 
         model = model_parser.parse()
@@ -283,7 +292,7 @@ class TestParseGenericTypes:
             classes=OrderedSet(
                 [
                     PY_CLASS_FOR_CLASS_WITH_SIMPLE_DEMO_CLASS_LIST,
-                    PY_CLASS_FOR_SIMPLE_DEMO_CLASS,
+                    simple_demo_class.py_class,
                 ]
             )
         )
@@ -296,7 +305,7 @@ class TestParseGenericTypes:
             classes=OrderedSet([PY_CLASS_FOR_CLASS_WITH_GENERIC_MEMBER])
         )
 
-    def test_should_parse_deeply_nested_generics(self):
+    def test_should_parse_deeply_nested_generics(self, simple_demo_class):
         model_parser = ModelParser([ClassWithDeepNestedGenerics], [DemoParser()])
 
         model = model_parser.parse()
@@ -304,7 +313,7 @@ class TestParseGenericTypes:
             classes=OrderedSet(
                 [
                     PY_CLASS_FOR_CLASS_WITH_DEEP_NESTED_GENERICS,
-                    PY_CLASS_FOR_SIMPLE_DEMO_CLASS,
+                    simple_demo_class.py_class,
                 ]
             )
         )

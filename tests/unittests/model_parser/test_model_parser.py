@@ -299,14 +299,16 @@ class TestParseGenericTypes:
             )
         )
 
-    def test_parse_class_with_str_str_dict(self):
-        model_parser = ModelParser([ClassWithStrStrDict], [DemoParser()])
+    def test_parse_class_with_str_str_dict(
+        self, class_with_str_str_dict: ClassFixture
+    ) -> None:
+        model_parser = ModelParser([class_with_str_str_dict.cls], [DemoParser()])
 
         model = model_parser.parse()
         assert model == Model(
             classes=OrderedSet(
                 [
-                    PY_CLASS_FOR_CLASS_WITH_STR_STR_DICT,
+                    class_with_str_str_dict.py_class,
                 ]
             )
         )

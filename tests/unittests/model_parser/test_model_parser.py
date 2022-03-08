@@ -196,33 +196,41 @@ class TestClassWithClassWithSimpleDemoClass:
         )
 
 
-@pytest.mark.parametrize(
-    "class_combinations,parsed_order",
-    [
-        (
-            [FirstClassInCycle],
-            [PY_CLASS_FOR_FIRST_CLASS_IN_CYCLE, PY_CLASS_FOR_SECOND_CLASS_IN_CYCLE],
-        ),
-        (
-            [SecondClassInCycle],
-            [
-                PY_CLASS_FOR_SECOND_CLASS_IN_CYCLE,
-                PY_CLASS_FOR_FIRST_CLASS_IN_CYCLE,
-            ],
-        ),
-        (
-            [FirstClassInCycle, SecondClassInCycle],
-            [PY_CLASS_FOR_FIRST_CLASS_IN_CYCLE, PY_CLASS_FOR_SECOND_CLASS_IN_CYCLE],
-        ),
-    ],
-)
-def test_parsing_cycle_should_terminate(
-    class_combinations: List[Type], parsed_order: List[PyClass]
-) -> None:
-    model_parser = ModelParser(class_combinations, [DemoParser()])
+class TestParsingCycleShouldTerminate:
+    def test_parse_only_first_class_in_cycle(self):
+        model_parser = ModelParser([FirstClassInCycle], [DemoParser()])
 
-    model = model_parser.parse()
-    assert model == Model(classes=OrderedSet(parsed_order))
+        model = model_parser.parse()
+        assert model == Model(
+            classes=OrderedSet(
+                [PY_CLASS_FOR_FIRST_CLASS_IN_CYCLE, PY_CLASS_FOR_SECOND_CLASS_IN_CYCLE]
+            )
+        )
+
+    def test_parse_only_second_class_in_cycle(self):
+        model_parser = ModelParser([SecondClassInCycle], [DemoParser()])
+
+        model = model_parser.parse()
+        assert model == Model(
+            classes=OrderedSet(
+                [
+                    PY_CLASS_FOR_SECOND_CLASS_IN_CYCLE,
+                    PY_CLASS_FOR_FIRST_CLASS_IN_CYCLE,
+                ]
+            )
+        )
+
+    def test_parse_all_in_cycle(self):
+        model_parser = ModelParser(
+            [FirstClassInCycle, SecondClassInCycle], [DemoParser()]
+        )
+
+        model = model_parser.parse()
+        assert model == Model(
+            classes=OrderedSet(
+                [PY_CLASS_FOR_FIRST_CLASS_IN_CYCLE, PY_CLASS_FOR_SECOND_CLASS_IN_CYCLE]
+            )
+        )
 
 
 @pytest.mark.parametrize(

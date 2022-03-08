@@ -135,26 +135,30 @@ class TestParseSimpleClass:
 
 class TestParseClassWithSimpleClass:
     def test_model_should_contain_both_classes_when_passing_only_with_simple_class(
-        self, simple_demo_class: ClassFixture
+        self,
+        simple_demo_class: ClassFixture,
+        class_with_simple_demo_class: ClassFixture,
     ) -> None:
-        model_parser = ModelParser([ClassWithSimpleDemoClass], [DemoParser()])
+        model_parser = ModelParser([class_with_simple_demo_class.cls], [DemoParser()])
 
         model = model_parser.parse()
 
         assert model == Model(
             classes=OrderedSet(
                 [
-                    PY_CLASS_FOR_CLASS_WITH_SIMPLE_DEMO_CLASS,
+                    class_with_simple_demo_class.py_class,
                     simple_demo_class.py_class,
                 ]
             )
         )
 
     def test_model_should_contain_both_classes_when_passing_both_classes(
-        self, simple_demo_class: ClassFixture
+        self,
+        simple_demo_class: ClassFixture,
+        class_with_simple_demo_class: ClassFixture,
     ) -> None:
         model_parser = ModelParser(
-            [ClassWithSimpleDemoClass, simple_demo_class.cls], [DemoParser()]
+            [class_with_simple_demo_class.cls, simple_demo_class.cls], [DemoParser()]
         )
 
         model = model_parser.parse()
@@ -162,7 +166,7 @@ class TestParseClassWithSimpleClass:
         assert model == Model(
             classes=OrderedSet(
                 [
-                    PY_CLASS_FOR_CLASS_WITH_SIMPLE_DEMO_CLASS,
+                    class_with_simple_demo_class.py_class,
                     simple_demo_class.py_class,
                 ]
             )
@@ -171,7 +175,9 @@ class TestParseClassWithSimpleClass:
 
 class TestClassWithClassWithSimpleDemoClass:
     def test_should_parse_through_three_levels(
-        self, simple_demo_class: ClassFixture
+        self,
+        simple_demo_class: ClassFixture,
+        class_with_simple_demo_class: ClassFixture,
     ) -> None:
         model_parser = ModelParser([ClassWithClassWithSimpleDemoClass], [DemoParser()])
 
@@ -180,7 +186,7 @@ class TestClassWithClassWithSimpleDemoClass:
             classes=OrderedSet(
                 [
                     PY_CLASS_FOR_CLASS_WITH_CLASS_WITH_SIMPLE_DEMO_CLASS,
-                    PY_CLASS_FOR_CLASS_WITH_SIMPLE_DEMO_CLASS,
+                    class_with_simple_demo_class.py_class,
                     simple_demo_class.py_class,
                 ]
             )

@@ -178,14 +178,17 @@ class TestClassWithClassWithSimpleDemoClass:
         self,
         simple_demo_class: ClassFixture,
         class_with_simple_demo_class: ClassFixture,
+        class_with_class_with_simple_demo_class: ClassFixture,
     ) -> None:
-        model_parser = ModelParser([ClassWithClassWithSimpleDemoClass], [DemoParser()])
+        model_parser = ModelParser(
+            [class_with_class_with_simple_demo_class.cls], [DemoParser()]
+        )
 
         model = model_parser.parse()
         assert model == Model(
             classes=OrderedSet(
                 [
-                    PY_CLASS_FOR_CLASS_WITH_CLASS_WITH_SIMPLE_DEMO_CLASS,
+                    class_with_class_with_simple_demo_class.py_class,
                     class_with_simple_demo_class.py_class,
                     simple_demo_class.py_class,
                 ]

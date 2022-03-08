@@ -134,3 +134,11 @@ def class_with_simple_demo_class():
     return ClassFixture(
         cls=ClassWithSimpleDemoClass, py_class=PY_CLASS_FOR_CLASS_WITH_SIMPLE_DEMO_CLASS
     )
+
+
+@pytest.fixture
+def class_with_class_with_simple_demo_class():
+    return ClassFixture(
+        cls=ClassWithClassWithSimpleDemoClass,
+        py_class=PY_CLASS_FOR_CLASS_WITH_CLASS_WITH_SIMPLE_DEMO_CLASS,
+    )

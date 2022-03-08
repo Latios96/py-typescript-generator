@@ -1,4 +1,4 @@
-from py_typescript_generator.typescript_model_compiler.ts_object_type import TsType
+from py_typescript_generator.typescript_model_compiler.ts_type import TsType
 
 TS_ANY = TsType("any")
 TS_NUMBER = TsType("number")

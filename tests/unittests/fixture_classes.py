@@ -343,7 +343,7 @@ TS_OBJECT_TYPE_FOR_CLASS_WITH_STR_STR_DEFAULT_DICT = TsObjectType(
 PY_CLASS_FOR_CLASS_WITH_OPTIONAL_INT = PyClass(
     name="ClassWithOptionalInt",
     type=ClassWithOptionalInt,
-    fields=frozenset({PyField(name="value", type=Optional[int])}),
+    fields=frozenset({PyField(name="value", type=Optional[int])}),  # type: ignore
 )
 TS_OBJECT_TYPE_FOR_CLASS_WITH_OPTIONAL_INT = TsObjectType(
     name="ClassWithOptionalInt",
@@ -353,7 +353,7 @@ TS_OBJECT_TYPE_FOR_CLASS_WITH_OPTIONAL_INT = TsObjectType(
 PY_CLASS_FOR_CLASS_WITH_OPTIONAL_EMPTY_CLASS = PyClass(
     name="ClassWithOptionalEmptyClass",
     type=ClassWithOptionalEmptyClass,
-    fields=frozenset({PyField(name="value", type=Optional[EmptyClass])}),
+    fields=frozenset({PyField(name="value", type=Optional[EmptyClass])}),  # type: ignore
 )
 TS_OBJECT_TYPE_FOR_CLASS_WITH_OPTIONAL_EMPTY_CLASS = TsObjectType(
     name="ClassWithOptionalEmptyClass",

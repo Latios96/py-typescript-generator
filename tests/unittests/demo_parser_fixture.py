@@ -51,6 +51,10 @@ from tests.unittests.fixture_classes import (
     PY_CLASS_FOR_CLASS_WITH_STR_INT_UNION,
     PY_CLASS_FOR_CLASS_WITH_STR_FROZEN_SET,
     PY_CLASS_FOR_CLASS_WITH_STR_STR_DEFAULT_DICT,
+    ClassWithOptionalInt,
+    ClassWithOptionalEmptyClass,
+    PY_CLASS_FOR_CLASS_WITH_OPTIONAL_INT,
+    PY_CLASS_FOR_CLASS_WITH_OPTIONAL_EMPTY_CLASS,
 )
 
 
@@ -79,6 +83,8 @@ class DemoParser(AbstractClassParser):
             ClassWithStrIntUnion,
             ClassWithStrFrozenSet,
             ClassWithStrStrDefaultDict,
+            ClassWithOptionalInt,
+            ClassWithOptionalEmptyClass,
         ]
 
     def parse(self, cls: Type) -> PyClass:
@@ -126,6 +132,10 @@ class DemoParser(AbstractClassParser):
             return PY_CLASS_FOR_CLASS_WITH_STR_FROZEN_SET
         elif cls == ClassWithStrStrDefaultDict:
             return PY_CLASS_FOR_CLASS_WITH_STR_STR_DEFAULT_DICT
+        elif cls == ClassWithOptionalInt:
+            return PY_CLASS_FOR_CLASS_WITH_OPTIONAL_INT
+        elif cls == ClassWithOptionalEmptyClass:
+            return PY_CLASS_FOR_CLASS_WITH_OPTIONAL_EMPTY_CLASS
         raise ValueError(f"Unsupported class: {cls}")
 
 

@@ -301,3 +301,13 @@ class TestParseGenericTypes:
                 ]
             )
         )
+
+
+class TestParseOptional:
+    def test_should_parse_optional_int(
+        self, class_with_optional_int: ClassFixture, demo_parser: DemoParser
+    ) -> None:
+        model_parser = ModelParser([class_with_optional_int.cls], [demo_parser])
+
+        model = model_parser.parse()
+        assert model == Model(classes=OrderedSet([class_with_optional_int.py_class]))

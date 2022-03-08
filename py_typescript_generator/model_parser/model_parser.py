@@ -16,7 +16,7 @@ from uuid import UUID
 from ordered_set import OrderedSet
 
 # Note: this can be removed once support for Python 3.7 is dropped
-from typing_inspect import get_args, get_origin  # type: ignore
+from typing_inspect import get_args, get_origin, is_optional_type  # type: ignore
 
 from py_typescript_generator.model.model import Model
 from py_typescript_generator.model.py_class import PyClass
@@ -25,6 +25,8 @@ from py_typescript_generator.model_parser.class_parsers.abstract_class_parser im
 )
 
 import logging
+
+from py_typescript_generator.typing_utils import get_wrapped_type_from_optional
 
 logger = logging.getLogger(__name__)
 
@@ -79,6 +81,10 @@ class ModelParser:
     def _parse_class(self, cls: Type, visited_classes: OrderedSet[PyClass]) -> None:
         if not self._is_class(cls):
             raise IsNotAClassException(cls)
+
+        if is_optional_type(cls):
+            self._parse_class(get_wrapped_type_from_optional(cls), visited_classes)
+            return
 
         has_generic_args = len(get_args(cls)) > 0
         if has_generic_args:

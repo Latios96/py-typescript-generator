@@ -191,3 +191,11 @@ def class_with_generic_member():
         cls=ClassWithGenericMember,
         py_class=PY_CLASS_FOR_CLASS_WITH_GENERIC_MEMBER,
     )
+
+
+@pytest.fixture
+def class_with_deep_nested_generics():
+    return ClassFixture(
+        cls=ClassWithDeepNestedGenerics,
+        py_class=PY_CLASS_FOR_CLASS_WITH_DEEP_NESTED_GENERICS,
+    )

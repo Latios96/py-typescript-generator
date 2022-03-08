@@ -340,14 +340,20 @@ class TestParseGenericTypes:
         model = model_parser.parse()
         assert model == Model(classes=OrderedSet([class_with_generic_member.py_class]))
 
-    def test_should_parse_deeply_nested_generics(self, simple_demo_class):
-        model_parser = ModelParser([ClassWithDeepNestedGenerics], [DemoParser()])
+    def test_should_parse_deeply_nested_generics(
+        self,
+        simple_demo_class: ClassFixture,
+        class_with_deep_nested_generics: ClassFixture,
+    ) -> None:
+        model_parser = ModelParser(
+            [class_with_deep_nested_generics.cls], [DemoParser()]
+        )
 
         model = model_parser.parse()
         assert model == Model(
             classes=OrderedSet(
                 [
-                    PY_CLASS_FOR_CLASS_WITH_DEEP_NESTED_GENERICS,
+                    class_with_deep_nested_generics.py_class,
                     simple_demo_class.py_class,
                 ]
             )

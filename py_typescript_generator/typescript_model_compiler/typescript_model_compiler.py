@@ -3,6 +3,8 @@ from typing import Type, Optional
 from uuid import UUID
 
 from ordered_set import OrderedSet
+from typing_extensions import get_args
+from typing_inspect import is_optional_type  # type: ignore
 
 from py_typescript_generator.model.model import Model
 from py_typescript_generator.model.py_class import PyClass
@@ -35,12 +37,17 @@ class TypescriptModelCompiler:
             )
         return TsObjectType(name=py_class.name, fields=frozenset(fields))
 
-    def _compile_type(self, cls: Type) -> TsType:
+    def _compile_type(self, cls: Type, optional: bool = False) -> TsType:
         mapped_type = self._map_type(cls)
         if mapped_type:
+            if optional:
+                return mapped_type.as_optional_type()
             return mapped_type
 
-        return TsType(name=cls.__name__)
+        if is_optional_type(cls):
+            return self._compile_type(get_args(cls)[0], optional=True)
+
+        return TsType(name=cls.__name__, is_optional=optional)
 
     def _map_type(self, cls: Type) -> Optional[TsType]:
         if cls == str:

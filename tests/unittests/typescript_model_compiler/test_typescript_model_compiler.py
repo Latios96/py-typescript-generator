@@ -71,3 +71,25 @@ def test_should_compile_class_with_scalar_types(fixture_name, request):
     ts_model = model_compiler.compile(model)
 
     assert ts_model == TsModel.of_object_types([class_fixture.ts_object_type])
+
+
+def test_should_compile_class_with_optional_int(class_with_optional_int):
+    model = Model.of_classes([class_with_optional_int.py_class])
+    model_compiler = TypescriptModelCompiler()
+
+    ts_model = model_compiler.compile(model)
+
+    assert ts_model == TsModel.of_object_types([class_with_optional_int.ts_object_type])
+
+
+def test_should_compile_class_with_optional_empty_class(
+    class_with_optional_empty_class,
+):
+    model = Model.of_classes([class_with_optional_empty_class.py_class])
+    model_compiler = TypescriptModelCompiler()
+
+    ts_model = model_compiler.compile(model)
+
+    assert ts_model == TsModel.of_object_types(
+        [class_with_optional_empty_class.ts_object_type]
+    )

@@ -347,7 +347,7 @@ PY_CLASS_FOR_CLASS_WITH_OPTIONAL_INT = PyClass(
 )
 TS_OBJECT_TYPE_FOR_CLASS_WITH_OPTIONAL_INT = TsObjectType(
     name="ClassWithOptionalInt",
-    fields=frozenset({TsField(name="value", type=TS_NUMBER.as_optional())}),
+    fields=frozenset({TsField(name="value", type=TS_NUMBER.as_optional_type())}),
 )
 
 PY_CLASS_FOR_CLASS_WITH_OPTIONAL_EMPTY_CLASS = PyClass(

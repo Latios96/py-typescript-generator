@@ -209,11 +209,11 @@ class TestParsingCycleShouldTerminate:
     ],
 )
 def test_parse_builtin_terminating_types(
-    the_type: Type, class_with_terminating_type: ClassFixture
+    the_type: Type, class_with_int: ClassFixture
 ) -> None:
     py_class_with_terminating_type = PyClass(
         name="ClassWithTerminatingType",
-        type=class_with_terminating_type.cls,
+        type=class_with_int.cls,
         fields=frozenset({PyField(name="the_type", type=the_type)}),
     )
 
@@ -224,9 +224,7 @@ def test_parse_builtin_terminating_types(
         def parse(self, cls: Type) -> PyClass:
             return py_class_with_terminating_type
 
-    model_parser = ModelParser(
-        [class_with_terminating_type.cls], [TerminatingTypeClassParser()]
-    )
+    model_parser = ModelParser([class_with_int.cls], [TerminatingTypeClassParser()])
 
     model = model_parser.parse()
 

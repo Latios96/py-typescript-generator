@@ -12,7 +12,7 @@ from tests.unittests.fixture_classes import (
     ClassWithClassWithSimpleDemoClass,
     FirstClassInCycle,
     SecondClassInCycle,
-    ClassWithTerminatingType,
+    ClassWithInt,
     ClassWithStrList,
     ClassWithSimpleDemoClassList,
     ClassWithGenericMember,
@@ -40,7 +40,7 @@ class DemoParser(AbstractClassParser):
             ClassWithClassWithSimpleDemoClass,
             FirstClassInCycle,
             SecondClassInCycle,
-            ClassWithTerminatingType,
+            ClassWithInt,
             ClassWithStrList,
             ClassWithSimpleDemoClassList,
             ClassWithGenericMember,
@@ -59,7 +59,7 @@ class DemoParser(AbstractClassParser):
             return PY_CLASS_FOR_FIRST_CLASS_IN_CYCLE
         elif cls == SecondClassInCycle:
             return PY_CLASS_FOR_SECOND_CLASS_IN_CYCLE
-        elif cls == ClassWithTerminatingType:
+        elif cls == ClassWithInt:
             return PY_CLASS_FOR_CLASS_WITH_TERMINATING_TYPE
         elif cls == ClassWithStrList:
             return PY_CLASS_FOR_CLASS_WITH_STR_LIST

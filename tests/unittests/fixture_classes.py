@@ -27,8 +27,8 @@ class SecondClassInCycle:
     first: FirstClassInCycle
 
 
-class ClassWithTerminatingType:
-    an_int: int
+class ClassWithInt:
+    value: int
 
 
 class ClassWithStrList:
@@ -81,8 +81,8 @@ PY_CLASS_FOR_SECOND_CLASS_IN_CYCLE = PyClass(
 )
 PY_CLASS_FOR_CLASS_WITH_TERMINATING_TYPE = PyClass(
     name="ClassWithTerminatingType",
-    type=ClassWithTerminatingType,
-    fields=frozenset({PyField(name="an_int", type=int)}),
+    type=ClassWithInt,
+    fields=frozenset({PyField(name="value", type=int)}),
 )
 PY_CLASS_FOR_CLASS_WITH_STR_LIST = PyClass(
     name="ClassWithStrList",
@@ -159,9 +159,9 @@ def second_class_in_cycle():
 
 
 @pytest.fixture
-def class_with_terminating_type():
+def class_with_int():
     return ClassFixture(
-        cls=ClassWithTerminatingType, py_class=PY_CLASS_FOR_CLASS_WITH_TERMINATING_TYPE
+        cls=ClassWithInt, py_class=PY_CLASS_FOR_CLASS_WITH_TERMINATING_TYPE
     )
 
 

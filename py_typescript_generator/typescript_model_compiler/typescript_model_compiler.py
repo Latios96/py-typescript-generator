@@ -38,7 +38,7 @@ class TypescriptModelCompiler:
         return TsObjectType(name=py_class.name, fields=frozenset(fields))
 
     def _compile_type(self, cls: Type, optional: bool = False) -> TsType:
-        mapped_type = self._map_type(cls)
+        mapped_type = self._map_scalar_type(cls)
         if mapped_type:
             if optional:
                 return mapped_type.as_optional_type()
@@ -49,7 +49,7 @@ class TypescriptModelCompiler:
 
         return TsType(name=cls.__name__, is_optional=optional)
 
-    def _map_type(self, cls: Type) -> Optional[TsType]:
+    def _map_scalar_type(self, cls: Type) -> Optional[TsType]:
         if cls == str:
             return TS_STRING
         elif cls == float:

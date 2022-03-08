@@ -11,6 +11,7 @@ from typing import (
     Union,
     FrozenSet,
     DefaultDict,
+    Optional,
 )
 from uuid import UUID
 
@@ -120,6 +121,14 @@ class ClassWithGenericMember(Generic[T]):
 
 class ClassWithDeepNestedGenerics:
     my_dict: Dict[str, List[Dict[str, EmptyClass]]]
+
+
+class ClassWithOptionalInt:
+    value: Optional[int]
+
+
+class ClassWithOptionalEmptyClass:
+    value: Optional[EmptyClass]
 
 
 PY_CLASS_FOR_EMPTY_CLASS = PyClass(
@@ -331,6 +340,29 @@ TS_OBJECT_TYPE_FOR_CLASS_WITH_STR_STR_DEFAULT_DICT = TsObjectType(
 )
 
 
+PY_CLASS_FOR_CLASS_WITH_OPTIONAL_INT = PyClass(
+    name="ClassWithOptionalInt",
+    type=ClassWithOptionalInt,
+    fields=frozenset({PyField(name="value", type=Optional[int])}),
+)
+TS_OBJECT_TYPE_FOR_CLASS_WITH_OPTIONAL_INT = TsObjectType(
+    name="ClassWithOptionalInt",
+    fields=frozenset({TsField(name="value", type=TS_NUMBER.as_optional())}),
+)
+
+PY_CLASS_FOR_CLASS_WITH_OPTIONAL_EMPTY_CLASS = PyClass(
+    name="ClassWithOptionalEmptyClass",
+    type=ClassWithOptionalEmptyClass,
+    fields=frozenset({PyField(name="value", type=Optional[EmptyClass])}),
+)
+TS_OBJECT_TYPE_FOR_CLASS_WITH_OPTIONAL_EMPTY_CLASS = TsObjectType(
+    name="ClassWithOptionalEmptyClass",
+    fields=frozenset(
+        {TsField(name="value", type=TsType("EmptyClass", is_optional=True))}
+    ),
+)
+
+
 @dataclass
 class ClassFixture:
     cls: Type
@@ -533,4 +565,22 @@ def class_with_deep_nested_generics():
         cls=ClassWithDeepNestedGenerics,
         py_class=PY_CLASS_FOR_CLASS_WITH_DEEP_NESTED_GENERICS,
         ts_object_type=TS_OBJECT_TYPE_FOR_CLASS_WITH_DEEP_NESTED_GENERICS,
+    )
+
+
+@pytest.fixture
+def class_with_optional_int():
+    return ClassFixture(
+        cls=ClassWithOptionalInt,
+        py_class=PY_CLASS_FOR_CLASS_WITH_OPTIONAL_INT,
+        ts_object_type=TS_OBJECT_TYPE_FOR_CLASS_WITH_OPTIONAL_INT,
+    )
+
+
+@pytest.fixture
+def class_with_optional_empty_class():
+    return ClassFixture(
+        cls=ClassWithOptionalEmptyClass,
+        py_class=PY_CLASS_FOR_CLASS_WITH_OPTIONAL_EMPTY_CLASS,
+        ts_object_type=TS_OBJECT_TYPE_FOR_CLASS_WITH_OPTIONAL_EMPTY_CLASS,
     )

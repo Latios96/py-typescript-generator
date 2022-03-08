@@ -31,16 +31,16 @@ from py_typescript_generator.typescript_model_compiler.well_known_types import (
 )
 
 
-class SimpleDemoClass:
+class EmptyClass:
     pass
 
 
 class ClassWithSimpleDemoClass:
-    simple_demo_class: SimpleDemoClass
+    empty_class: EmptyClass
 
 
 class ClassWithClassWithSimpleDemoClass:
-    class_with_simple_demo_class: ClassWithSimpleDemoClass
+    class_with_empty_class: ClassWithSimpleDemoClass
 
 
 class FirstClassInCycle:
@@ -108,7 +108,7 @@ class ClassWithStrStrDict:
 
 
 class ClassWithSimpleDemoClassList:
-    simple_demo_class_list: List[SimpleDemoClass]
+    empty_class_list: List[EmptyClass]
 
 
 T = TypeVar("T")
@@ -119,40 +119,38 @@ class ClassWithGenericMember(Generic[T]):
 
 
 class ClassWithDeepNestedGenerics:
-    my_dict: Dict[str, List[Dict[str, SimpleDemoClass]]]
+    my_dict: Dict[str, List[Dict[str, EmptyClass]]]
 
 
-PY_CLASS_FOR_SIMPLE_DEMO_CLASS = PyClass(
-    name="SimpleDemoClass", type=SimpleDemoClass, fields=frozenset()
+PY_CLASS_FOR_EMPTY_CLASS = PyClass(
+    name="SimpleDemoClass", type=EmptyClass, fields=frozenset()
 )
-TS_OBJECT_TYPE_FOR_SIMPLE_DEMO_CLASS = TsObjectType(
+TS_OBJECT_TYPE_FOR_EMPTY_CLASS = TsObjectType(
     name="SimpleDemoClass",
     fields=frozenset(),
 )
-PY_CLASS_FOR_CLASS_WITH_SIMPLE_DEMO_CLASS = PyClass(
+PY_CLASS_FOR_CLASS_WITH_EMPTY_CLASS = PyClass(
     name="ClassWithSimpleDemoClass",
     type=ClassWithSimpleDemoClass,
-    fields=frozenset({PyField(name="simple_demo_class", type=SimpleDemoClass)}),
+    fields=frozenset({PyField(name="empty_class", type=EmptyClass)}),
 )
-TS_OBJECT_TYPE_FOR_CLASS_WITH_SIMPLE_DEMO_CLASS = TsObjectType(
+TS_OBJECT_TYPE_FOR_CLASS_WITH_EMPTY_CLASS = TsObjectType(
     name="ClassWithSimpleDemoClass",
-    fields=frozenset(
-        {TsField(name="simple_demo_class", type=TsType("SimpleDemoClass"))}
-    ),
+    fields=frozenset({TsField(name="empty_class", type=TsType("SimpleDemoClass"))}),
 )
-PY_CLASS_FOR_CLASS_WITH_CLASS_WITH_SIMPLE_DEMO_CLASS = PyClass(
+PY_CLASS_FOR_CLASS_WITH_CLASS_WITH_EMPTY_CLASS = PyClass(
     name="ClassWithClassWithSimpleDemoClass",
     type=ClassWithClassWithSimpleDemoClass,
     fields=frozenset(
-        {PyField(name="class_with_simple_demo_class", type=ClassWithSimpleDemoClass)}
+        {PyField(name="class_with_empty_class", type=ClassWithSimpleDemoClass)}
     ),
 )
-TS_OBJECT_TYPE_FOR_CLASS_WITH_CLASS_WITH_SIMPLE_DEMO_CLASS = TsObjectType(
+TS_OBJECT_TYPE_FOR_CLASS_WITH_CLASS_WITH_EMPTY_CLASS = TsObjectType(
     name="ClassWithClassWithSimpleDemoClass",
     fields=frozenset(
         {
             TsField(
-                name="class_with_simple_demo_class",
+                name="class_with_empty_class",
                 type=TsType("ClassWithSimpleDemoClass"),
             )
         }
@@ -203,16 +201,14 @@ TS_OBJECT_TYPE_FOR_CLASS_WITH_STR_STR_DICT = TsObjectType(
     name="ClassWithStrStrDict",
     fields=frozenset({TsField(name="str_dict", type=TS_ANY)}),
 )
-PY_CLASS_FOR_CLASS_WITH_SIMPLE_DEMO_CLASS_LIST = PyClass(
+PY_CLASS_FOR_CLASS_WITH_EMPTY_CLASS_LIST = PyClass(
     name="ClassWithSimpleDemoClassList",
     type=ClassWithSimpleDemoClassList,
-    fields=frozenset(
-        {PyField(name="simple_demo_class_list", type=List[SimpleDemoClass])}
-    ),
+    fields=frozenset({PyField(name="empty_class_list", type=List[EmptyClass])}),
 )
-TS_OBJECT_TYPE_FOR_CLASS_WITH_SIMPLE_DEMO_CLASS_LIST = TsObjectType(
+TS_OBJECT_TYPE_FOR_CLASS_WITH_EMPTY_CLASS_LIST = TsObjectType(
     name="ClassWithSimpleDemoClassList",
-    fields=frozenset({TsField(name="simple_demo_class_list", type=TS_ANY)}),
+    fields=frozenset({TsField(name="empty_class_list", type=TS_ANY)}),
 )
 PY_CLASS_FOR_CLASS_WITH_GENERIC_MEMBER = PyClass(
     name="ClassWithGenericMember",
@@ -227,7 +223,7 @@ PY_CLASS_FOR_CLASS_WITH_DEEP_NESTED_GENERICS = PyClass(
     name="ClassWithDeepNestedGenerics",
     type=ClassWithDeepNestedGenerics,
     fields=frozenset(
-        {PyField(name="my_dict", type=Dict[str, List[Dict[str, SimpleDemoClass]]])}
+        {PyField(name="my_dict", type=Dict[str, List[Dict[str, EmptyClass]]])}
     ),
 )
 TS_OBJECT_TYPE_FOR_CLASS_WITH_DEEP_NESTED_GENERICS = TsObjectType(
@@ -343,29 +339,29 @@ class ClassFixture:
 
 
 @pytest.fixture
-def simple_demo_class():  # todo rename to EmptyDemoClass
+def empty_class():
     return ClassFixture(
-        cls=SimpleDemoClass,
-        py_class=PY_CLASS_FOR_SIMPLE_DEMO_CLASS,
-        ts_object_type=TS_OBJECT_TYPE_FOR_SIMPLE_DEMO_CLASS,
+        cls=EmptyClass,
+        py_class=PY_CLASS_FOR_EMPTY_CLASS,
+        ts_object_type=TS_OBJECT_TYPE_FOR_EMPTY_CLASS,
     )
 
 
 @pytest.fixture
-def class_with_simple_demo_class():
+def class_with_empty_class():
     return ClassFixture(
         cls=ClassWithSimpleDemoClass,
-        py_class=PY_CLASS_FOR_CLASS_WITH_SIMPLE_DEMO_CLASS,
-        ts_object_type=TS_OBJECT_TYPE_FOR_CLASS_WITH_SIMPLE_DEMO_CLASS,
+        py_class=PY_CLASS_FOR_CLASS_WITH_EMPTY_CLASS,
+        ts_object_type=TS_OBJECT_TYPE_FOR_CLASS_WITH_EMPTY_CLASS,
     )
 
 
 @pytest.fixture
-def class_with_class_with_simple_demo_class():
+def class_with_class_with_empty_class():
     return ClassFixture(
         cls=ClassWithClassWithSimpleDemoClass,
-        py_class=PY_CLASS_FOR_CLASS_WITH_CLASS_WITH_SIMPLE_DEMO_CLASS,
-        ts_object_type=TS_OBJECT_TYPE_FOR_CLASS_WITH_CLASS_WITH_SIMPLE_DEMO_CLASS,
+        py_class=PY_CLASS_FOR_CLASS_WITH_CLASS_WITH_EMPTY_CLASS,
+        ts_object_type=TS_OBJECT_TYPE_FOR_CLASS_WITH_CLASS_WITH_EMPTY_CLASS,
     )
 
 
@@ -514,11 +510,11 @@ def class_with_str_str_dict():
 
 
 @pytest.fixture
-def class_with_simple_demo_class_list():
+def class_with_empty_class_list():
     return ClassFixture(
         cls=ClassWithSimpleDemoClassList,
-        py_class=PY_CLASS_FOR_CLASS_WITH_SIMPLE_DEMO_CLASS_LIST,
-        ts_object_type=TS_OBJECT_TYPE_FOR_CLASS_WITH_SIMPLE_DEMO_CLASS_LIST,
+        py_class=PY_CLASS_FOR_CLASS_WITH_EMPTY_CLASS_LIST,
+        ts_object_type=TS_OBJECT_TYPE_FOR_CLASS_WITH_EMPTY_CLASS_LIST,
     )
 
 

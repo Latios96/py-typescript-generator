@@ -50,54 +50,52 @@ def test_should_raise_exception_if_passed_thing_is_not_a_class(demo_parser):
 
 class TestParseSimpleClass:
     def test_model_should_contain_just_the_simple_class(
-        self, simple_demo_class: ClassFixture, demo_parser: DemoParser
+        self, empty_class: ClassFixture, demo_parser: DemoParser
     ) -> None:
-        model_parser = ModelParser([simple_demo_class.cls], [demo_parser])
+        model_parser = ModelParser([empty_class.cls], [demo_parser])
 
         model = model_parser.parse()
 
-        assert model == Model(classes=OrderedSet([simple_demo_class.py_class]))
+        assert model == Model(classes=OrderedSet([empty_class.py_class]))
 
     def test_model_should_contain_just_the_simple_class_even_if_supplied_two_timed(
-        self, simple_demo_class: ClassFixture, demo_parser: DemoParser
+        self, empty_class: ClassFixture, demo_parser: DemoParser
     ) -> None:
-        model_parser = ModelParser(
-            [simple_demo_class.cls, simple_demo_class.cls], [demo_parser]
-        )
+        model_parser = ModelParser([empty_class.cls, empty_class.cls], [demo_parser])
 
         model = model_parser.parse()
 
-        assert model == Model(classes=OrderedSet([simple_demo_class.py_class]))
+        assert model == Model(classes=OrderedSet([empty_class.py_class]))
 
 
 class TestParseClassWithSimpleClass:
     def test_model_should_contain_both_classes_when_passing_only_with_simple_class(
         self,
-        simple_demo_class: ClassFixture,
-        class_with_simple_demo_class: ClassFixture,
+        empty_class: ClassFixture,
+        class_with_empty_class: ClassFixture,
         demo_parser: DemoParser,
     ) -> None:
-        model_parser = ModelParser([class_with_simple_demo_class.cls], [demo_parser])
+        model_parser = ModelParser([class_with_empty_class.cls], [demo_parser])
 
         model = model_parser.parse()
 
         assert model == Model(
             classes=OrderedSet(
                 [
-                    class_with_simple_demo_class.py_class,
-                    simple_demo_class.py_class,
+                    class_with_empty_class.py_class,
+                    empty_class.py_class,
                 ]
             )
         )
 
     def test_model_should_contain_both_classes_when_passing_both_classes(
         self,
-        simple_demo_class: ClassFixture,
-        class_with_simple_demo_class: ClassFixture,
+        empty_class: ClassFixture,
+        class_with_empty_class: ClassFixture,
         demo_parser: DemoParser,
     ) -> None:
         model_parser = ModelParser(
-            [class_with_simple_demo_class.cls, simple_demo_class.cls], [demo_parser]
+            [class_with_empty_class.cls, empty_class.cls], [demo_parser]
         )
 
         model = model_parser.parse()
@@ -105,8 +103,8 @@ class TestParseClassWithSimpleClass:
         assert model == Model(
             classes=OrderedSet(
                 [
-                    class_with_simple_demo_class.py_class,
-                    simple_demo_class.py_class,
+                    class_with_empty_class.py_class,
+                    empty_class.py_class,
                 ]
             )
         )
@@ -115,22 +113,22 @@ class TestParseClassWithSimpleClass:
 class TestClassWithClassWithSimpleDemoClass:
     def test_should_parse_through_three_levels(
         self,
-        simple_demo_class: ClassFixture,
-        class_with_simple_demo_class: ClassFixture,
-        class_with_class_with_simple_demo_class: ClassFixture,
+        empty_class: ClassFixture,
+        class_with_empty_class: ClassFixture,
+        class_with_class_with_empty_class: ClassFixture,
         demo_parser: DemoParser,
     ) -> None:
         model_parser = ModelParser(
-            [class_with_class_with_simple_demo_class.cls], [demo_parser]
+            [class_with_class_with_empty_class.cls], [demo_parser]
         )
 
         model = model_parser.parse()
         assert model == Model(
             classes=OrderedSet(
                 [
-                    class_with_class_with_simple_demo_class.py_class,
-                    class_with_simple_demo_class.py_class,
-                    simple_demo_class.py_class,
+                    class_with_class_with_empty_class.py_class,
+                    class_with_empty_class.py_class,
+                    empty_class.py_class,
                 ]
             )
         )
@@ -260,22 +258,20 @@ class TestParseGenericTypes:
             )
         )
 
-    def test_parse_class_with_simple_demo_class_list(
+    def test_parse_class_with_empty_class_list(
         self,
-        simple_demo_class: ClassFixture,
-        class_with_simple_demo_class_list: ClassFixture,
+        empty_class: ClassFixture,
+        class_with_empty_class_list: ClassFixture,
         demo_parser: DemoParser,
     ) -> None:
-        model_parser = ModelParser(
-            [class_with_simple_demo_class_list.cls], [demo_parser]
-        )
+        model_parser = ModelParser([class_with_empty_class_list.cls], [demo_parser])
 
         model = model_parser.parse()
         assert model == Model(
             classes=OrderedSet(
                 [
-                    class_with_simple_demo_class_list.py_class,
-                    simple_demo_class.py_class,
+                    class_with_empty_class_list.py_class,
+                    empty_class.py_class,
                 ]
             )
         )
@@ -290,7 +286,7 @@ class TestParseGenericTypes:
 
     def test_should_parse_deeply_nested_generics(
         self,
-        simple_demo_class: ClassFixture,
+        empty_class: ClassFixture,
         class_with_deep_nested_generics: ClassFixture,
         demo_parser: DemoParser,
     ) -> None:
@@ -301,7 +297,7 @@ class TestParseGenericTypes:
             classes=OrderedSet(
                 [
                     class_with_deep_nested_generics.py_class,
-                    simple_demo_class.py_class,
+                    empty_class.py_class,
                 ]
             )
         )

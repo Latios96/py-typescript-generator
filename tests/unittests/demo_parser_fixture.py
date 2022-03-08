@@ -7,7 +7,7 @@ from py_typescript_generator.model_parser.class_parsers.abstract_class_parser im
     AbstractClassParser,
 )
 from tests.unittests.fixture_classes import (
-    SimpleDemoClass,
+    EmptyClass,
     ClassWithSimpleDemoClass,
     ClassWithClassWithSimpleDemoClass,
     FirstClassInCycle,
@@ -29,14 +29,14 @@ from tests.unittests.fixture_classes import (
     ClassWithStrIntUnion,
     ClassWithStrFrozenSet,
     ClassWithStrStrDefaultDict,
-    PY_CLASS_FOR_SIMPLE_DEMO_CLASS,
-    PY_CLASS_FOR_CLASS_WITH_SIMPLE_DEMO_CLASS,
-    PY_CLASS_FOR_CLASS_WITH_CLASS_WITH_SIMPLE_DEMO_CLASS,
+    PY_CLASS_FOR_EMPTY_CLASS,
+    PY_CLASS_FOR_CLASS_WITH_EMPTY_CLASS,
+    PY_CLASS_FOR_CLASS_WITH_CLASS_WITH_EMPTY_CLASS,
     PY_CLASS_FOR_FIRST_CLASS_IN_CYCLE,
     PY_CLASS_FOR_SECOND_CLASS_IN_CYCLE,
     PY_CLASS_FOR_CLASS_WITH_INT,
     PY_CLASS_FOR_CLASS_WITH_STR_LIST,
-    PY_CLASS_FOR_CLASS_WITH_SIMPLE_DEMO_CLASS_LIST,
+    PY_CLASS_FOR_CLASS_WITH_EMPTY_CLASS_LIST,
     PY_CLASS_FOR_CLASS_WITH_GENERIC_MEMBER,
     PY_CLASS_FOR_CLASS_WITH_STR_STR_DICT,
     PY_CLASS_FOR_CLASS_WITH_DEEP_NESTED_GENERICS,
@@ -57,7 +57,7 @@ from tests.unittests.fixture_classes import (
 class DemoParser(AbstractClassParser):
     def accepts_class(self, cls: Type) -> bool:
         return cls in [
-            SimpleDemoClass,
+            EmptyClass,
             ClassWithSimpleDemoClass,
             ClassWithClassWithSimpleDemoClass,
             FirstClassInCycle,
@@ -82,12 +82,12 @@ class DemoParser(AbstractClassParser):
         ]
 
     def parse(self, cls: Type) -> PyClass:
-        if cls == SimpleDemoClass:
-            return PY_CLASS_FOR_SIMPLE_DEMO_CLASS
+        if cls == EmptyClass:
+            return PY_CLASS_FOR_EMPTY_CLASS
         elif cls == ClassWithSimpleDemoClass:
-            return PY_CLASS_FOR_CLASS_WITH_SIMPLE_DEMO_CLASS
+            return PY_CLASS_FOR_CLASS_WITH_EMPTY_CLASS
         elif cls == ClassWithClassWithSimpleDemoClass:
-            return PY_CLASS_FOR_CLASS_WITH_CLASS_WITH_SIMPLE_DEMO_CLASS
+            return PY_CLASS_FOR_CLASS_WITH_CLASS_WITH_EMPTY_CLASS
         elif cls == FirstClassInCycle:
             return PY_CLASS_FOR_FIRST_CLASS_IN_CYCLE
         elif cls == SecondClassInCycle:
@@ -97,7 +97,7 @@ class DemoParser(AbstractClassParser):
         elif cls == ClassWithStrList:
             return PY_CLASS_FOR_CLASS_WITH_STR_LIST
         elif cls == ClassWithSimpleDemoClassList:
-            return PY_CLASS_FOR_CLASS_WITH_SIMPLE_DEMO_CLASS_LIST
+            return PY_CLASS_FOR_CLASS_WITH_EMPTY_CLASS_LIST
         elif cls == ClassWithGenericMember:
             return PY_CLASS_FOR_CLASS_WITH_GENERIC_MEMBER
         elif cls == ClassWithStrStrDict:

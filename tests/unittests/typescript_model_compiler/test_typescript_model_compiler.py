@@ -7,6 +7,15 @@ from py_typescript_generator.typescript_model_compiler.typescript_model_compiler
 )
 
 
+def test_should_compile_empty_class(empty_class):
+    model = Model.of_classes([empty_class.py_class])
+    model_compiler = TypescriptModelCompiler()
+
+    ts_model = model_compiler.compile(model)
+
+    assert ts_model == TsModel.of_object_types([empty_class.ts_object_type])
+
+
 @pytest.mark.parametrize(
     "fixture_name",
     [

@@ -197,17 +197,17 @@ class TestClassWithClassWithSimpleDemoClass:
 
 
 class TestParsingCycleShouldTerminate:
-    def test_parse_only_first_class_in_cycle(self):
-        model_parser = ModelParser([FirstClassInCycle], [DemoParser()])
+    def test_parse_only_first_class_in_cycle(self, first_class_in_cycle):
+        model_parser = ModelParser([first_class_in_cycle.cls], [DemoParser()])
 
         model = model_parser.parse()
         assert model == Model(
             classes=OrderedSet(
-                [PY_CLASS_FOR_FIRST_CLASS_IN_CYCLE, PY_CLASS_FOR_SECOND_CLASS_IN_CYCLE]
+                [first_class_in_cycle.py_class, PY_CLASS_FOR_SECOND_CLASS_IN_CYCLE]
             )
         )
 
-    def test_parse_only_second_class_in_cycle(self):
+    def test_parse_only_second_class_in_cycle(self, first_class_in_cycle):
         model_parser = ModelParser([SecondClassInCycle], [DemoParser()])
 
         model = model_parser.parse()
@@ -215,20 +215,20 @@ class TestParsingCycleShouldTerminate:
             classes=OrderedSet(
                 [
                     PY_CLASS_FOR_SECOND_CLASS_IN_CYCLE,
-                    PY_CLASS_FOR_FIRST_CLASS_IN_CYCLE,
+                    first_class_in_cycle.py_class,
                 ]
             )
         )
 
-    def test_parse_all_in_cycle(self):
+    def test_parse_all_in_cycle(self, first_class_in_cycle):
         model_parser = ModelParser(
-            [FirstClassInCycle, SecondClassInCycle], [DemoParser()]
+            [first_class_in_cycle.cls, SecondClassInCycle], [DemoParser()]
         )
 
         model = model_parser.parse()
         assert model == Model(
             classes=OrderedSet(
-                [PY_CLASS_FOR_FIRST_CLASS_IN_CYCLE, PY_CLASS_FOR_SECOND_CLASS_IN_CYCLE]
+                [first_class_in_cycle.py_class, PY_CLASS_FOR_SECOND_CLASS_IN_CYCLE]
             )
         )
 

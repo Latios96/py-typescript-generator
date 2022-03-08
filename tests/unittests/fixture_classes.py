@@ -142,3 +142,10 @@ def class_with_class_with_simple_demo_class():
         cls=ClassWithClassWithSimpleDemoClass,
         py_class=PY_CLASS_FOR_CLASS_WITH_CLASS_WITH_SIMPLE_DEMO_CLASS,
     )
+
+
+@pytest.fixture
+def first_class_in_cycle():
+    return ClassFixture(
+        cls=FirstClassInCycle, py_class=PY_CLASS_FOR_FIRST_CLASS_IN_CYCLE
+    )

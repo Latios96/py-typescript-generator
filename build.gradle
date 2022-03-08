@@ -98,6 +98,7 @@ task mypyCheck(type:PythonTask){
     dependsOn 'pythonInstall'
     command = "-m mypy -p ${pythonSourceFolders.join(' -p ')}"
     pythonSourceFolders.forEach { inputs.dir(it) }
+    inputs.file("mypy.ini")
     outputs.file('mypyCheck')
 }
 

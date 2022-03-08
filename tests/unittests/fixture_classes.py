@@ -1,5 +1,18 @@
 from dataclasses import dataclass
-from typing import List, Dict, TypeVar, Generic, Type
+from datetime import datetime
+from typing import (
+    List,
+    Dict,
+    TypeVar,
+    Generic,
+    Type,
+    Set,
+    Tuple,
+    Union,
+    FrozenSet,
+    DefaultDict,
+)
+from uuid import UUID
 
 import pytest
 
@@ -29,6 +42,50 @@ class SecondClassInCycle:
 
 class ClassWithInt:
     value: int
+
+
+class ClassWithFloat:
+    value: float
+
+
+class ClassWithStr:
+    value: str
+
+
+class ClassWithBytes:
+    value: bytes
+
+
+class ClassWithBool:
+    value: bool
+
+
+class ClassWithDatetime:
+    value: datetime
+
+
+class ClassWithUUID:
+    value: UUID
+
+
+class ClassWithStrSet:
+    value: Set[str]
+
+
+class ClassWithStrTuple:
+    value: Tuple[str]
+
+
+class ClassWithStrIntUnion:
+    value: Union[str, int]
+
+
+class ClassWithStrFrozenSet:
+    value: FrozenSet[str]
+
+
+class ClassWithStrStrDefaultDict:
+    value: DefaultDict[str, str]
 
 
 class ClassWithStrList:
@@ -79,8 +136,8 @@ PY_CLASS_FOR_SECOND_CLASS_IN_CYCLE = PyClass(
     type=SecondClassInCycle,
     fields=frozenset({PyField(name="first", type=FirstClassInCycle)}),
 )
-PY_CLASS_FOR_CLASS_WITH_TERMINATING_TYPE = PyClass(
-    name="ClassWithTerminatingType",
+PY_CLASS_FOR_CLASS_WITH_INT = PyClass(
+    name="ClassWithInt",
     type=ClassWithInt,
     fields=frozenset({PyField(name="value", type=int)}),
 )
@@ -112,6 +169,64 @@ PY_CLASS_FOR_CLASS_WITH_DEEP_NESTED_GENERICS = PyClass(
     fields=frozenset(
         {PyField(name="my_dict", type=Dict[str, List[Dict[str, SimpleDemoClass]]])}
     ),
+)
+
+
+PY_CLASS_FOR_CLASS_WITH_FLOAT = PyClass(
+    name="ClassWithFloat",
+    type=ClassWithFloat,
+    fields=frozenset({PyField(name="value", type=float)}),
+)
+PY_CLASS_FOR_CLASS_WITH_STR = PyClass(
+    name="ClassWithStr",
+    type=ClassWithStr,
+    fields=frozenset({PyField(name="value", type=str)}),
+)
+PY_CLASS_FOR_CLASS_WITH_BYTES = PyClass(
+    name="ClassWithBytes",
+    type=ClassWithBytes,
+    fields=frozenset({PyField(name="value", type=bytes)}),
+)
+PY_CLASS_FOR_CLASS_WITH_BOOL = PyClass(
+    name="ClassWithBool",
+    type=ClassWithBool,
+    fields=frozenset({PyField(name="value", type=bool)}),
+)
+PY_CLASS_FOR_CLASS_WITH_DATETIME = PyClass(
+    name="ClassWithDatetime",
+    type=ClassWithDatetime,
+    fields=frozenset({PyField(name="value", type=datetime)}),
+)
+PY_CLASS_FOR_CLASS_WITH_UUID = PyClass(
+    name="ClassWithUUID",
+    type=ClassWithUUID,
+    fields=frozenset({PyField(name="value", type=UUID)}),
+)
+PY_CLASS_FOR_CLASS_WITH_STR_SET = PyClass(
+    name="ClassWithStrSet",
+    type=ClassWithStrSet,
+    fields=frozenset({PyField(name="value", type=Set[str])}),
+)
+
+PY_CLASS_FOR_CLASS_WITH_STR_TUPLE = PyClass(
+    name="ClassWithStrTuple",
+    type=ClassWithStrTuple,
+    fields=frozenset({PyField(name="value", type=Tuple[str])}),  # type: ignore
+)
+PY_CLASS_FOR_CLASS_WITH_STR_INT_UNION = PyClass(
+    name="ClassWithStrIntUnion",
+    type=ClassWithStrIntUnion,
+    fields=frozenset({PyField(name="value", type=Union[str, int])}),  # type: ignore
+)
+PY_CLASS_FOR_CLASS_WITH_STR_FROZEN_SET = PyClass(
+    name="ClassWithStrFrozenSet",
+    type=ClassWithStrFrozenSet,
+    fields=frozenset({PyField(name="value", type=FrozenSet[str])}),
+)
+PY_CLASS_FOR_CLASS_WITH_STR_STR_DEFAULT_DICT = PyClass(
+    name="ClassWithStrStrDefaultDict",
+    type=ClassWithStrStrDefaultDict,
+    fields=frozenset({PyField(name="value", type=DefaultDict[str, str])}),
 )
 
 
@@ -160,8 +275,72 @@ def second_class_in_cycle():
 
 @pytest.fixture
 def class_with_int():
+    return ClassFixture(cls=ClassWithInt, py_class=PY_CLASS_FOR_CLASS_WITH_INT)
+
+
+@pytest.fixture
+def class_with_float():
+    return ClassFixture(cls=ClassWithFloat, py_class=PY_CLASS_FOR_CLASS_WITH_FLOAT)
+
+
+@pytest.fixture
+def class_with_str():
+    return ClassFixture(cls=ClassWithStr, py_class=PY_CLASS_FOR_CLASS_WITH_STR)
+
+
+@pytest.fixture
+def class_with_bytes():
+    return ClassFixture(cls=ClassWithBytes, py_class=PY_CLASS_FOR_CLASS_WITH_BYTES)
+
+
+@pytest.fixture
+def class_with_bool():
+    return ClassFixture(cls=ClassWithBool, py_class=PY_CLASS_FOR_CLASS_WITH_BOOL)
+
+
+@pytest.fixture
+def class_with_datetime():
     return ClassFixture(
-        cls=ClassWithInt, py_class=PY_CLASS_FOR_CLASS_WITH_TERMINATING_TYPE
+        cls=ClassWithDatetime, py_class=PY_CLASS_FOR_CLASS_WITH_DATETIME
+    )
+
+
+@pytest.fixture
+def class_with_uuid():
+    return ClassFixture(cls=ClassWithUUID, py_class=PY_CLASS_FOR_CLASS_WITH_UUID)
+
+
+@pytest.fixture
+def class_with_str_set():
+    return ClassFixture(cls=ClassWithStrSet, py_class=PY_CLASS_FOR_CLASS_WITH_STR_SET)
+
+
+@pytest.fixture
+def class_with_str_tuple():
+    return ClassFixture(
+        cls=ClassWithStrTuple, py_class=PY_CLASS_FOR_CLASS_WITH_STR_TUPLE
+    )
+
+
+@pytest.fixture
+def class_with_str_int_union():
+    return ClassFixture(
+        cls=ClassWithStrIntUnion, py_class=PY_CLASS_FOR_CLASS_WITH_STR_INT_UNION
+    )
+
+
+@pytest.fixture
+def class_with_str_frozen_set():
+    return ClassFixture(
+        cls=ClassWithStrFrozenSet, py_class=PY_CLASS_FOR_CLASS_WITH_STR_FROZEN_SET
+    )
+
+
+@pytest.fixture
+def class_with_str_str_default_dict():
+    return ClassFixture(
+        cls=ClassWithStrStrDefaultDict,
+        py_class=PY_CLASS_FOR_CLASS_WITH_STR_STR_DEFAULT_DICT,
     )
 
 

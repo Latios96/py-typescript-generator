@@ -177,3 +177,15 @@ class TestTypesMappedToObject:
         assert ts_model == TsModel.of_object_types(
             [class_with_str_str_default_dict.ts_object_type]
         )
+
+    def test_should_compile_str_str_ordered_dict(
+        self, class_with_str_str_ordered_dict: ClassFixture
+    ) -> None:
+        model = Model.of_classes([class_with_str_str_ordered_dict.py_class])
+        model_compiler = TypescriptModelCompiler()
+
+        ts_model = model_compiler.compile(model)
+
+        assert ts_model == TsModel.of_object_types(
+            [class_with_str_str_ordered_dict.ts_object_type]
+        )

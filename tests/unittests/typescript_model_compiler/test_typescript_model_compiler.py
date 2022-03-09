@@ -13,20 +13,21 @@ from py_typescript_generator.typescript_model_compiler.typescript_model_compiler
 from tests.unittests.fixture_classes import ClassFixture
 
 
-def test_should_compile_empty_class(empty_class):
-    model = Model.of_classes([empty_class.py_class])
+def _compile_py_class(empty_class: PyClass) -> TsModel:
+    model = Model.of_classes([empty_class])
     model_compiler = TypescriptModelCompiler()
-
     ts_model = model_compiler.compile(model)
+    return ts_model
+
+
+def test_should_compile_empty_class(empty_class):
+    ts_model = _compile_py_class(empty_class.py_class)
 
     assert ts_model == TsModel.of_object_types([empty_class.ts_object_type])
 
 
 def test_should_compile_class_with_empty_class(class_with_empty_class):
-    model = Model.of_classes([class_with_empty_class.py_class])
-    model_compiler = TypescriptModelCompiler()
-
-    ts_model = model_compiler.compile(model)
+    ts_model = _compile_py_class(class_with_empty_class.py_class)
 
     assert ts_model == TsModel.of_object_types([class_with_empty_class.ts_object_type])
 
@@ -34,10 +35,7 @@ def test_should_compile_class_with_empty_class(class_with_empty_class):
 def test_should_compile_class_with_class_with_empty_class(
     class_with_class_with_empty_class,
 ):
-    model = Model.of_classes([class_with_class_with_empty_class.py_class])
-    model_compiler = TypescriptModelCompiler()
-
-    ts_model = model_compiler.compile(model)
+    ts_model = _compile_py_class(class_with_class_with_empty_class.py_class)
 
     assert ts_model == TsModel.of_object_types(
         [class_with_class_with_empty_class.ts_object_type]
@@ -71,19 +69,13 @@ def test_should_compile_classes_with_cycle(first_class_in_cycle, second_class_in
 )
 def test_should_compile_class_with_scalar_types(fixture_name, request):
     class_fixture = request.getfixturevalue(fixture_name)
-    model = Model.of_classes([class_fixture.py_class])
-    model_compiler = TypescriptModelCompiler()
-
-    ts_model = model_compiler.compile(model)
+    ts_model = _compile_py_class(class_fixture.py_class)
 
     assert ts_model == TsModel.of_object_types([class_fixture.ts_object_type])
 
 
 def test_should_compile_class_with_optional_int(class_with_optional_int):
-    model = Model.of_classes([class_with_optional_int.py_class])
-    model_compiler = TypescriptModelCompiler()
-
-    ts_model = model_compiler.compile(model)
+    ts_model = _compile_py_class(class_with_optional_int.py_class)
 
     assert ts_model == TsModel.of_object_types([class_with_optional_int.ts_object_type])
 
@@ -91,10 +83,7 @@ def test_should_compile_class_with_optional_int(class_with_optional_int):
 def test_should_compile_class_with_optional_empty_class(
     class_with_optional_empty_class,
 ):
-    model = Model.of_classes([class_with_optional_empty_class.py_class])
-    model_compiler = TypescriptModelCompiler()
-
-    ts_model = model_compiler.compile(model)
+    ts_model = _compile_py_class(class_with_optional_empty_class.py_class)
 
     assert ts_model == TsModel.of_object_types(
         [class_with_optional_empty_class.ts_object_type]
@@ -103,26 +92,17 @@ def test_should_compile_class_with_optional_empty_class(
 
 class TestTypesMappedToArray:
     def test_should_compile_class_with_str_list(self, class_with_str_list):
-        model = Model.of_classes([class_with_str_list.py_class])
-        model_compiler = TypescriptModelCompiler()
-
-        ts_model = model_compiler.compile(model)
+        ts_model = _compile_py_class(class_with_str_list.py_class)
 
         assert ts_model == TsModel.of_object_types([class_with_str_list.ts_object_type])
 
     def test_should_compile_class_with_str_set(self, class_with_str_set):
-        model = Model.of_classes([class_with_str_set.py_class])
-        model_compiler = TypescriptModelCompiler()
-
-        ts_model = model_compiler.compile(model)
+        ts_model = _compile_py_class(class_with_str_set.py_class)
 
         assert ts_model == TsModel.of_object_types([class_with_str_set.ts_object_type])
 
     def test_should_compile_class_with_str_frozen_set(self, class_with_str_frozen_set):
-        model = Model.of_classes([class_with_str_frozen_set.py_class])
-        model_compiler = TypescriptModelCompiler()
-
-        ts_model = model_compiler.compile(model)
+        ts_model = _compile_py_class(class_with_str_frozen_set.py_class)
 
         assert ts_model == TsModel.of_object_types(
             [class_with_str_frozen_set.ts_object_type]
@@ -131,10 +111,7 @@ class TestTypesMappedToArray:
     def test_should_compile_class_with_str_ordered_set(
         self, class_with_str_ordered_set
     ):
-        model = Model.of_classes([class_with_str_ordered_set.py_class])
-        model_compiler = TypescriptModelCompiler()
-
-        ts_model = model_compiler.compile(model)
+        ts_model = _compile_py_class(class_with_str_ordered_set.py_class)
 
         assert ts_model == TsModel.of_object_types(
             [class_with_str_ordered_set.ts_object_type]
@@ -143,17 +120,13 @@ class TestTypesMappedToArray:
     def test_should_compile_class_with_optional_empty_class(
         self, class_with_optional_empty_class: ClassFixture
     ) -> None:
-        model = Model.of_classes([class_with_optional_empty_class.py_class])
-        model_compiler = TypescriptModelCompiler()
-
-        ts_model = model_compiler.compile(model)
+        ts_model = _compile_py_class(class_with_optional_empty_class.py_class)
 
         assert ts_model == TsModel.of_object_types(
             [class_with_optional_empty_class.ts_object_type]
         )
 
 
-# todo compiler invocation can be refactored into method
 class TestTypesMappedToObject:
     def test_should_fail_if_key_type_is_not_str(self):
         class ClassWithIntStrDict:
@@ -164,19 +137,13 @@ class TestTypesMappedToObject:
             type=ClassWithIntStrDict,
             fields=frozenset({PyField(name="int_dict", type=Dict[int, str])}),
         )
-        model = Model.of_classes([py_class])
-        model_compiler = TypescriptModelCompiler()
-
         with pytest.raises(UnsupportedKeyTypeForMappedType):
-            model_compiler.compile(model)
+            _compile_py_class(py_class)
 
     def test_should_compile_str_str_dict(
         self, class_with_str_str_dict: ClassFixture
     ) -> None:
-        model = Model.of_classes([class_with_str_str_dict.py_class])
-        model_compiler = TypescriptModelCompiler()
-
-        ts_model = model_compiler.compile(model)
+        ts_model = _compile_py_class(class_with_str_str_dict.py_class)
 
         assert ts_model == TsModel.of_object_types(
             [class_with_str_str_dict.ts_object_type]
@@ -185,10 +152,7 @@ class TestTypesMappedToObject:
     def test_should_compile_str_str_default_dict(
         self, class_with_str_str_default_dict: ClassFixture
     ) -> None:
-        model = Model.of_classes([class_with_str_str_default_dict.py_class])
-        model_compiler = TypescriptModelCompiler()
-
-        ts_model = model_compiler.compile(model)
+        ts_model = _compile_py_class(class_with_str_str_default_dict.py_class)
 
         assert ts_model == TsModel.of_object_types(
             [class_with_str_str_default_dict.ts_object_type]
@@ -197,10 +161,7 @@ class TestTypesMappedToObject:
     def test_should_compile_str_str_ordered_dict(
         self, class_with_str_str_ordered_dict: ClassFixture
     ) -> None:
-        model = Model.of_classes([class_with_str_str_ordered_dict.py_class])
-        model_compiler = TypescriptModelCompiler()
-
-        ts_model = model_compiler.compile(model)
+        ts_model = _compile_py_class(class_with_str_str_ordered_dict.py_class)
 
         assert ts_model == TsModel.of_object_types(
             [class_with_str_str_ordered_dict.ts_object_type]

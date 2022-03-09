@@ -98,8 +98,8 @@ def test_emit_simple_int_enum(simple_int_enum: EnumFixture) -> None:
     assert (
         _emit_enum(simple_int_enum.ts_enum)
         == """enum SimpleIntEnum {
-    SECOND = 1,
     FIRST = 0,
+    SECOND = 1,
 }
 """
     )
@@ -108,9 +108,9 @@ def test_emit_simple_int_enum(simple_int_enum: EnumFixture) -> None:
 def test_emit_simple_str_enum(simple_str_enum: EnumFixture) -> None:
     assert (
         _emit_enum(simple_str_enum.ts_enum)
-        == """interface ClassWithClassWithEmptyClass {
-    SECOND = "SECOND",
+        == """enum SimpleStrEnum {
     FIRST = "FIRST",
+    SECOND = "SECOND",
 }
 """
     )

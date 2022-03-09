@@ -30,4 +30,4 @@ class DataclassParser(AbstractClassParser):
         for field in fields(cls):
             py_fields.append(PyField(name=field.name, type=field.type))
 
-        return PyClass(name=cls.__name__, type=cls, fields=frozenset(py_fields))
+        return PyClass(name=cls.__name__, type=cls, fields=tuple(py_fields))

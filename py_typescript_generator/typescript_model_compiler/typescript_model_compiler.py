@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Type, Optional, FrozenSet
+from typing import Type, Optional, Tuple
 from uuid import UUID
 
 from ordered_set import OrderedSet
@@ -67,7 +67,7 @@ class TypescriptModelCompiler:
             fields.append(
                 TsField(name=py_field.name, type=self._compile_type(py_field.type))
             )
-        return TsObjectType(name=py_class.name, fields=frozenset(fields))
+        return TsObjectType(name=py_class.name, fields=tuple(fields))
 
     def _compile_type(self, cls: Type, optional: bool = False) -> TsType:
         mapped_type = self._map_scalar_type(cls)
@@ -132,5 +132,5 @@ class TypescriptModelCompiler:
         for py_enum_value in enum.values:
             if type(py_enum_value.value) not in {int, str}:
                 raise UnsupportedEnumValue(type(py_enum_value.value))
-        values: FrozenSet[TsEnumValue] = [TsEnumValue(x.name, x.value) for x in enum.values]  # type: ignore
-        return TsEnum(name=enum.name, values=frozenset(values))
+        values: Tuple[TsEnumValue, ...] = [TsEnumValue(x.name, x.value) for x in enum.values]  # type: ignore
+        return TsEnum(name=enum.name, values=tuple(values))

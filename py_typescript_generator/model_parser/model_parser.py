@@ -153,7 +153,7 @@ class ModelParser:
                 PyEnum(
                     name=cls.__name__,
                     type=cls,
-                    values=frozenset([PyEnumValue(e.name, e.value) for e in cls]),
+                    values=tuple([PyEnumValue(e.name, e.value) for e in cls]),
                 )
             )
 

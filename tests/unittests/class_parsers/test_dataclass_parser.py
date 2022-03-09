@@ -39,9 +39,7 @@ def test_should_parse_empty_dataclass_class():
 
     py_class = dataclass_parser.parse(EmptyDataClass)
 
-    assert py_class == PyClass(
-        name="EmptyDataClass", type=EmptyDataClass, fields=frozenset()
-    )
+    assert py_class == PyClass(name="EmptyDataClass", type=EmptyDataClass, fields=())
 
 
 def test_should_parse_dataclass_class():
@@ -56,7 +54,7 @@ def test_should_parse_dataclass_class():
     assert py_class == PyClass(
         name="MyDataClass",
         type=MyDataClass,
-        fields=frozenset([PyField(name="value", type=int)]),
+        fields=(PyField(name="value", type=int),),
     )
 
 
@@ -82,7 +80,7 @@ def test_parse_dataclass_with_str_list():
     assert py_class == PyClass(
         name="MyDataClass",
         type=MyDataClass,
-        fields=frozenset([PyField(name="str_list", type=List[str])]),
+        fields=(PyField(name="str_list", type=List[str]),),
     )
 
 
@@ -101,7 +99,7 @@ def test_parse_dataclass_with_custom_class_list():
     assert py_class == PyClass(
         name="MyDataClass",
         type=MyDataClass,
-        fields=frozenset([PyField(name="the_list", type=List[CustomClass])]),
+        fields=(PyField(name="the_list", type=List[CustomClass]),),
     )
 
 
@@ -120,7 +118,7 @@ def test_parse_dataclass_with_nested_generics():
     assert py_class == PyClass(
         name="MyDataClass",
         type=MyDataClass,
-        fields=frozenset(
-            [PyField(name="the_dict", type=Dict[str, List[Dict[str, CustomClass]]])]
+        fields=(
+            PyField(name="the_dict", type=Dict[str, List[Dict[str, CustomClass]]]),
         ),
     )

@@ -33,7 +33,7 @@ def test_should_parse_simple_dataclass_correctly():
                 PyClass(
                     name="MySimpleDataClass",
                     type=MySimpleDataClass,
-                    fields=frozenset({PyField(name="my_int", type=int)}),
+                    fields=(PyField(name="my_int", type=int),),
                 )
             ]
         )
@@ -51,14 +51,14 @@ def test_should_parse_simple_dataclass_with_nested_class_correctly():
                 PyClass(
                     name="MySimpleDataClassWithANestedClass",
                     type=MySimpleDataClassWithANestedClass,
-                    fields=frozenset(
-                        {PyField(name="my_simple_data_class", type=MySimpleDataClass)}
+                    fields=(
+                        PyField(name="my_simple_data_class", type=MySimpleDataClass),
                     ),
                 ),
                 PyClass(
                     name="MySimpleDataClass",
                     type=MySimpleDataClass,
-                    fields=frozenset({PyField(name="my_int", type=int)}),
+                    fields=(PyField(name="my_int", type=int),),
                 ),
             ]
         )
@@ -80,7 +80,7 @@ def test_should_parse_dataclass_with_str_list_correctly():
                 PyClass(
                     name="MyDataClass",
                     type=MyDataClass,
-                    fields=frozenset([PyField(name="str_list", type=List[str])]),
+                    fields=(PyField(name="str_list", type=List[str]),),
                 )
             ]
         )
@@ -106,11 +106,9 @@ def test_should_parse_dataclass_with_custom_class_list_correctly():
                 PyClass(
                     name="MyDataClass",
                     type=MyDataClass,
-                    fields=frozenset(
-                        [PyField(name="the_list", type=List[CustomClass])]
-                    ),
+                    fields=(PyField(name="the_list", type=List[CustomClass]),),
                 ),
-                PyClass(name="CustomClass", type=CustomClass, fields=frozenset()),
+                PyClass(name="CustomClass", type=CustomClass, fields=()),
             ]
         )
     )
@@ -135,16 +133,14 @@ def test_should_parse_dataclass_with_nested_generics_correctly():
                 PyClass(
                     name="MyDataClass",
                     type=MyDataClass,
-                    fields=frozenset(
-                        [
-                            PyField(
-                                name="the_dict",
-                                type=Dict[str, List[Dict[str, CustomClass]]],
-                            )
-                        ]
+                    fields=(
+                        PyField(
+                            name="the_dict",
+                            type=Dict[str, List[Dict[str, CustomClass]]],
+                        ),
                     ),
                 ),
-                PyClass(name="CustomClass", type=CustomClass, fields=frozenset()),
+                PyClass(name="CustomClass", type=CustomClass, fields=()),
             ]
         )
     )

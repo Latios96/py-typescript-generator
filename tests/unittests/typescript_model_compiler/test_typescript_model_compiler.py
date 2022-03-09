@@ -155,7 +155,7 @@ class TestTypesMappedToObject:
         py_class = PyClass(
             name="ClassWithIntStrDict",
             type=ClassWithIntStrDict,
-            fields=frozenset({PyField(name="int_dict", type=Dict[int, str])}),
+            fields=(PyField(name="int_dict", type=Dict[int, str]),),
         )
         with pytest.raises(UnsupportedKeyTypeForMappedType):
             _compile_py_class(py_class)
@@ -206,7 +206,7 @@ class TestCompileEnum:
         py_enum = PyEnum(
             name="test",
             type=MyEnum,
-            values=frozenset([PyEnumValue(name="test", value=(1,))]),
+            values=(PyEnumValue(name="test", value=(1,)),),
         )
 
         with pytest.raises(UnsupportedEnumValue):

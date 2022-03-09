@@ -169,307 +169,291 @@ class SimpleStrEnum(Enum):
     SECOND = "SECOND"
 
 
-PY_CLASS_FOR_EMPTY_CLASS = PyClass(
-    name="EmptyClass", type=EmptyClass, fields=frozenset()
-)
+PY_CLASS_FOR_EMPTY_CLASS = PyClass(name="EmptyClass", type=EmptyClass, fields=())
 TS_OBJECT_TYPE_FOR_EMPTY_CLASS = TsObjectType(
     name="EmptyClass",
-    fields=frozenset(),
+    fields=tuple(),
 )
 PY_CLASS_FOR_CLASS_WITH_EMPTY_CLASS = PyClass(
     name="ClassWithEmptyClass",
     type=ClassWithEmptyClass,
-    fields=frozenset({PyField(name="empty_class", type=EmptyClass)}),
+    fields=tuple({PyField(name="empty_class", type=EmptyClass)}),
 )
 TS_OBJECT_TYPE_FOR_CLASS_WITH_EMPTY_CLASS = TsObjectType(
     name="ClassWithEmptyClass",
-    fields=frozenset({TsField(name="empty_class", type=TsType("EmptyClass"))}),
+    fields=(TsField(name="empty_class", type=TsType("EmptyClass")),),
 )
 PY_CLASS_FOR_CLASS_WITH_CLASS_WITH_EMPTY_CLASS = PyClass(
     name="ClassWithClassWithEmptyClass",
     type=ClassWithClassWithEmptyClass,
-    fields=frozenset(
-        {PyField(name="class_with_empty_class", type=ClassWithEmptyClass)}
-    ),
+    fields=(PyField(name="class_with_empty_class", type=ClassWithEmptyClass),),
 )
 TS_OBJECT_TYPE_FOR_CLASS_WITH_CLASS_WITH_EMPTY_CLASS = TsObjectType(
     name="ClassWithClassWithEmptyClass",
-    fields=frozenset(
-        {
-            TsField(
-                name="class_with_empty_class",
-                type=TsType("ClassWithEmptyClass"),
-            )
-        }
+    fields=(
+        TsField(
+            name="class_with_empty_class",
+            type=TsType("ClassWithEmptyClass"),
+        ),
     ),
 )
 PY_CLASS_FOR_FIRST_CLASS_IN_CYCLE = PyClass(
     name="FirstClassInCycle",
     type=FirstClassInCycle,
-    fields=frozenset({PyField(name="second", type=SecondClassInCycle)}),
+    fields=(PyField(name="second", type=SecondClassInCycle),),
 )
 TS_OBJECT_TYPE_FOR_FIRST_CLASS_IN_CYCLE = TsObjectType(
     name="FirstClassInCycle",
-    fields=frozenset({TsField(name="second", type=TsType("SecondClassInCycle"))}),
+    fields=(TsField(name="second", type=TsType("SecondClassInCycle")),),
 )
 PY_CLASS_FOR_SECOND_CLASS_IN_CYCLE = PyClass(
     name="SecondClassInCycle",
     type=SecondClassInCycle,
-    fields=frozenset({PyField(name="first", type=FirstClassInCycle)}),
+    fields=(PyField(name="first", type=FirstClassInCycle),),
 )
 TS_OBJECT_TYPE_FOR_SECOND_CLASS_IN_CYCLE = TsObjectType(
     name="SecondClassInCycle",
-    fields=frozenset({TsField(name="first", type=TsType("FirstClassInCycle"))}),
+    fields=(TsField(name="first", type=TsType("FirstClassInCycle")),),
 )
 PY_CLASS_FOR_CLASS_WITH_INT = PyClass(
     name="ClassWithInt",
     type=ClassWithInt,
-    fields=frozenset({PyField(name="value", type=int)}),
+    fields=(PyField(name="value", type=int),),
 )
 TS_OBJECT_TYPE_FOR_CLASS_WITH_INT = TsObjectType(
     name="ClassWithInt",
-    fields=frozenset({TsField(name="value", type=TS_NUMBER)}),
+    fields=(TsField(name="value", type=TS_NUMBER),),
 )
 PY_CLASS_FOR_CLASS_WITH_STR_LIST = PyClass(
     name="ClassWithStrList",
     type=ClassWithStrList,
-    fields=frozenset({PyField(name="str_list", type=List[str])}),
+    fields=(PyField(name="str_list", type=List[str]),),
 )
 TS_OBJECT_TYPE_FOR_CLASS_WITH_STR_LIST = TsObjectType(
     name="ClassWithStrList",
-    fields=frozenset({TsField(name="str_list", type=TsArray(TS_STRING))}),
+    fields=(TsField(name="str_list", type=TsArray(TS_STRING)),),
 )
 PY_CLASS_FOR_CLASS_WITH_STR_STR_DICT = PyClass(
     name="ClassWithStrStrDict",
     type=ClassWithStrStrDict,
-    fields=frozenset({PyField(name="str_dict", type=Dict[str, str])}),
+    fields=(PyField(name="str_dict", type=Dict[str, str]),),
 )
 TS_OBJECT_TYPE_FOR_CLASS_WITH_STR_STR_DICT = TsObjectType(
     name="ClassWithStrStrDict",
-    fields=frozenset({TsField(name="str_dict", type=TsMappedType(TS_STRING))}),
+    fields=(TsField(name="str_dict", type=TsMappedType(TS_STRING)),),
 )
 PY_CLASS_FOR_CLASS_WITH_EMPTY_CLASS_LIST = PyClass(
     name="ClassWithEmptyClassList",
     type=ClassWithEmptyClassList,
-    fields=frozenset({PyField(name="empty_class_list", type=List[EmptyClass])}),
+    fields=(PyField(name="empty_class_list", type=List[EmptyClass]),),
 )
 TS_OBJECT_TYPE_FOR_CLASS_WITH_EMPTY_CLASS_LIST = TsObjectType(
     name="ClassWithEmptyClassList",
-    fields=frozenset(
-        {TsField(name="empty_class_list", type=TsArray(TsType("EmptyClass")))}
-    ),
+    fields=(TsField(name="empty_class_list", type=TsArray(TsType("EmptyClass"))),),
 )
 PY_CLASS_FOR_CLASS_WITH_GENERIC_MEMBER = PyClass(
     name="ClassWithGenericMember",
     type=ClassWithGenericMember,
-    fields=frozenset({PyField(name="my_member", type=T)}),  # type: ignore
+    fields=(PyField(name="my_member", type=T),),  # type: ignore
 )
 TS_OBJECT_TYPE_FOR_CLASS_WITH_GENERIC_MEMBER = TsObjectType(
     name="ClassWithGenericMember",
-    fields=frozenset({TsField(name="my_member", type=TS_ANY)}),  # type: ignore
+    fields=(TsField(name="my_member", type=TS_ANY),),  # type: ignore
 )
 PY_CLASS_FOR_CLASS_WITH_DEEP_NESTED_GENERICS = PyClass(
     name="ClassWithDeepNestedGenerics",
     type=ClassWithDeepNestedGenerics,
-    fields=frozenset(
-        {PyField(name="my_dict", type=Dict[str, List[Dict[str, EmptyClass]]])}
-    ),
+    fields=(PyField(name="my_dict", type=Dict[str, List[Dict[str, EmptyClass]]]),),
 )
 TS_OBJECT_TYPE_FOR_CLASS_WITH_DEEP_NESTED_GENERICS = TsObjectType(
     name="ClassWithDeepNestedGenerics",
-    fields=frozenset({TsField(name="my_dict", type=TS_ANY)}),
+    fields=(TsField(name="my_dict", type=TS_ANY),),
 )
 PY_CLASS_FOR_CLASS_WITH_FLOAT = PyClass(
     name="ClassWithFloat",
     type=ClassWithFloat,
-    fields=frozenset({PyField(name="value", type=float)}),
+    fields=(PyField(name="value", type=float),),
 )
 TS_OBJECT_TYPE_FOR_CLASS_WITH_FLOAT = TsObjectType(
     name="ClassWithFloat",
-    fields=frozenset({TsField(name="value", type=TS_NUMBER)}),
+    fields=(TsField(name="value", type=TS_NUMBER),),
 )
 PY_CLASS_FOR_CLASS_WITH_STR = PyClass(
     name="ClassWithStr",
     type=ClassWithStr,
-    fields=frozenset({PyField(name="value", type=str)}),
+    fields=(PyField(name="value", type=str),),
 )
 TS_OBJECT_TYPE_FOR_CLASS_WITH_STR = TsObjectType(
     name="ClassWithStr",
-    fields=frozenset({TsField(name="value", type=TS_STRING)}),
+    fields=(TsField(name="value", type=TS_STRING),),
 )
 PY_CLASS_FOR_CLASS_WITH_BYTES = PyClass(
     name="ClassWithBytes",
     type=ClassWithBytes,
-    fields=frozenset({PyField(name="value", type=bytes)}),
+    fields=(PyField(name="value", type=bytes),),
 )
 TS_OBJECT_TYPE_FOR_CLASS_WITH_BYTES = TsObjectType(
     name="ClassWithBytes",
-    fields=frozenset({TsField(name="value", type=TS_STRING)}),
+    fields=(TsField(name="value", type=TS_STRING),),
 )
 PY_CLASS_FOR_CLASS_WITH_BOOL = PyClass(
     name="ClassWithBool",
     type=ClassWithBool,
-    fields=frozenset({PyField(name="value", type=bool)}),
+    fields=(PyField(name="value", type=bool),),
 )
 TS_OBJECT_TYPE_FOR_CLASS_WITH_BOOL = TsObjectType(
     name="ClassWithBool",
-    fields=frozenset({TsField(name="value", type=TS_BOOLEAN)}),
+    fields=(TsField(name="value", type=TS_BOOLEAN),),
 )
 PY_CLASS_FOR_CLASS_WITH_DATETIME = PyClass(
     name="ClassWithDatetime",
     type=ClassWithDatetime,
-    fields=frozenset({PyField(name="value", type=datetime)}),
+    fields=(PyField(name="value", type=datetime),),
 )
 TS_OBJECT_TYPE_FOR_CLASS_WITH_DATETIME = TsObjectType(
     name="ClassWithDatetime",
-    fields=frozenset({TsField(name="value", type=TS_STRING)}),
+    fields=(TsField(name="value", type=TS_STRING),),
 )
 PY_CLASS_FOR_CLASS_WITH_UUID = PyClass(
     name="ClassWithUUID",
     type=ClassWithUUID,
-    fields=frozenset({PyField(name="value", type=UUID)}),
+    fields=(PyField(name="value", type=UUID),),
 )
 TS_OBJECT_TYPE_FOR_CLASS_WITH_UUID = TsObjectType(
     name="ClassWithUUID",
-    fields=frozenset({TsField(name="value", type=TS_STRING)}),
+    fields=(TsField(name="value", type=TS_STRING),),
 )
 PY_CLASS_FOR_CLASS_WITH_STR_SET = PyClass(
     name="ClassWithStrSet",
     type=ClassWithStrSet,
-    fields=frozenset({PyField(name="value", type=Set[str])}),
+    fields=(PyField(name="value", type=Set[str]),),
 )
 TS_OBJECT_TYPE_FOR_CLASS_WITH_STR_SET = TsObjectType(
     name="ClassWithStrSet",
-    fields=frozenset({TsField(name="value", type=TsArray(TS_STRING))}),
+    fields=(TsField(name="value", type=TsArray(TS_STRING)),),
 )
 PY_CLASS_FOR_CLASS_WITH_STR_TUPLE = PyClass(
     name="ClassWithStrTuple",
     type=ClassWithStrTuple,
-    fields=frozenset({PyField(name="value", type=Tuple[str])}),  # type: ignore
+    fields=(PyField(name="value", type=Tuple[str]),),  # type: ignore
 )
 TS_OBJECT_TYPE_FOR_CLASS_WITH_STR_TUPLE = TsObjectType(
     name="ClassWithStrTuple",
-    fields=frozenset({TsField(name="value", type=TS_ANY)}),
+    fields=(TsField(name="value", type=TS_ANY),),
 )
 PY_CLASS_FOR_CLASS_WITH_STR_INT_UNION = PyClass(
     name="ClassWithStrIntUnion",
     type=ClassWithStrIntUnion,
-    fields=frozenset({PyField(name="value", type=Union[str, int])}),  # type: ignore
+    fields=(PyField(name="value", type=Union[str, int]),),  # type: ignore
 )
 TS_OBJECT_TYPE_FOR_CLASS_WITH_STR_INT_UNION = TsObjectType(
     name="ClassWithStrIntUnion",
-    fields=frozenset({TsField(name="value", type=TS_ANY)}),
+    fields=(TsField(name="value", type=TS_ANY),),
 )
 PY_CLASS_FOR_CLASS_WITH_STR_FROZEN_SET = PyClass(
     name="ClassWithStrFrozenSet",
     type=ClassWithStrFrozenSet,
-    fields=frozenset({PyField(name="value", type=FrozenSet[str])}),
+    fields=(PyField(name="value", type=FrozenSet[str]),),
 )
 TS_OBJECT_TYPE_FOR_CLASS_WITH_STR_FROZEN_SET = TsObjectType(
     name="ClassWithStrFrozenSet",
-    fields=frozenset({TsField(name="value", type=TsArray(TS_STRING))}),
+    fields=(TsField(name="value", type=TsArray(TS_STRING)),),
 )
 PY_CLASS_FOR_CLASS_WITH_STR_ORDERED_SET = PyClass(
     name="ClassWithStrOrderedSet",
     type=ClassWithStrOrderedSet,
-    fields=frozenset({PyField(name="value", type=FrozenSet[str])}),
+    fields=(PyField(name="value", type=FrozenSet[str]),),
 )
 TS_OBJECT_TYPE_FOR_CLASS_WITH_STR_ORDERED_SET = TsObjectType(
     name="ClassWithStrOrderedSet",
-    fields=frozenset({TsField(name="value", type=TsArray(TS_STRING))}),
+    fields=(TsField(name="value", type=TsArray(TS_STRING)),),
 )
 PY_CLASS_FOR_CLASS_WITH_STR_STR_DEFAULT_DICT = PyClass(
     name="ClassWithStrStrDefaultDict",
     type=ClassWithStrStrDefaultDict,
-    fields=frozenset({PyField(name="value", type=DefaultDict[str, str])}),
+    fields=(PyField(name="value", type=DefaultDict[str, str]),),
 )
 TS_OBJECT_TYPE_FOR_CLASS_WITH_STR_STR_DEFAULT_DICT = TsObjectType(
     name="ClassWithStrStrDefaultDict",
-    fields=frozenset({TsField(name="value", type=TsMappedType(TS_STRING))}),
+    fields=(TsField(name="value", type=TsMappedType(TS_STRING)),),
 )
 PY_CLASS_FOR_CLASS_WITH_STR_STR_ORDERED_DICT = PyClass(
     name="ClassWithStrStrOrderedDict",
     type=ClassWithStrStrOrderedDict,
-    fields=frozenset({PyField(name="value", type=DefaultDict[str, str])}),
+    fields=(PyField(name="value", type=DefaultDict[str, str]),),
 )
 TS_OBJECT_TYPE_FOR_CLASS_WITH_STR_STR_ORDERED_DICT = TsObjectType(
     name="ClassWithStrStrOrderedDict",
-    fields=frozenset({TsField(name="value", type=TsMappedType(TS_STRING))}),
+    fields=(TsField(name="value", type=TsMappedType(TS_STRING)),),
 )
 PY_CLASS_FOR_CLASS_WITH_OPTIONAL_INT = PyClass(
     name="ClassWithOptionalInt",
     type=ClassWithOptionalInt,
-    fields=frozenset({PyField(name="value", type=Optional[int])}),  # type: ignore
+    fields=(PyField(name="value", type=Optional[int]),),  # type: ignore
 )
 TS_OBJECT_TYPE_FOR_CLASS_WITH_OPTIONAL_INT = TsObjectType(
     name="ClassWithOptionalInt",
-    fields=frozenset({TsField(name="value", type=TS_NUMBER.as_optional_type())}),
+    fields=(TsField(name="value", type=TS_NUMBER.as_optional_type()),),
 )
 
 PY_CLASS_FOR_CLASS_WITH_OPTIONAL_EMPTY_CLASS = PyClass(
     name="ClassWithOptionalEmptyClass",
     type=ClassWithOptionalEmptyClass,
-    fields=frozenset({PyField(name="value", type=Optional[EmptyClass])}),  # type: ignore
+    fields=(PyField(name="value", type=Optional[EmptyClass]),),  # type: ignore
 )
 TS_OBJECT_TYPE_FOR_CLASS_WITH_OPTIONAL_EMPTY_CLASS = TsObjectType(
     name="ClassWithOptionalEmptyClass",
-    fields=frozenset(
-        {TsField(name="value", type=TsType("EmptyClass", is_optional=True))}
-    ),
+    fields=(TsField(name="value", type=TsType("EmptyClass", is_optional=True)),),
 )
 PY_CLASS_FOR_CLASS_WITH_LIST_OF_OPTIONAL_INT = PyClass(
     name="ClassWithListOfOptionalInt",
     type=ClassWithListOfOptionalInt,
-    fields=frozenset({PyField(name="value", type=List[Optional[int]])}),  # type: ignore
+    fields=(PyField(name="value", type=List[Optional[int]]),),  # type: ignore
 )
 TS_OBJECT_TYPE_FOR_CLASS_WITH_LIST_OF_OPTIONAL_INT = TsObjectType(
     name="ClassWithOptionalInt",
-    fields=frozenset(
-        {TsField(name="value", type=TsArray(TS_NUMBER.as_optional_type()))}
-    ),
+    fields=(TsField(name="value", type=TsArray(TS_NUMBER.as_optional_type())),),
 )
 
 PY_CLASS_FOR_CLASS_WITH_LIST_OF_OPTIONAL_EMPTY_CLASS = PyClass(
     name="ClassWithListOfOptionalEmptyClass",
     type=ClassWithListOfOptionalEmptyClass,
-    fields=frozenset({PyField(name="value", type=List[Optional[EmptyClass]])}),  # type: ignore
+    fields=(PyField(name="value", type=List[Optional[EmptyClass]]),),  # type: ignore
 )
 TS_OBJECT_TYPE_FOR_CLASS_WITH_LIST_OF_OPTIONAL_EMPTY_CLASS = TsObjectType(
     name="ClassWithListOfOptionalEmptyClass",
-    fields=frozenset(
-        {TsField(name="value", type=TsArray(TsType("EmptyClass", is_optional=True)))}
+    fields=(
+        TsField(name="value", type=TsArray(TsType("EmptyClass", is_optional=True))),
     ),
 )
 PY_ENUM_FOR_SIMPLE_INT_ENUM = PyEnum(
     name="SimpleIntEnum",
     type=SimpleIntEnum,
-    values=frozenset(
-        [PyEnumValue(name="FIRST", value=0), PyEnumValue(name="SECOND", value=1)]
+    values=(
+        PyEnumValue(name="FIRST", value=0),
+        PyEnumValue(name="SECOND", value=1),
     ),
 )
 TS_ENUM_FOR_SIMPLE_INT_ENUM = TsEnum(
     name="SimpleIntEnum",
-    values=frozenset(
-        [TsEnumValue(name="FIRST", value=0), TsEnumValue(name="SECOND", value=1)]
+    values=(
+        TsEnumValue(name="FIRST", value=0),
+        TsEnumValue(name="SECOND", value=1),
     ),
 )
 PY_ENUM_FOR_SIMPLE_STR_ENUM = PyEnum(
     name="SimpleStrEnum",
     type=SimpleStrEnum,
-    values=frozenset(
-        [
-            PyEnumValue(name="FIRST", value="FIRST"),
-            PyEnumValue(name="SECOND", value="SECOND"),
-        ]
+    values=(
+        PyEnumValue(name="FIRST", value="FIRST"),
+        PyEnumValue(name="SECOND", value="SECOND"),
     ),
 )
 TS_ENUM_FOR_SIMPLE_STR_ENUM = TsEnum(
     name="SimpleStrEnum",
-    values=frozenset(
-        [
-            TsEnumValue(name="FIRST", value="FIRST"),
-            TsEnumValue(name="SECOND", value="SECOND"),
-        ]
+    values=(
+        TsEnumValue(name="FIRST", value="FIRST"),
+        TsEnumValue(name="SECOND", value="SECOND"),
     ),
 )
 

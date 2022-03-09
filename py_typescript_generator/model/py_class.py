@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Type, FrozenSet
+from typing import Type, Tuple
 
 from py_typescript_generator.model.py_field import PyField
 
@@ -8,4 +8,4 @@ from py_typescript_generator.model.py_field import PyField
 class PyClass:
     name: str
     type: Type
-    fields: FrozenSet[PyField]
+    fields: Tuple[PyField, ...]

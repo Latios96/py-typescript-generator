@@ -213,7 +213,7 @@ def test_parse_builtin_terminating_types(
     py_class_with_terminating_type = PyClass(
         name="ClassWithTerminatingType",
         type=class_with_int.cls,
-        fields=frozenset({PyField(name="the_type", type=the_type)}),
+        fields=(PyField(name="the_type", type=the_type),),
     )
 
     class TerminatingTypeClassParser(AbstractClassParser):

@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Union, FrozenSet
+from typing import Union, Tuple
 
 
 @dataclass(frozen=True)
@@ -16,4 +16,4 @@ class TsEnumValue:
 @dataclass(frozen=True)
 class TsEnum:
     name: str
-    values: FrozenSet[TsEnumValue]
+    values: Tuple[TsEnumValue, ...]

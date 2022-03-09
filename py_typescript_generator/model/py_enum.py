@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Type, FrozenSet
+from typing import Type, Tuple
 
 
 @dataclass(frozen=True)
@@ -12,4 +12,4 @@ class PyEnumValue:
 class PyEnum:
     name: str
     type: Type
-    values: FrozenSet[PyEnumValue]
+    values: Tuple[PyEnumValue, ...]

@@ -12,6 +12,7 @@ from typing import (
     FrozenSet,
     DefaultDict,
     Optional,
+    OrderedDict,
 )
 from uuid import UUID
 
@@ -107,6 +108,10 @@ class ClassWithStrOrderedSet:
 
 class ClassWithStrStrDefaultDict:
     value: DefaultDict[str, str]
+
+
+class ClassWithStrStrOrderedDict:
+    value: OrderedDict[str, str]
 
 
 class ClassWithStrList:
@@ -364,6 +369,15 @@ TS_OBJECT_TYPE_FOR_CLASS_WITH_STR_STR_DEFAULT_DICT = TsObjectType(
     name="ClassWithStrStrDefaultDict",
     fields=frozenset({TsField(name="value", type=TsMappedType(TS_STRING))}),
 )
+PY_CLASS_FOR_CLASS_WITH_STR_STR_ORDERED_DICT = PyClass(
+    name="ClassWithStrStrOrderedDict",
+    type=ClassWithStrStrOrderedDict,
+    fields=frozenset({PyField(name="value", type=DefaultDict[str, str])}),
+)
+TS_OBJECT_TYPE_FOR_CLASS_WITH_STR_STR_ORDERED_DICT = TsObjectType(
+    name="ClassWithStrStrOrderedDict",
+    fields=frozenset({TsField(name="value", type=TsMappedType(TS_STRING))}),
+)
 PY_CLASS_FOR_CLASS_WITH_OPTIONAL_INT = PyClass(
     name="ClassWithOptionalInt",
     type=ClassWithOptionalInt,
@@ -576,6 +590,15 @@ def class_with_str_str_default_dict():
         cls=ClassWithStrStrDefaultDict,
         py_class=PY_CLASS_FOR_CLASS_WITH_STR_STR_DEFAULT_DICT,
         ts_object_type=TS_OBJECT_TYPE_FOR_CLASS_WITH_STR_STR_DEFAULT_DICT,
+    )
+
+
+@pytest.fixture
+def class_with_str_str_ordered_dict():
+    return ClassFixture(
+        cls=ClassWithStrStrOrderedDict,
+        py_class=PY_CLASS_FOR_CLASS_WITH_STR_STR_ORDERED_DICT,
+        ts_object_type=TS_OBJECT_TYPE_FOR_CLASS_WITH_STR_STR_ORDERED_DICT,
     )
 
 

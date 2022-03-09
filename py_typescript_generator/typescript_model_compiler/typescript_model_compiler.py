@@ -14,6 +14,7 @@ from py_typescript_generator.typescript_model_compiler.ts_object_type import (
     TsObjectType,
 )
 from py_typescript_generator.typescript_model_compiler.ts_type import TsType
+from py_typescript_generator.typescript_model_compiler.ts_array import TsArray
 from py_typescript_generator.typescript_model_compiler.well_known_types import (
     TS_NUMBER,
     TS_STRING,
@@ -75,7 +76,7 @@ class TypescriptModelCompiler:
             return TS_STRING
         return None
 
-    def _map_generic_type(self, cls: Type, is_optional: bool):
+    def _map_generic_type(self, cls: Type, is_optional: bool) -> TsType:
         generic_origin_type = get_origin(cls)
         is_mapped_to_array = generic_origin_type in {list, set, frozenset}
         if is_mapped_to_array:
@@ -83,7 +84,8 @@ class TypescriptModelCompiler:
                 raise UnsupportedGenericParameterCount(
                     "A type which is mapped to an array can only have one generic parameter."
                 )
-            return TsType.array(
-                name=self._compile_type(get_args(cls)[0]).name, is_optional=is_optional
+            return TsArray(
+                wrapped_type=self._compile_type(get_args(cls)[0]),
+                is_optional=is_optional,
             )
         raise ValueError("not supported")

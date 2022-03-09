@@ -24,6 +24,7 @@ from py_typescript_generator.typescript_model_compiler.ts_object_type import (
     TsObjectType,
 )
 from py_typescript_generator.typescript_model_compiler.ts_type import TsType
+from py_typescript_generator.typescript_model_compiler.ts_array import TsArray
 from py_typescript_generator.typescript_model_compiler.well_known_types import (
     TS_NUMBER,
     TS_ANY,
@@ -199,7 +200,7 @@ PY_CLASS_FOR_CLASS_WITH_STR_LIST = PyClass(
 )
 TS_OBJECT_TYPE_FOR_CLASS_WITH_STR_LIST = TsObjectType(
     name="ClassWithStrList",
-    fields=frozenset({TsField(name="str_list", type=TsType.array("string"))}),
+    fields=frozenset({TsField(name="str_list", type=TsArray(TS_STRING))}),
 )
 PY_CLASS_FOR_CLASS_WITH_STR_STR_DICT = PyClass(
     name="ClassWithStrStrDict",
@@ -300,7 +301,7 @@ PY_CLASS_FOR_CLASS_WITH_STR_SET = PyClass(
 )
 TS_OBJECT_TYPE_FOR_CLASS_WITH_STR_SET = TsObjectType(
     name="ClassWithStrSet",
-    fields=frozenset({TsField(name="value", type=TsType.array("string"))}),
+    fields=frozenset({TsField(name="value", type=TsArray(TS_STRING))}),
 )
 PY_CLASS_FOR_CLASS_WITH_STR_TUPLE = PyClass(
     name="ClassWithStrTuple",
@@ -327,7 +328,7 @@ PY_CLASS_FOR_CLASS_WITH_STR_FROZEN_SET = PyClass(
 )
 TS_OBJECT_TYPE_FOR_CLASS_WITH_STR_FROZEN_SET = TsObjectType(
     name="ClassWithStrFrozenSet",
-    fields=frozenset({TsField(name="value", type=TsType.array("string"))}),
+    fields=frozenset({TsField(name="value", type=TsArray(TS_STRING))}),
 )
 PY_CLASS_FOR_CLASS_WITH_STR_STR_DEFAULT_DICT = PyClass(
     name="ClassWithStrStrDefaultDict",

@@ -2,6 +2,9 @@ import pytest
 
 from py_typescript_generator.typescript_model_compiler.ts_array import TsArray
 from py_typescript_generator.typescript_model_compiler.ts_interface import TsInterface
+from py_typescript_generator.typescript_model_compiler.ts_mapped_type import (
+    TsMappedType,
+)
 from py_typescript_generator.typescript_model_compiler.ts_type import TsType
 from py_typescript_generator.typescript_model_compiler.well_known_types import (
     TS_STRING,
@@ -25,6 +28,10 @@ class TestAsOptionalType:
                 TsArray(wrapped_type=TS_STRING, is_optional=False),
                 TsArray(wrapped_type=TS_STRING, is_optional=True),
             ),
+            (
+                TsMappedType(wrapped_type=TS_STRING, is_optional=False),
+                TsMappedType(wrapped_type=TS_STRING, is_optional=True),
+            ),
         ],
     )
     def test_non_optional_type_should_get_optional(self, ts_type_before, ts_type_after):
@@ -46,6 +53,10 @@ class TestAsOptionalType:
             (
                 TsArray(wrapped_type=TS_STRING, is_optional=True),
                 TsArray(wrapped_type=TS_STRING, is_optional=True),
+            ),
+            (
+                TsMappedType(wrapped_type=TS_STRING, is_optional=True),
+                TsMappedType(wrapped_type=TS_STRING, is_optional=True),
             ),
         ],
     )
@@ -73,6 +84,10 @@ class TestWithIsOptional:
                 TsArray(wrapped_type=TS_STRING, is_optional=False),
                 TsArray(wrapped_type=TS_STRING, is_optional=True),
             ),
+            (
+                TsMappedType(wrapped_type=TS_STRING, is_optional=False),
+                TsMappedType(wrapped_type=TS_STRING, is_optional=True),
+            ),
         ],
     )
     def test_should_create_optional_type(self, ts_type_before, ts_type_after):
@@ -94,6 +109,10 @@ class TestWithIsOptional:
             (
                 TsArray(wrapped_type=TS_STRING, is_optional=True),
                 TsArray(wrapped_type=TS_STRING, is_optional=True),
+            ),
+            (
+                TsMappedType(wrapped_type=TS_STRING, is_optional=True),
+                TsMappedType(wrapped_type=TS_STRING, is_optional=True),
             ),
         ],
     )
@@ -120,6 +139,10 @@ class TestWithIsOptional:
             TsArray(wrapped_type=TS_STRING, is_optional=False),
             "TsArray(name='string[]', wrapped_type=TsType(name='string', is_optional='False'), is_optional='False')",
         ),
+        (
+            TsMappedType(wrapped_type=TS_STRING, is_optional=False),
+            "TsMappedType(name='{[index: string]: string}', wrapped_type=TsType(name='string', is_optional='False'), is_optional='False')",
+        ),
     ],
 )
 def test_dunder_str(ts_type, the_str):
@@ -140,6 +163,10 @@ def test_dunder_str(ts_type, the_str):
         (
             TsArray(wrapped_type=TS_STRING, is_optional=False),
             "TsArray(name='string[]', wrapped_type=TsType(name='string', is_optional='False'), is_optional='False')",
+        ),
+        (
+            TsMappedType(wrapped_type=TS_STRING, is_optional=False),
+            "TsMappedType(name='{[index: string]: string}', wrapped_type=TsType(name='string', is_optional='False'), is_optional='False')",
         ),
     ],
 )
@@ -162,6 +189,10 @@ class TestEqualsAndHash:
             (
                 TsArray(wrapped_type=TS_STRING, is_optional=False),
                 TsArray(wrapped_type=TS_STRING, is_optional=False),
+            ),
+            (
+                TsMappedType(wrapped_type=TS_STRING, is_optional=False),
+                TsMappedType(wrapped_type=TS_STRING, is_optional=False),
             ),
         ],
     )
@@ -196,6 +227,14 @@ class TestEqualsAndHash:
             (
                 TsArray(wrapped_type=TS_STRING, is_optional=False),
                 TsArray(wrapped_type=TS_STRING, is_optional=True),
+            ),
+            (
+                TsMappedType(wrapped_type=TS_STRING, is_optional=False),
+                TsMappedType(wrapped_type=TS_NUMBER, is_optional=False),
+            ),
+            (
+                TsMappedType(wrapped_type=TS_STRING, is_optional=False),
+                TsMappedType(wrapped_type=TS_STRING, is_optional=True),
             ),
         ],
     )

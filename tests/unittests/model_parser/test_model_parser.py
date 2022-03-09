@@ -310,4 +310,21 @@ class TestParseOptional:
         model_parser = ModelParser([class_with_optional_int.cls], [demo_parser])
 
         model = model_parser.parse()
+
         assert model == Model(classes=OrderedSet([class_with_optional_int.py_class]))
+
+    def test_should_also_parse_empty_class(
+        self,
+        class_with_optional_empty_class: ClassFixture,
+        empty_class: ClassFixture,
+        demo_parser: DemoParser,
+    ) -> None:
+        model_parser = ModelParser([class_with_optional_empty_class.cls], [demo_parser])
+
+        model = model_parser.parse()
+
+        assert model == Model(
+            classes=OrderedSet(
+                [class_with_optional_empty_class.py_class, empty_class.py_class]
+            )
+        )

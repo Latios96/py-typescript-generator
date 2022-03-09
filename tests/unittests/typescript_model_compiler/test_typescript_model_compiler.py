@@ -107,6 +107,15 @@ class TestTypesMappedToArray:
 
         assert ts_model == TsModel.of_object_types([class_with_str_list.ts_object_type])
 
+    def test_should_compile_class_with_empty_class_list(
+        self, class_with_empty_class_list
+    ):
+        ts_model = _compile_py_class(class_with_empty_class_list.py_class)
+
+        assert ts_model == TsModel.of_object_types(
+            [class_with_empty_class_list.ts_object_type]
+        )
+
     def test_should_compile_class_with_str_set(self, class_with_str_set):
         ts_model = _compile_py_class(class_with_str_set.py_class)
 

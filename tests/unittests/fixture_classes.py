@@ -255,7 +255,9 @@ PY_CLASS_FOR_CLASS_WITH_EMPTY_CLASS_LIST = PyClass(
 )
 TS_OBJECT_TYPE_FOR_CLASS_WITH_EMPTY_CLASS_LIST = TsObjectType(
     name="ClassWithEmptyClassList",
-    fields=frozenset({TsField(name="empty_class_list", type=TS_ANY)}),
+    fields=frozenset(
+        {TsField(name="empty_class_list", type=TsArray(TsType("EmptyClass")))}
+    ),
 )
 PY_CLASS_FOR_CLASS_WITH_GENERIC_MEMBER = PyClass(
     name="ClassWithGenericMember",

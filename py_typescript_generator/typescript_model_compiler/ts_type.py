@@ -1,10 +1,3 @@
-# Array
-# Object
-# Tuple
-# Interface
-# Generic interface
-
-
 class TsType:
     def __init__(self, name: str, is_optional: bool = False):
         self._name = name
@@ -39,3 +32,6 @@ class TsType:
         return (
             other and self.name == other.name and self.is_optional == other.is_optional
         )
+
+    def format_as_type_reference(self):
+        return self.name

@@ -31,3 +31,6 @@ class TsArray(TsType):
             and self.wrapped_type == other.wrapped_type
             and self.is_optional == other.is_optional
         )
+
+    def format_as_type_reference(self):
+        return f"{self.wrapped_type.format_as_type_reference()}[]"

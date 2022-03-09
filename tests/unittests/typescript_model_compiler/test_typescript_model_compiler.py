@@ -1,9 +1,14 @@
+from typing import Dict
+
 import pytest
 
 from py_typescript_generator.model.model import Model
+from py_typescript_generator.model.py_class import PyClass
+from py_typescript_generator.model.py_field import PyField
 from py_typescript_generator.typescript_model_compiler.ts_model import TsModel
 from py_typescript_generator.typescript_model_compiler.typescript_model_compiler import (
     TypescriptModelCompiler,
+    UnsupportedKeyTypeForMappedType,
 )
 from tests.unittests.fixture_classes import ClassFixture
 
@@ -150,9 +155,20 @@ class TestTypesMappedToArray:
 
 # todo compiler invocation can be refactored into method
 class TestTypesMappedToObject:
-    # todo fail if object does not have str key
+    def test_should_fail_if_key_type_is_not_str(self):
+        class ClassWithIntStrDict:
+            pass
 
-    # dict, defaultdict, OrderedDict
+        py_class = PyClass(
+            name="ClassWithIntStrDict",
+            type=ClassWithIntStrDict,
+            fields=frozenset({PyField(name="int_dict", type=Dict[int, str])}),
+        )
+        model = Model.of_classes([py_class])
+        model_compiler = TypescriptModelCompiler()
+
+        with pytest.raises(UnsupportedKeyTypeForMappedType):
+            model_compiler.compile(model)
 
     def test_should_compile_str_str_dict(
         self, class_with_str_str_dict: ClassFixture

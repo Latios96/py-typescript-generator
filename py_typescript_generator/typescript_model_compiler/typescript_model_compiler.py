@@ -30,6 +30,13 @@ class UnsupportedGenericParameterCount(RuntimeError):
         super().__init__(message)
 
 
+class UnsupportedKeyTypeForMappedType(RuntimeError):
+    def __init__(self, cls: Type) -> None:
+        super().__init__(
+            f"The type {cls} is not supported as a key for a mapped type since JSON only supports string keys."
+        )
+
+
 class TypescriptModelCompiler:
     def compile(self, model: Model) -> TsModel:
         types: OrderedSet[TsObjectType] = OrderedSet()
@@ -94,11 +101,12 @@ class TypescriptModelCompiler:
 
         is_mapped_to_mapped_type = issubclass(generic_origin_type, dict)
         if is_mapped_to_mapped_type:
-            has_str_key = get_args(cls)[0] == str
+            key_cls = get_args(cls)[0]
+            has_str_key = key_cls == str
             if not has_str_key:
-                raise ValueError()
+                raise UnsupportedKeyTypeForMappedType(key_cls)
             return TsMappedType(
-                wrapped_type=self._compile_type(get_args(cls)[0]),
+                wrapped_type=self._compile_type(key_cls),
                 is_optional=is_optional,
             )
 

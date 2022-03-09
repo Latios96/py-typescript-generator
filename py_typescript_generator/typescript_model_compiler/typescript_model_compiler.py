@@ -54,13 +54,13 @@ class UnsupportedEnumValue(RuntimeError):
 
 
 class CaseFormat(Enum):
-    SNAKE_CASE = "SNAKE_CASE"
+    KEEP_CASING = "KEEP_CASING"
     CAMEL_CASE = "CAMEL_CASE"
 
 
 @dataclass
 class TypescriptModelCompilerSettings:
-    field_case_format: CaseFormat = CaseFormat.SNAKE_CASE
+    field_case_format: CaseFormat = CaseFormat.KEEP_CASING
 
 
 class TypescriptModelCompiler:

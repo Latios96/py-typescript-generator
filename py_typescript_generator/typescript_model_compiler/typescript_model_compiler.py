@@ -126,8 +126,8 @@ class TypescriptModelCompiler:
         raise ValueError("not supported")
 
     def _compile_enum(self, enum: PyEnum) -> TsEnum:
-        for value in enum.values:
-            if type(value) not in {int, str}:
-                raise UnsupportedEnumValue(type(value))
-        values: FrozenSet[Union[int, str]] = enum.values  # type: ignore
-        return TsEnum(name=enum.name, values=values)
+        for py_enum_value in enum.values:
+            if type(py_enum_value.value) not in {int, str}:
+                raise UnsupportedEnumValue(type(py_enum_value.value))
+        values: FrozenSet[Union[int, str]] = [x.value for x in enum.values]  # type: ignore
+        return TsEnum(name=enum.name, values=frozenset(values))

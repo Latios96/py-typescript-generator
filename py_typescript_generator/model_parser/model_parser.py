@@ -21,7 +21,7 @@ from typing_inspect import get_args, get_origin, is_optional_type  # type: ignor
 
 from py_typescript_generator.model.model import Model
 from py_typescript_generator.model.py_class import PyClass
-from py_typescript_generator.model.py_enum import PyEnum
+from py_typescript_generator.model.py_enum import PyEnum, PyEnumValue
 from py_typescript_generator.model_parser.class_parsers.abstract_class_parser import (
     AbstractClassParser,
 )
@@ -153,7 +153,7 @@ class ModelParser:
                 PyEnum(
                     name=cls.__name__,
                     type=cls,
-                    values=frozenset([e.value for e in cls]),
+                    values=frozenset([PyEnumValue(e.name, e.value) for e in cls]),
                 )
             )
 

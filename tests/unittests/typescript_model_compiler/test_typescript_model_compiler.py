@@ -6,7 +6,7 @@ from ordered_set import OrderedSet
 
 from py_typescript_generator.model.model import Model
 from py_typescript_generator.model.py_class import PyClass
-from py_typescript_generator.model.py_enum import PyEnum
+from py_typescript_generator.model.py_enum import PyEnum, PyEnumValue
 from py_typescript_generator.model.py_field import PyField
 from py_typescript_generator.typescript_model_compiler.ts_model import TsModel
 from py_typescript_generator.typescript_model_compiler.typescript_model_compiler import (
@@ -194,7 +194,11 @@ class TestCompileEnum:
         class MyEnum(Enum):
             pass
 
-        py_enum = PyEnum(name="test", type=MyEnum, values=frozenset([(1,), 1]))
+        py_enum = PyEnum(
+            name="test",
+            type=MyEnum,
+            values=frozenset([PyEnumValue(name="test", value=(1,))]),
+        )
 
         with pytest.raises(UnsupportedEnumValue):
             _compile_py_enum(py_enum)

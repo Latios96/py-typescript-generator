@@ -21,7 +21,7 @@ import pytest
 from ordered_set import OrderedSet
 
 from py_typescript_generator.model.py_class import PyClass
-from py_typescript_generator.model.py_enum import PyEnum
+from py_typescript_generator.model.py_enum import PyEnum, PyEnumValue
 from py_typescript_generator.model.py_field import PyField
 from py_typescript_generator.typescript_model_compiler.ts_enum import TsEnum
 from py_typescript_generator.typescript_model_compiler.ts_field import TsField
@@ -436,11 +436,22 @@ TS_OBJECT_TYPE_FOR_CLASS_WITH_LIST_OF_OPTIONAL_EMPTY_CLASS = TsObjectType(
     ),
 )
 PY_ENUM_FOR_SIMPLE_INT_ENUM = PyEnum(
-    name="SimpleIntEnum", type=SimpleIntEnum, values=frozenset([0, 1])
+    name="SimpleIntEnum",
+    type=SimpleIntEnum,
+    values=frozenset(
+        [PyEnumValue(name="FIRST", value=0), PyEnumValue(name="SECOND", value=1)]
+    ),
 )
 TS_ENUM_FOR_SIMPLE_INT_ENUM = TsEnum(name="SimpleIntEnum", values=frozenset([0, 1]))
 PY_ENUM_FOR_SIMPLE_STR_ENUM = PyEnum(
-    name="SimpleStrEnum", type=SimpleStrEnum, values=frozenset(["FIRST", "SECOND"])
+    name="SimpleStrEnum",
+    type=SimpleStrEnum,
+    values=frozenset(
+        [
+            PyEnumValue(name="FIRST", value="FIRST"),
+            PyEnumValue(name="SECOND", value="SECOND"),
+        ]
+    ),
 )
 TS_ENUM_FOR_SIMPLE_STR_ENUM = TsEnum(
     name="SimpleStrEnum", values=frozenset(["FIRST", "SECOND"])

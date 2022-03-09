@@ -1,7 +1,10 @@
+from dataclasses import dataclass
 from datetime import datetime
-from typing import Type, Optional, Tuple
+from enum import Enum
+from typing import Type, Optional, Tuple, cast
 from uuid import UUID
 
+from caseconverter import camelcase  # type: ignore
 from ordered_set import OrderedSet
 from typing_extensions import get_args
 from typing_inspect import is_optional_type, get_origin  # type: ignore
@@ -9,6 +12,7 @@ from typing_inspect import is_optional_type, get_origin  # type: ignore
 from py_typescript_generator.model.model import Model
 from py_typescript_generator.model.py_class import PyClass
 from py_typescript_generator.model.py_enum import PyEnum
+from py_typescript_generator.model.py_field import PyField
 from py_typescript_generator.typescript_model_compiler.ts_array import TsArray
 from py_typescript_generator.typescript_model_compiler.ts_enum import (
     TsEnum,
@@ -49,7 +53,20 @@ class UnsupportedEnumValue(RuntimeError):
         )
 
 
+class CaseFormat(Enum):
+    SNAKE_CASE = "SNAKE_CASE"
+    CAMEL_CASE = "CAMEL_CASE"
+
+
+@dataclass
+class TypescriptModelCompilerSettings:
+    field_case_format: CaseFormat = CaseFormat.SNAKE_CASE
+
+
 class TypescriptModelCompiler:
+    def __init__(self, typescript_compiler_settings: TypescriptModelCompilerSettings):
+        self.typescript_compiler_settings = typescript_compiler_settings
+
     def compile(self, model: Model) -> TsModel:
         types: OrderedSet[TsObjectType] = OrderedSet()
         for py_class in model.classes:
@@ -65,7 +82,10 @@ class TypescriptModelCompiler:
         fields = []
         for py_field in py_class.fields:
             fields.append(
-                TsField(name=py_field.name, type=self._compile_type(py_field.type))
+                TsField(
+                    name=self._adjust_field_casing(py_field),
+                    type=self._compile_type(py_field.type),
+                )
             )
         return TsObjectType(name=py_class.name, fields=tuple(fields))
 
@@ -132,3 +152,8 @@ class TypescriptModelCompiler:
                 raise UnsupportedEnumValue(type(py_enum_value.value))
         values: Tuple[TsEnumValue, ...] = [TsEnumValue(x.name, x.value) for x in enum.values]  # type: ignore
         return TsEnum(name=enum.name, values=tuple(values))
+
+    def _adjust_field_casing(self, py_field: PyField) -> str:
+        if self.typescript_compiler_settings.field_case_format == CaseFormat.CAMEL_CASE:
+            return cast(str, camelcase(py_field.name))
+        return py_field.name

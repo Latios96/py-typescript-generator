@@ -8,25 +8,32 @@ from py_typescript_generator.model.model import Model
 from py_typescript_generator.model.py_class import PyClass
 from py_typescript_generator.model.py_enum import PyEnum, PyEnumValue
 from py_typescript_generator.model.py_field import PyField
+from py_typescript_generator.typescript_model_compiler.ts_field import TsField
 from py_typescript_generator.typescript_model_compiler.ts_model import TsModel
+from py_typescript_generator.typescript_model_compiler.ts_object_type import (
+    TsObjectType,
+)
+from py_typescript_generator.typescript_model_compiler.ts_type import TsType
 from py_typescript_generator.typescript_model_compiler.typescript_model_compiler import (
     TypescriptModelCompiler,
     UnsupportedKeyTypeForMappedType,
     UnsupportedEnumValue,
+    TypescriptModelCompilerSettings,
+    CaseFormat,
 )
 from tests.unittests.fixture_classes import ClassFixture, EnumFixture
 
 
 def _compile_py_class(py_class: PyClass) -> TsModel:
     model = Model.of_classes([py_class])
-    model_compiler = TypescriptModelCompiler()
+    model_compiler = TypescriptModelCompiler(TypescriptModelCompilerSettings())
     ts_model = model_compiler.compile(model)
     return ts_model
 
 
 def _compile_py_enum(py_enum: PyEnum) -> TsModel:
     model = Model(enums=OrderedSet([py_enum]))
-    model_compiler = TypescriptModelCompiler()
+    model_compiler = TypescriptModelCompiler(TypescriptModelCompilerSettings())
     ts_model = model_compiler.compile(model)
     return ts_model
 
@@ -57,7 +64,7 @@ def test_should_compile_classes_with_cycle(first_class_in_cycle, second_class_in
     model = Model.of_classes(
         [first_class_in_cycle.py_class, second_class_in_cycle.py_class]
     )
-    model_compiler = TypescriptModelCompiler()
+    model_compiler = TypescriptModelCompiler(TypescriptModelCompilerSettings())
 
     ts_model = model_compiler.compile(model)
 
@@ -211,3 +218,20 @@ class TestCompileEnum:
 
         with pytest.raises(UnsupportedEnumValue):
             _compile_py_enum(py_enum)
+
+
+def test_should_convert_casing_to_camel_case(class_with_empty_class):
+    model = Model.of_classes([class_with_empty_class.py_class])
+    model_compiler = TypescriptModelCompiler(
+        TypescriptModelCompilerSettings(field_case_format=CaseFormat.CAMEL_CASE)
+    )
+    ts_model = model_compiler.compile(model)
+
+    assert ts_model == TsModel.of_object_types(
+        [
+            TsObjectType(
+                name="ClassWithEmptyClass",
+                fields=(TsField(name="emptyClass", type=TsType("EmptyClass")),),
+            )
+        ]
+    )

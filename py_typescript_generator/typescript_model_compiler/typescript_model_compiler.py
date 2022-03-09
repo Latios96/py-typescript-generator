@@ -78,7 +78,7 @@ class TypescriptModelCompiler:
 
     def _map_generic_type(self, cls: Type, is_optional: bool) -> TsType:
         generic_origin_type = get_origin(cls)
-        is_mapped_to_array = generic_origin_type in {list, set, frozenset}
+        is_mapped_to_array = generic_origin_type in {list, set, frozenset, OrderedSet}
         if is_mapped_to_array:
             if len(get_args(cls)) != 1:
                 raise UnsupportedGenericParameterCount(

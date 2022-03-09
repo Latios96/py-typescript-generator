@@ -16,6 +16,7 @@ from typing import (
 from uuid import UUID
 
 import pytest
+from ordered_set import OrderedSet
 
 from py_typescript_generator.model.py_class import PyClass
 from py_typescript_generator.model.py_field import PyField
@@ -95,6 +96,10 @@ class ClassWithStrIntUnion:
 
 class ClassWithStrFrozenSet:
     value: FrozenSet[str]
+
+
+class ClassWithStrOrderedSet:
+    value: OrderedSet[str]
 
 
 class ClassWithStrStrDefaultDict:
@@ -330,6 +335,15 @@ TS_OBJECT_TYPE_FOR_CLASS_WITH_STR_FROZEN_SET = TsObjectType(
     name="ClassWithStrFrozenSet",
     fields=frozenset({TsField(name="value", type=TsArray(TS_STRING))}),
 )
+PY_CLASS_FOR_CLASS_WITH_STR_ORDERED_SET = PyClass(
+    name="ClassWithStrOrderedSet",
+    type=ClassWithStrOrderedSet,
+    fields=frozenset({PyField(name="value", type=FrozenSet[str])}),
+)
+TS_OBJECT_TYPE_FOR_CLASS_WITH_STR_ORDERED_SET = TsObjectType(
+    name="ClassWithStrOrderedSet",
+    fields=frozenset({TsField(name="value", type=TsArray(TS_STRING))}),
+)
 PY_CLASS_FOR_CLASS_WITH_STR_STR_DEFAULT_DICT = PyClass(
     name="ClassWithStrStrDefaultDict",
     type=ClassWithStrStrDefaultDict,
@@ -512,6 +526,15 @@ def class_with_str_frozen_set():
         cls=ClassWithStrFrozenSet,
         py_class=PY_CLASS_FOR_CLASS_WITH_STR_FROZEN_SET,
         ts_object_type=TS_OBJECT_TYPE_FOR_CLASS_WITH_STR_FROZEN_SET,
+    )
+
+
+@pytest.fixture
+def class_with_str_ordered_set():
+    return ClassFixture(
+        cls=ClassWithStrOrderedSet,
+        py_class=PY_CLASS_FOR_CLASS_WITH_STR_ORDERED_SET,
+        ts_object_type=TS_OBJECT_TYPE_FOR_CLASS_WITH_STR_ORDERED_SET,
     )
 
 

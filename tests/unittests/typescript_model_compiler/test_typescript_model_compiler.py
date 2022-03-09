@@ -122,6 +122,21 @@ class TestTypesMappedToArray:
             [class_with_str_frozen_set.ts_object_type]
         )
 
+    def test_should_compile_class_with_str_ordered_set(
+        self, class_with_str_ordered_set
+    ):
+        model = Model.of_classes([class_with_str_ordered_set.py_class])
+        model_compiler = TypescriptModelCompiler()
+
+        ts_model = model_compiler.compile(model)
+
+        assert ts_model == TsModel.of_object_types(
+            [class_with_str_ordered_set.ts_object_type]
+        )
+
 
 # List[str]
 # List[customType]
+
+# List[Optional[str]]
+# List[Optional[CustomType]

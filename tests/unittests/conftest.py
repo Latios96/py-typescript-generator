@@ -21,6 +21,7 @@ from tests.unittests.fixture_classes import (  # noqa: F401
     class_with_str_tuple,
     class_with_str_int_union,
     class_with_str_frozen_set,
+    class_with_str_ordered_set,
     class_with_str_str_default_dict,
     class_with_optional_int,
     class_with_optional_empty_class,

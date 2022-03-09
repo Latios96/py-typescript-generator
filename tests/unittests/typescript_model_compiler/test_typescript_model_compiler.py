@@ -17,8 +17,8 @@ from py_typescript_generator.typescript_model_compiler.typescript_model_compiler
 from tests.unittests.fixture_classes import ClassFixture, EnumFixture
 
 
-def _compile_py_class(empty_class: PyClass) -> TsModel:  # todo rename param to py_class
-    model = Model.of_classes([empty_class])
+def _compile_py_class(py_class: PyClass) -> TsModel:
+    model = Model.of_classes([py_class])
     model_compiler = TypescriptModelCompiler()
     ts_model = model_compiler.compile(model)
     return ts_model

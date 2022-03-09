@@ -35,4 +35,6 @@ class TsMappedType(TsType):
         )
 
     def format_as_type_reference(self):
-        return f"{{[index: string]: {self.wrapped_type.name}}}"
+        return self._format_as_optional(
+            f"{{[index: string]: {self.wrapped_type.name}}}"
+        )

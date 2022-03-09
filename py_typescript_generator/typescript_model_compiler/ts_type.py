@@ -34,4 +34,9 @@ class TsType:
         )
 
     def format_as_type_reference(self):
-        return self.name
+        return self._format_as_optional(self.name)
+
+    def _format_as_optional(self, the_str: str) -> str:
+        if self.is_optional:
+            return f"{the_str} | undefined"
+        return the_str

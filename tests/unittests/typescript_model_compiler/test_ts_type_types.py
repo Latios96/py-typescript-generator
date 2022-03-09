@@ -244,3 +244,26 @@ class TestEqualsAndHash:
         assert ts_type1 != ts_type2
         assert hash(ts_type1) != hash(ts_type2)
         assert len({ts_type1, ts_type1}) == 1
+
+
+@pytest.mark.parametrize(
+    "ts_type,the_str",
+    [
+        (TsType("TheType"), "TheType"),
+        (TsArray(wrapped_type=TsType("TheType")), "TheType[]"),
+        (TsInterface("TheType"), "TheType"),
+        (TsMappedType(TsType("TheType")), "{[index: string]: TheType}"),
+        (TsType("TheType", is_optional=True), "TheType | undefined"),
+        (
+            TsArray(wrapped_type=TsType("TheType"), is_optional=True),
+            "TheType[] | undefined",
+        ),
+        (TsInterface("TheType", is_optional=True), "TheType | undefined"),
+        (
+            TsMappedType(TsType("TheType"), is_optional=True),
+            "{[index: string]: TheType} | undefined",
+        ),
+    ],
+)
+def test_format_as_type_reference(ts_type: TsType, the_str: str) -> None:
+    assert ts_type.format_as_type_reference() == the_str

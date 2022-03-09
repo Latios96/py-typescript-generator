@@ -5,6 +5,7 @@ from py_typescript_generator.typescript_model_compiler.ts_model import TsModel
 from py_typescript_generator.typescript_model_compiler.typescript_model_compiler import (
     TypescriptModelCompiler,
 )
+from tests.unittests.fixture_classes import ClassFixture
 
 
 def test_should_compile_empty_class(empty_class):
@@ -134,9 +135,14 @@ class TestTypesMappedToArray:
             [class_with_str_ordered_set.ts_object_type]
         )
 
+    def test_should_compile_class_with_optional_empty_class(
+        self, class_with_optional_empty_class: ClassFixture
+    ) -> None:
+        model = Model.of_classes([class_with_optional_empty_class.py_class])
+        model_compiler = TypescriptModelCompiler()
 
-# List[str]
-# List[customType]
+        ts_model = model_compiler.compile(model)
 
-# List[Optional[str]]
-# List[Optional[CustomType]
+        assert ts_model == TsModel.of_object_types(
+            [class_with_optional_empty_class.ts_object_type]
+        )

@@ -137,6 +137,14 @@ class ClassWithOptionalEmptyClass:
     value: Optional[EmptyClass]
 
 
+class ClassWithListOfOptionalInt:
+    value: List[Optional[int]]
+
+
+class ClassWithListOfOptionalEmptyClass:
+    value: List[Optional[EmptyClass]]
+
+
 PY_CLASS_FOR_EMPTY_CLASS = PyClass(
     name="EmptyClass", type=EmptyClass, fields=frozenset()
 )
@@ -353,8 +361,6 @@ TS_OBJECT_TYPE_FOR_CLASS_WITH_STR_STR_DEFAULT_DICT = TsObjectType(
     name="ClassWithStrStrDefaultDict",
     fields=frozenset({TsField(name="value", type=TS_ANY)}),
 )
-
-
 PY_CLASS_FOR_CLASS_WITH_OPTIONAL_INT = PyClass(
     name="ClassWithOptionalInt",
     type=ClassWithOptionalInt,
@@ -374,6 +380,29 @@ TS_OBJECT_TYPE_FOR_CLASS_WITH_OPTIONAL_EMPTY_CLASS = TsObjectType(
     name="ClassWithOptionalEmptyClass",
     fields=frozenset(
         {TsField(name="value", type=TsType("EmptyClass", is_optional=True))}
+    ),
+)
+PY_CLASS_FOR_CLASS_WITH_LIST_OF_OPTIONAL_INT = PyClass(
+    name="ClassWithListOfOptionalInt",
+    type=ClassWithListOfOptionalInt,
+    fields=frozenset({PyField(name="value", type=List[Optional[int]])}),  # type: ignore
+)
+TS_OBJECT_TYPE_FOR_CLASS_WITH_LIST_OF_OPTIONAL_INT = TsObjectType(
+    name="ClassWithOptionalInt",
+    fields=frozenset(
+        {TsField(name="value", type=TsArray(TS_NUMBER.as_optional_type()))}
+    ),
+)
+
+PY_CLASS_FOR_CLASS_WITH_LIST_OF_OPTIONAL_EMPTY_CLASS = PyClass(
+    name="ClassWithListOfOptionalEmptyClass",
+    type=ClassWithListOfOptionalEmptyClass,
+    fields=frozenset({PyField(name="value", type=List[Optional[EmptyClass]])}),  # type: ignore
+)
+TS_OBJECT_TYPE_FOR_CLASS_WITH_LIST_OF_OPTIONAL_EMPTY_CLASS = TsObjectType(
+    name="ClassWithListOfOptionalEmptyClass",
+    fields=frozenset(
+        {TsField(name="value", type=TsArray(TsType("EmptyClass", is_optional=True)))}
     ),
 )
 
@@ -607,4 +636,22 @@ def class_with_optional_empty_class():
         cls=ClassWithOptionalEmptyClass,
         py_class=PY_CLASS_FOR_CLASS_WITH_OPTIONAL_EMPTY_CLASS,
         ts_object_type=TS_OBJECT_TYPE_FOR_CLASS_WITH_OPTIONAL_EMPTY_CLASS,
+    )
+
+
+@pytest.fixture
+def class_with_list_of_optional_int():
+    return ClassFixture(
+        cls=ClassWithListOfOptionalInt,
+        py_class=PY_CLASS_FOR_CLASS_WITH_LIST_OF_OPTIONAL_INT,
+        ts_object_type=TS_OBJECT_TYPE_FOR_CLASS_WITH_LIST_OF_OPTIONAL_INT,
+    )
+
+
+@pytest.fixture
+def class_with_list_of_optional_empty_class():
+    return ClassFixture(
+        cls=ClassWithListOfOptionalEmptyClass,
+        py_class=PY_CLASS_FOR_CLASS_WITH_LIST_OF_OPTIONAL_EMPTY_CLASS,
+        ts_object_type=TS_OBJECT_TYPE_FOR_CLASS_WITH_LIST_OF_OPTIONAL_EMPTY_CLASS,
     )

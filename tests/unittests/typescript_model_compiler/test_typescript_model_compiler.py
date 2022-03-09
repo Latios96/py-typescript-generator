@@ -93,3 +93,35 @@ def test_should_compile_class_with_optional_empty_class(
     assert ts_model == TsModel.of_object_types(
         [class_with_optional_empty_class.ts_object_type]
     )
+
+
+class TestTypesMappedToArray:
+    def test_should_compile_class_with_str_list(self, class_with_str_list):
+        model = Model.of_classes([class_with_str_list.py_class])
+        model_compiler = TypescriptModelCompiler()
+
+        ts_model = model_compiler.compile(model)
+
+        assert ts_model == TsModel.of_object_types([class_with_str_list.ts_object_type])
+
+    def test_should_compile_class_with_str_set(self, class_with_str_set):
+        model = Model.of_classes([class_with_str_set.py_class])
+        model_compiler = TypescriptModelCompiler()
+
+        ts_model = model_compiler.compile(model)
+
+        assert ts_model == TsModel.of_object_types([class_with_str_set.ts_object_type])
+
+    def test_should_compile_class_with_str_frozen_set(self, class_with_str_frozen_set):
+        model = Model.of_classes([class_with_str_frozen_set.py_class])
+        model_compiler = TypescriptModelCompiler()
+
+        ts_model = model_compiler.compile(model)
+
+        assert ts_model == TsModel.of_object_types(
+            [class_with_str_frozen_set.ts_object_type]
+        )
+
+
+# List[str]
+# List[customType]

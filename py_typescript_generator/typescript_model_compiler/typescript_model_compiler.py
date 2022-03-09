@@ -4,7 +4,7 @@ from uuid import UUID
 
 from ordered_set import OrderedSet
 from typing_extensions import get_args
-from typing_inspect import is_optional_type  # type: ignore
+from typing_inspect import is_optional_type, get_origin  # type: ignore
 
 from py_typescript_generator.model.model import Model
 from py_typescript_generator.model.py_class import PyClass
@@ -19,6 +19,11 @@ from py_typescript_generator.typescript_model_compiler.well_known_types import (
     TS_STRING,
     TS_BOOLEAN,
 )
+
+
+class UnsupportedGenericParameterCount(RuntimeError):
+    def __init__(self, message: str) -> None:
+        super().__init__(message)
 
 
 class TypescriptModelCompiler:
@@ -41,11 +46,15 @@ class TypescriptModelCompiler:
         mapped_type = self._map_scalar_type(cls)
         if mapped_type:
             if optional:
-                return mapped_type.as_optional_type()
+                return mapped_type.as_optional_type()  # todo use with_is_optional
             return mapped_type
 
         if is_optional_type(cls):
             return self._compile_type(get_args(cls)[0], optional=True)
+
+        has_generic_args = len(get_args(cls)) > 0
+        if has_generic_args:
+            return self._map_generic_type(cls, optional)
 
         return TsType(name=cls.__name__, is_optional=optional)
 
@@ -65,3 +74,16 @@ class TypescriptModelCompiler:
         elif cls == UUID:
             return TS_STRING
         return None
+
+    def _map_generic_type(self, cls: Type, is_optional: bool):
+        generic_origin_type = get_origin(cls)
+        is_mapped_to_array = generic_origin_type in {list, set, frozenset}
+        if is_mapped_to_array:
+            if len(get_args(cls)) != 1:
+                raise UnsupportedGenericParameterCount(
+                    "A type which is mapped to an array can only have one generic parameter."
+                )
+            return TsType.array(
+                name=self._compile_type(get_args(cls)[0]).name, is_optional=is_optional
+            )
+        raise ValueError("not supported")

@@ -26,4 +26,6 @@ from tests.unittests.fixture_classes import (  # noqa: F401
     class_with_str_str_ordered_dict,
     class_with_optional_int,
     class_with_optional_empty_class,
+    simple_int_enum,
+    simple_str_enum,
 )

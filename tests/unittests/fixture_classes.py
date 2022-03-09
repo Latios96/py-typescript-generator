@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 from datetime import datetime
+from enum import Enum
 from typing import (
     List,
     Dict,
@@ -20,7 +21,9 @@ import pytest
 from ordered_set import OrderedSet
 
 from py_typescript_generator.model.py_class import PyClass
+from py_typescript_generator.model.py_enum import PyEnum
 from py_typescript_generator.model.py_field import PyField
+from py_typescript_generator.typescript_model_compiler.ts_enum import TsEnum
 from py_typescript_generator.typescript_model_compiler.ts_field import TsField
 from py_typescript_generator.typescript_model_compiler.ts_mapped_type import (
     TsMappedType,
@@ -151,6 +154,16 @@ class ClassWithListOfOptionalInt:
 
 class ClassWithListOfOptionalEmptyClass:
     value: List[Optional[EmptyClass]]
+
+
+class SimpleIntEnum(Enum):
+    FIRST = 0
+    SECOND = 1
+
+
+class SimpleStrEnum(Enum):
+    FIRST = "FIRST"
+    SECOND = "SECOND"
 
 
 PY_CLASS_FOR_EMPTY_CLASS = PyClass(
@@ -422,6 +435,16 @@ TS_OBJECT_TYPE_FOR_CLASS_WITH_LIST_OF_OPTIONAL_EMPTY_CLASS = TsObjectType(
         {TsField(name="value", type=TsArray(TsType("EmptyClass", is_optional=True)))}
     ),
 )
+PY_ENUM_FOR_SIMPLE_INT_ENUM = PyEnum(
+    name="SimpleIntEnum", type=SimpleIntEnum, values=frozenset([0, 1])
+)
+TS_ENUM_FOR_SIMPLE_INT_ENUM = TsEnum(name="SimpleIntEnum", values=frozenset([0, 1]))
+PY_ENUM_FOR_SIMPLE_STR_ENUM = PyEnum(
+    name="SimpleStrEnum", type=SimpleStrEnum, values=frozenset(["FIRST", "SECOND"])
+)
+TS_ENUM_FOR_SIMPLE_STR_ENUM = TsEnum(
+    name="SimpleStrEnum", values=frozenset(["FIRST", "SECOND"])
+)
 
 
 @dataclass
@@ -429,6 +452,13 @@ class ClassFixture:
     cls: Type
     py_class: PyClass
     ts_object_type: TsObjectType
+
+
+@dataclass
+class EnumFixture:
+    cls: Type
+    py_enum: PyEnum
+    ts_enum: TsEnum
 
 
 @pytest.fixture
@@ -680,4 +710,22 @@ def class_with_list_of_optional_empty_class():
         cls=ClassWithListOfOptionalEmptyClass,
         py_class=PY_CLASS_FOR_CLASS_WITH_LIST_OF_OPTIONAL_EMPTY_CLASS,
         ts_object_type=TS_OBJECT_TYPE_FOR_CLASS_WITH_LIST_OF_OPTIONAL_EMPTY_CLASS,
+    )
+
+
+@pytest.fixture
+def simple_int_enum():
+    return EnumFixture(
+        cls=SimpleIntEnum,
+        py_enum=PY_ENUM_FOR_SIMPLE_INT_ENUM,
+        ts_enum=TS_ENUM_FOR_SIMPLE_INT_ENUM,
+    )
+
+
+@pytest.fixture
+def simple_str_enum():
+    return EnumFixture(
+        cls=SimpleStrEnum,
+        py_enum=PY_ENUM_FOR_SIMPLE_STR_ENUM,
+        ts_enum=TS_ENUM_FOR_SIMPLE_STR_ENUM,
     )

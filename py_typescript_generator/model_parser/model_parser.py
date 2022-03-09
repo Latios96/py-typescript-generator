@@ -1,6 +1,7 @@
 import inspect
 from collections import defaultdict
 from datetime import datetime
+from enum import Enum
 from typing import (
     List,
     Type,
@@ -20,6 +21,7 @@ from typing_inspect import get_args, get_origin, is_optional_type  # type: ignor
 
 from py_typescript_generator.model.model import Model
 from py_typescript_generator.model.py_class import PyClass
+from py_typescript_generator.model.py_enum import PyEnum
 from py_typescript_generator.model_parser.class_parsers.abstract_class_parser import (
     AbstractClassParser,
 )
@@ -75,23 +77,36 @@ class ModelParser:
 
     def parse(self) -> Model:
         visited_classes: OrderedSet[PyClass] = OrderedSet()
+        visited_enums: OrderedSet[PyEnum] = OrderedSet()
         for cls in self._classes_to_parse:
-            self._parse_class(cls, visited_classes)
+            self._parse_class(cls, visited_classes, visited_enums)
 
-        return Model(classes=visited_classes)
+        return Model(classes=visited_classes, enums=visited_enums)
 
-    def _parse_class(self, cls: Type, visited_classes: OrderedSet[PyClass]) -> None:
+    def _parse_class(
+        self,
+        cls: Type,
+        visited_classes: OrderedSet[PyClass],
+        visited_enums: OrderedSet[PyEnum],
+    ) -> None:
         if not self._is_class(cls):
             raise IsNotAClassException(cls)
 
+        is_enum = self._is_enum(cls)
+        if is_enum:
+            self._parse_enum(cls, visited_enums)
+            return
+
         if is_optional_type(cls):
-            self._parse_class(get_wrapped_type_from_optional(cls), visited_classes)
+            self._parse_class(
+                get_wrapped_type_from_optional(cls), visited_classes, visited_enums
+            )
             return
 
         has_generic_args = len(get_args(cls)) > 0
         if has_generic_args:
             for arg in get_args(cls):
-                self._parse_class(arg, visited_classes)
+                self._parse_class(arg, visited_classes, visited_enums)
 
         if self._is_terminating_class(cls):
             return
@@ -100,17 +115,20 @@ class ModelParser:
             if parser.accepts_class(cls):
                 py_class = parser.parse(cls)
                 visited_classes.add(py_class)
-                self._parse_fields(py_class, visited_classes)
+                self._parse_fields(py_class, visited_classes, visited_enums)
                 return
 
         raise NoParserForClassFoundException(cls)
 
     def _parse_fields(
-        self, py_class: PyClass, visited_classes: OrderedSet[PyClass]
+        self,
+        py_class: PyClass,
+        visited_classes: OrderedSet[PyClass],
+        visited_enums: OrderedSet[PyEnum],
     ) -> None:
         for field in py_class.fields:
             if field.type not in {x.type for x in visited_classes}:
-                self._parse_class(field.type, visited_classes)
+                self._parse_class(field.type, visited_classes, visited_enums)
 
     def _is_class(self, cls: Type) -> bool:
         if (
@@ -128,3 +146,19 @@ class ModelParser:
         if isinstance(cls, TypeVar):
             return True
         return cls in TERMINATING_CLASSES
+
+    def _parse_enum(self, cls: Type, visited_enums: OrderedSet[PyEnum]) -> None:
+        if cls not in {x.type for x in visited_enums}:
+            visited_enums.add(
+                PyEnum(
+                    name=cls.__name__,
+                    type=cls,
+                    values=frozenset([e.value for e in cls]),
+                )
+            )
+
+    def _is_enum(self, cls: Type) -> bool:
+        try:
+            return issubclass(cls, Enum)
+        except TypeError:
+            return False

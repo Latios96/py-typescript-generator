@@ -28,6 +28,7 @@ from py_typescript_generator.model_parser.model_parser import (
 from tests.unittests.demo_parser_fixture import DemoParser
 from tests.unittests.fixture_classes import (
     ClassFixture,
+    EnumFixture,
 )
 
 
@@ -328,3 +329,23 @@ class TestParseOptional:
                 [class_with_optional_empty_class.py_class, empty_class.py_class]
             )
         )
+
+
+class TestParseEnums:
+    def test_should_parse_simple_int_enum(
+        self, simple_int_enum: EnumFixture, demo_parser: DemoParser
+    ) -> None:
+        model_parser = ModelParser([simple_int_enum.cls], [demo_parser])
+
+        model = model_parser.parse()
+
+        assert model == Model(enums=OrderedSet([simple_int_enum.py_enum]))
+
+    def test_should_parse_simple_str_enum(
+        self, simple_str_enum: EnumFixture, demo_parser: DemoParser
+    ) -> None:
+        model_parser = ModelParser([simple_str_enum.cls], [demo_parser])
+
+        model = model_parser.parse()
+
+        assert model == Model(enums=OrderedSet([simple_str_enum.py_enum]))

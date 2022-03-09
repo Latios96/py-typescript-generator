@@ -1,20 +1,31 @@
+from enum import Enum
 from typing import Dict
 
 import pytest
+from ordered_set import OrderedSet
 
 from py_typescript_generator.model.model import Model
 from py_typescript_generator.model.py_class import PyClass
+from py_typescript_generator.model.py_enum import PyEnum
 from py_typescript_generator.model.py_field import PyField
 from py_typescript_generator.typescript_model_compiler.ts_model import TsModel
 from py_typescript_generator.typescript_model_compiler.typescript_model_compiler import (
     TypescriptModelCompiler,
     UnsupportedKeyTypeForMappedType,
+    UnsupportedEnumValue,
 )
-from tests.unittests.fixture_classes import ClassFixture
+from tests.unittests.fixture_classes import ClassFixture, EnumFixture
 
 
-def _compile_py_class(empty_class: PyClass) -> TsModel:
+def _compile_py_class(empty_class: PyClass) -> TsModel:  # todo rename param to py_class
     model = Model.of_classes([empty_class])
+    model_compiler = TypescriptModelCompiler()
+    ts_model = model_compiler.compile(model)
+    return ts_model
+
+
+def _compile_py_enum(py_enum: PyEnum) -> TsModel:
+    model = Model(enums=OrderedSet([py_enum]))
     model_compiler = TypescriptModelCompiler()
     ts_model = model_compiler.compile(model)
     return ts_model
@@ -166,3 +177,24 @@ class TestTypesMappedToObject:
         assert ts_model == TsModel.of_object_types(
             [class_with_str_str_ordered_dict.ts_object_type]
         )
+
+
+class TestCompileEnum:
+    def test_should_compile_int_enum(self, simple_int_enum: EnumFixture) -> None:
+        ts_model = _compile_py_enum(simple_int_enum.py_enum)
+
+        assert ts_model == TsModel.of_enums([simple_int_enum.ts_enum])
+
+    def test_should_compile_str_enum(self, simple_str_enum: EnumFixture) -> None:
+        ts_model = _compile_py_enum(simple_str_enum.py_enum)
+
+        assert ts_model == TsModel.of_enums([simple_str_enum.ts_enum])
+
+    def test_compile_enum_with_non_str_int_values_should_fail(self) -> None:
+        class MyEnum(Enum):
+            pass
+
+        py_enum = PyEnum(name="test", type=MyEnum, values=frozenset([(1,), 1]))
+
+        with pytest.raises(UnsupportedEnumValue):
+            _compile_py_enum(py_enum)

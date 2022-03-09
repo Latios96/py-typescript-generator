@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Type, Optional
+from typing import Type, Optional, FrozenSet, Union
 from uuid import UUID
 
 from ordered_set import OrderedSet
@@ -8,6 +8,8 @@ from typing_inspect import is_optional_type, get_origin  # type: ignore
 
 from py_typescript_generator.model.model import Model
 from py_typescript_generator.model.py_class import PyClass
+from py_typescript_generator.model.py_enum import PyEnum
+from py_typescript_generator.typescript_model_compiler.ts_enum import TsEnum
 from py_typescript_generator.typescript_model_compiler.ts_field import TsField
 from py_typescript_generator.typescript_model_compiler.ts_mapped_type import (
     TsMappedType,
@@ -37,13 +39,24 @@ class UnsupportedKeyTypeForMappedType(RuntimeError):
         )
 
 
+class UnsupportedEnumValue(RuntimeError):
+    def __init__(self, cls: Type) -> None:
+        super().__init__(
+            f"Typescript enums only support int and string values, provided type was {cls}."
+        )
+
+
 class TypescriptModelCompiler:
     def compile(self, model: Model) -> TsModel:
         types: OrderedSet[TsObjectType] = OrderedSet()
         for py_class in model.classes:
             types.append(self._compile_class(py_class))
 
-        return TsModel(types=types)
+        enums: OrderedSet[TsEnum] = OrderedSet()
+        for py_enum in model.enums:
+            enums.append(self._compile_enum(py_enum))
+
+        return TsModel(types=types, enums=enums)
 
     def _compile_class(self, py_class: PyClass) -> TsObjectType:
         fields = []
@@ -111,3 +124,10 @@ class TypescriptModelCompiler:
             )
 
         raise ValueError("not supported")
+
+    def _compile_enum(self, enum: PyEnum) -> TsEnum:
+        for value in enum.values:
+            if type(value) not in {int, str}:
+                raise UnsupportedEnumValue(type(value))
+        values: FrozenSet[Union[int, str]] = enum.values  # type: ignore
+        return TsEnum(name=enum.name, values=values)

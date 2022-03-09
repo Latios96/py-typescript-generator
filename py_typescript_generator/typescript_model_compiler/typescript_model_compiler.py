@@ -72,9 +72,7 @@ class TypescriptModelCompiler:
     def _compile_type(self, cls: Type, optional: bool = False) -> TsType:
         mapped_type = self._map_scalar_type(cls)
         if mapped_type:
-            if optional:
-                return mapped_type.as_optional_type()  # todo use with_is_optional
-            return mapped_type
+            return mapped_type.with_is_optional(optional)
 
         if is_optional_type(cls):
             return self._compile_type(get_args(cls)[0], optional=True)

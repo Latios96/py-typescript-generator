@@ -43,6 +43,14 @@ jupyter = ["ipython (>=7.8.0)", "tokenize-rt (>=3.2.0)"]
 uvloop = ["uvloop (>=0.15.2)"]
 
 [[package]]
+name = "case-converter"
+version = "1.0.2"
+description = "A string case conversion package."
+category = "main"
+optional = false
+python-versions = "*"
+
+[[package]]
 name = "click"
 version = "8.0.4"
 description = "Composable command line interface toolkit"
@@ -298,7 +306,7 @@ typing-extensions = ">=3.7.4"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "3ded9bd680e9d21230482583aeef304bc31179fafd04a7c632493c54c450cd60"
+content-hash = "5855d898e9140b0408c04fb513f6f9c3a1778d0eca17e82909565eaf76cbb218"
 
 [metadata.files]
 atomicwrites = [
@@ -333,6 +341,10 @@ black = [
     {file = "black-22.1.0-cp39-cp39-win_amd64.whl", hash = "sha256:373922fc66676133ddc3e754e4509196a8c392fec3f5ca4486673e685a421321"},
     {file = "black-22.1.0-py3-none-any.whl", hash = "sha256:3524739d76b6b3ed1132422bf9d82123cd1705086723bc3e235ca39fd21c667d"},
     {file = "black-22.1.0.tar.gz", hash = "sha256:a7c0192d35635f6fc1174be575cb7915e92e5dd629ee79fdaf0dcfa41a80afb5"},
+]
+case-converter = [
+    {file = "case-converter-1.0.2.tar.gz", hash = "sha256:f441019f10a777e2e8fac3b27833766851b68e1f2bdcf5cff3eeba5cffad7294"},
+    {file = "case_converter-1.0.2-py3-none-any.whl", hash = "sha256:07142bf3f569c930a0baff40cb6c2047c7ca67ca741fb4e37adae4b8f3615fe7"},
 ]
 click = [
     {file = "click-8.0.4-py3-none-any.whl", hash = "sha256:6a7a62563bbfabfda3a38f3023a1db4a35978c0abd76f6c9605ecd6554d6d9b1"},

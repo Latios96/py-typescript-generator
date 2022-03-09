@@ -146,3 +146,34 @@ class TestTypesMappedToArray:
         assert ts_model == TsModel.of_object_types(
             [class_with_optional_empty_class.ts_object_type]
         )
+
+
+# todo compiler invocation can be refactored into method
+class TestTypesMappedToObject:
+    # todo fail if object does not have str key
+
+    # dict, defaultdict, OrderedDict
+
+    def test_should_compile_str_str_dict(
+        self, class_with_str_str_dict: ClassFixture
+    ) -> None:
+        model = Model.of_classes([class_with_str_str_dict.py_class])
+        model_compiler = TypescriptModelCompiler()
+
+        ts_model = model_compiler.compile(model)
+
+        assert ts_model == TsModel.of_object_types(
+            [class_with_str_str_dict.ts_object_type]
+        )
+
+    def test_should_compile_str_str_default_dict(
+        self, class_with_str_str_default_dict: ClassFixture
+    ) -> None:
+        model = Model.of_classes([class_with_str_str_default_dict.py_class])
+        model_compiler = TypescriptModelCompiler()
+
+        ts_model = model_compiler.compile(model)
+
+        assert ts_model == TsModel.of_object_types(
+            [class_with_str_str_default_dict.ts_object_type]
+        )

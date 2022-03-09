@@ -9,6 +9,9 @@ from typing_inspect import is_optional_type, get_origin  # type: ignore
 from py_typescript_generator.model.model import Model
 from py_typescript_generator.model.py_class import PyClass
 from py_typescript_generator.typescript_model_compiler.ts_field import TsField
+from py_typescript_generator.typescript_model_compiler.ts_mapped_type import (
+    TsMappedType,
+)
 from py_typescript_generator.typescript_model_compiler.ts_model import TsModel
 from py_typescript_generator.typescript_model_compiler.ts_object_type import (
     TsObjectType,
@@ -88,4 +91,15 @@ class TypescriptModelCompiler:
                 wrapped_type=self._compile_type(get_args(cls)[0]),
                 is_optional=is_optional,
             )
+
+        is_mapped_to_mapped_type = issubclass(generic_origin_type, dict)
+        if is_mapped_to_mapped_type:
+            has_str_key = get_args(cls)[0] == str
+            if not has_str_key:
+                raise ValueError()
+            return TsMappedType(
+                wrapped_type=self._compile_type(get_args(cls)[0]),
+                is_optional=is_optional,
+            )
+
         raise ValueError("not supported")

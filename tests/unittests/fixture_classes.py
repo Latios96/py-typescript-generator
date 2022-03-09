@@ -21,6 +21,9 @@ from ordered_set import OrderedSet
 from py_typescript_generator.model.py_class import PyClass
 from py_typescript_generator.model.py_field import PyField
 from py_typescript_generator.typescript_model_compiler.ts_field import TsField
+from py_typescript_generator.typescript_model_compiler.ts_mapped_type import (
+    TsMappedType,
+)
 from py_typescript_generator.typescript_model_compiler.ts_object_type import (
     TsObjectType,
 )
@@ -222,7 +225,7 @@ PY_CLASS_FOR_CLASS_WITH_STR_STR_DICT = PyClass(
 )
 TS_OBJECT_TYPE_FOR_CLASS_WITH_STR_STR_DICT = TsObjectType(
     name="ClassWithStrStrDict",
-    fields=frozenset({TsField(name="str_dict", type=TS_ANY)}),
+    fields=frozenset({TsField(name="str_dict", type=TsMappedType(TS_STRING))}),
 )
 PY_CLASS_FOR_CLASS_WITH_EMPTY_CLASS_LIST = PyClass(
     name="ClassWithEmptyClassList",
@@ -359,7 +362,7 @@ PY_CLASS_FOR_CLASS_WITH_STR_STR_DEFAULT_DICT = PyClass(
 )
 TS_OBJECT_TYPE_FOR_CLASS_WITH_STR_STR_DEFAULT_DICT = TsObjectType(
     name="ClassWithStrStrDefaultDict",
-    fields=frozenset({TsField(name="value", type=TS_ANY)}),
+    fields=frozenset({TsField(name="value", type=TsMappedType(TS_STRING))}),
 )
 PY_CLASS_FOR_CLASS_WITH_OPTIONAL_INT = PyClass(
     name="ClassWithOptionalInt",

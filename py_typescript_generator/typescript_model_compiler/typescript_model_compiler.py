@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Type, Optional, FrozenSet, Union
+from typing import Type, Optional, FrozenSet
 from uuid import UUID
 
 from ordered_set import OrderedSet
@@ -9,7 +9,11 @@ from typing_inspect import is_optional_type, get_origin  # type: ignore
 from py_typescript_generator.model.model import Model
 from py_typescript_generator.model.py_class import PyClass
 from py_typescript_generator.model.py_enum import PyEnum
-from py_typescript_generator.typescript_model_compiler.ts_enum import TsEnum
+from py_typescript_generator.typescript_model_compiler.ts_array import TsArray
+from py_typescript_generator.typescript_model_compiler.ts_enum import (
+    TsEnum,
+    TsEnumValue,
+)
 from py_typescript_generator.typescript_model_compiler.ts_field import TsField
 from py_typescript_generator.typescript_model_compiler.ts_mapped_type import (
     TsMappedType,
@@ -19,7 +23,6 @@ from py_typescript_generator.typescript_model_compiler.ts_object_type import (
     TsObjectType,
 )
 from py_typescript_generator.typescript_model_compiler.ts_type import TsType
-from py_typescript_generator.typescript_model_compiler.ts_array import TsArray
 from py_typescript_generator.typescript_model_compiler.well_known_types import (
     TS_NUMBER,
     TS_STRING,
@@ -129,5 +132,5 @@ class TypescriptModelCompiler:
         for py_enum_value in enum.values:
             if type(py_enum_value.value) not in {int, str}:
                 raise UnsupportedEnumValue(type(py_enum_value.value))
-        values: FrozenSet[Union[int, str]] = [x.value for x in enum.values]  # type: ignore
+        values: FrozenSet[TsEnumValue] = [TsEnumValue(x.name, x.value) for x in enum.values]  # type: ignore
         return TsEnum(name=enum.name, values=frozenset(values))

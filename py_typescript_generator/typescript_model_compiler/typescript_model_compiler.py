@@ -1,7 +1,7 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from typing import Type, Optional, Tuple, cast
+from typing import Type, Optional, Tuple, cast, Dict
 from uuid import UUID
 
 from caseconverter import camelcase  # type: ignore
@@ -61,6 +61,7 @@ class CaseFormat(Enum):
 @dataclass
 class TypescriptModelCompilerSettings:
     field_case_format: CaseFormat = CaseFormat.KEEP_CASING
+    type_mapping_overrides: Dict[Type, Type] = field(default_factory=dict)
 
 
 class TypescriptModelCompiler:
@@ -90,6 +91,11 @@ class TypescriptModelCompiler:
         return TsObjectType(name=py_class.name, fields=tuple(fields))
 
     def _compile_type(self, cls: Type, optional: bool = False) -> TsType:
+        type_override = self.typescript_compiler_settings.type_mapping_overrides.get(
+            cls
+        )
+        if type_override:
+            return self._compile_type(type_override, optional)
         mapped_type = self._map_scalar_type(cls)
         if mapped_type:
             return mapped_type.with_is_optional(optional)

@@ -1,5 +1,6 @@
 import inspect
 from collections import defaultdict
+from dataclasses import dataclass, field as dataclasses_field
 from datetime import datetime
 from enum import Enum
 from typing import (
@@ -9,6 +10,7 @@ from typing import (
     Any,
     Generic,
     Union,
+    Dict,
 )
 from typing import _GenericAlias  # type: ignore
 from uuid import UUID
@@ -70,10 +72,21 @@ TERMINATING_CLASSES = {
 }
 
 
+@dataclass
+class ModelParserSettings:
+    type_mapping_overrides: Dict[Type, Type] = dataclasses_field(default_factory=dict)
+
+
 class ModelParser:
-    def __init__(self, classes_to_parse: List[Type], parsers: List[P]):
+    def __init__(
+        self,
+        classes_to_parse: List[Type],
+        parsers: List[P],
+        settings: ModelParserSettings,
+    ):
         self._classes_to_parse = classes_to_parse
         self._parsers = parsers
+        self._settings = settings
 
     def parse(self) -> Model:
         visited_classes: OrderedSet[PyClass] = OrderedSet()
@@ -91,6 +104,10 @@ class ModelParser:
     ) -> None:
         if not self._is_class(cls):
             raise IsNotAClassException(cls)
+
+        type_override = self._settings.type_mapping_overrides.get(cls)
+        if type_override:
+            return self._parse_class(type_override, visited_classes, visited_enums)
 
         is_enum = self._is_enum(cls)
         if is_enum:

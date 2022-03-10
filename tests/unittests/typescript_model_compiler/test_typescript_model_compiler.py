@@ -21,6 +21,7 @@ from py_typescript_generator.typescript_model_compiler.typescript_model_compiler
     TypescriptModelCompilerSettings,
     CaseFormat,
 )
+from py_typescript_generator.typescript_model_compiler.well_known_types import TS_STRING
 from tests.unittests.fixture_classes import ClassFixture, EnumFixture
 
 
@@ -232,6 +233,25 @@ def test_should_convert_casing_to_camel_case(class_with_empty_class):
             TsObjectType(
                 name="ClassWithEmptyClass",
                 fields=(TsField(name="emptyClass", type=TsType("EmptyClass")),),
+            )
+        ]
+    )
+
+
+def test_type_with_override_should_compile_to_overriden_type(
+    class_with_empty_class: ClassFixture, empty_class: ClassFixture
+) -> None:
+    model = Model.of_classes([class_with_empty_class.py_class])
+    model_compiler = TypescriptModelCompiler(
+        TypescriptModelCompilerSettings(type_mapping_overrides={empty_class.cls: str})
+    )
+    ts_model = model_compiler.compile(model)
+
+    assert ts_model == TsModel.of_object_types(
+        [
+            TsObjectType(
+                name="ClassWithEmptyClass",
+                fields=(TsField(name="empty_class", type=TS_STRING),),
             )
         ]
     )

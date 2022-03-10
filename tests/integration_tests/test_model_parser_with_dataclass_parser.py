@@ -9,7 +9,10 @@ from py_typescript_generator.model.py_field import PyField
 from py_typescript_generator.model_parser.class_parsers.dataclass_parser import (
     DataclassParser,
 )
-from py_typescript_generator.model_parser.model_parser import ModelParser
+from py_typescript_generator.model_parser.model_parser import (
+    ModelParser,
+    ModelParserSettings,
+)
 
 
 @dataclass
@@ -23,7 +26,9 @@ class MySimpleDataClassWithANestedClass:
 
 
 def test_should_parse_simple_dataclass_correctly():
-    model_parser = ModelParser([MySimpleDataClass], [DataclassParser()])
+    model_parser = ModelParser(
+        [MySimpleDataClass], [DataclassParser()], ModelParserSettings()
+    )
 
     model = model_parser.parse()
 
@@ -41,7 +46,9 @@ def test_should_parse_simple_dataclass_correctly():
 
 
 def test_should_parse_simple_dataclass_with_nested_class_correctly():
-    model_parser = ModelParser([MySimpleDataClassWithANestedClass], [DataclassParser()])
+    model_parser = ModelParser(
+        [MySimpleDataClassWithANestedClass], [DataclassParser()], ModelParserSettings()
+    )
 
     model = model_parser.parse()
 
@@ -70,7 +77,9 @@ def test_should_parse_dataclass_with_str_list_correctly():
     class MyDataClass:
         str_list: List[str]
 
-    model_parser = ModelParser([MyDataClass], [DataclassParser()])
+    model_parser = ModelParser(
+        [MyDataClass], [DataclassParser()], ModelParserSettings()
+    )
 
     model = model_parser.parse()
 
@@ -96,7 +105,9 @@ def test_should_parse_dataclass_with_custom_class_list_correctly():
     class MyDataClass:
         the_list: List[CustomClass]
 
-    model_parser = ModelParser([MyDataClass], [DataclassParser()])
+    model_parser = ModelParser(
+        [MyDataClass], [DataclassParser()], ModelParserSettings()
+    )
 
     model = model_parser.parse()
 
@@ -123,7 +134,9 @@ def test_should_parse_dataclass_with_nested_generics_correctly():
     class MyDataClass:
         the_dict: Dict[str, List[Dict[str, CustomClass]]]
 
-    model_parser = ModelParser([MyDataClass], [DataclassParser()])
+    model_parser = ModelParser(
+        [MyDataClass], [DataclassParser()], ModelParserSettings()
+    )
 
     model = model_parser.parse()
 

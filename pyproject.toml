@@ -5,7 +5,7 @@ description = "Genereate TypeScript types from Python classes"
 authors = ["Jan Honsbrok <jan.honsbrok@gmail.com>"]
 
 [tool.poetry.dependencies]
-python = "^3.8"
+python = ">=3.7"
 ordered-set = "^4.1.0"
 typing-inspect = "^0.7.1"
 case-converter = "^1.0.2"

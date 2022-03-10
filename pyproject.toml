@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "py-typescript-generator"
 version = "0.1.0"
-description = "Genereate TypeScript types from Python classes"
+description = "Generate TypeScript types from Python classes"
 authors = ["Jan Honsbrok <jan.honsbrok@gmail.com>"]
 
 [tool.poetry.dependencies]

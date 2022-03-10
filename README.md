@@ -2,7 +2,7 @@
 
 `py-typescript-generator` is a tool to create TypeScript type definitions from Python classes. 
 
-> Currently, only Python dataclasses are supported, but it's possible to extend this to other sources, like attrs classes or SqlAlchemy models.
+> Note: Currently, only Python dataclasses are supported, but it's possible to extend this to other sources, like attrs classes or SqlAlchemy models.
 
 This project is heavily inspired by the [typescript-generator](https://github.com/vojtechhabarta/typescript-generator) project by 
 Vojtěch Habarta, a TypeScript generator for Java classes.
@@ -29,7 +29,7 @@ interface DemoClass {
     my_dict: { [index: string]: string }
 }
 ```
-`py-typescript-generator` supports basic Python types like `int`, `float`, `str`, `datetime` or `UUID` and collections like `List`, `Set` or `Dict`.  
+`py-typescript-generator` supports basic Python types like `int`, `float`, `str`, `datetime` or `UUID` and collections like `List`, `Set` or `Dict`. `Optional` is also supported.
 
 For more details on type mapping, see [Type Mapping](##Type Mapping).
 
@@ -42,7 +42,7 @@ pip install git+https://github.com/Latios96/py-typescript-generator.git
 ### Invocation
 `py-typescript-generator` is invoked by a custom Python Script, which is placed in your project. Note that `py-typescript-generator` needs to import your classes, so make sure all your imported dependencies are available when generating your types.
 
-To generate your TypeScript types, pass a list of your classes to the `for_types` function: 
+To generate your TypeScript types, pass a list of your classes: 
 
 ```python
 from dataclasses import dataclass

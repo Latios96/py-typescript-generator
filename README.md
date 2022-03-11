@@ -1,3 +1,4 @@
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 # py-typescript-generator
 
 `py-typescript-generator` is a tool to create TypeScript type definitions from Python classes. 

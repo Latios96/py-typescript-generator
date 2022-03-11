@@ -87,4 +87,4 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          asset_paths: '["./*.whl", "./*.tar.gz"]'
+          asset_paths: '["./*.whl"]'

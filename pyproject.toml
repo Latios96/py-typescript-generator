@@ -3,6 +3,7 @@ name = "py-typescript-generator"
 version = "0.1.0"
 description = "Generate TypeScript types from Python classes"
 authors = ["Jan Honsbrok <jan.honsbrok@gmail.com>"]
+license = "MIT"
 
 [tool.poetry.dependencies]
 python = ">=3.7"

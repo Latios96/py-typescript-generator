@@ -20,7 +20,7 @@ def test_build_pipeline(tmp_path):
 
     assert (
         content
-        == """interface MyExampleClass {
+        == """export interface MyExampleClass {
     value: string
 }
 """

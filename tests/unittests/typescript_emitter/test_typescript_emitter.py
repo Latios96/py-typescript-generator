@@ -22,7 +22,7 @@ def _emit_enum(ts_enum: TsEnum) -> str:
 def test_emit_empty_class(empty_class: ClassFixture) -> None:
     assert (
         _emit_object(empty_class.ts_object_type)
-        == """interface EmptyClass {
+        == """export interface EmptyClass {
 }
 """
     )
@@ -33,7 +33,7 @@ def test_emit_class_with_class_with_empty_class(
 ) -> None:
     assert (
         _emit_object(class_with_class_with_empty_class.ts_object_type)
-        == """interface ClassWithClassWithEmptyClass {
+        == """export interface ClassWithClassWithEmptyClass {
     class_with_empty_class: ClassWithEmptyClass
 }
 """
@@ -43,7 +43,7 @@ def test_emit_class_with_class_with_empty_class(
 def test_emit_class_with_str_list(class_with_str_list: ClassFixture) -> None:
     assert (
         _emit_object(class_with_str_list.ts_object_type)
-        == """interface ClassWithStrList {
+        == """export interface ClassWithStrList {
     str_list: string[]
 }
 """
@@ -53,7 +53,7 @@ def test_emit_class_with_str_list(class_with_str_list: ClassFixture) -> None:
 def test_emit_class_with_str_str_dict(class_with_str_str_dict: ClassFixture) -> None:
     assert (
         _emit_object(class_with_str_str_dict.ts_object_type)
-        == """interface ClassWithStrStrDict {
+        == """export interface ClassWithStrStrDict {
     str_dict: {[index: string]: string}
 }
 """
@@ -65,7 +65,7 @@ def test_emit_class_with_empty_class_list(
 ) -> None:
     assert (
         _emit_object(class_with_empty_class_list.ts_object_type)
-        == """interface ClassWithEmptyClassList {
+        == """export interface ClassWithEmptyClassList {
     empty_class_list: EmptyClass[]
 }
 """
@@ -75,7 +75,7 @@ def test_emit_class_with_empty_class_list(
 def test_emit_class_with_optional_int(class_with_optional_int: ClassFixture) -> None:
     assert (
         _emit_object(class_with_optional_int.ts_object_type)
-        == """interface ClassWithOptionalInt {
+        == """export interface ClassWithOptionalInt {
     value: number | undefined
 }
 """
@@ -87,7 +87,7 @@ def test_emit_class_with_optional_empty_class(
 ) -> None:
     assert (
         _emit_object(class_with_optional_empty_class.ts_object_type)
-        == """interface ClassWithOptionalEmptyClass {
+        == """export interface ClassWithOptionalEmptyClass {
     value: EmptyClass | undefined
 }
 """
@@ -97,7 +97,7 @@ def test_emit_class_with_optional_empty_class(
 def test_emit_simple_int_enum(simple_int_enum: EnumFixture) -> None:
     assert (
         _emit_enum(simple_int_enum.ts_enum)
-        == """enum SimpleIntEnum {
+        == """export enum SimpleIntEnum {
     FIRST = 0,
     SECOND = 1,
 }
@@ -108,7 +108,7 @@ def test_emit_simple_int_enum(simple_int_enum: EnumFixture) -> None:
 def test_emit_simple_str_enum(simple_str_enum: EnumFixture) -> None:
     assert (
         _emit_enum(simple_str_enum.ts_enum)
-        == """enum SimpleStrEnum {
+        == """export enum SimpleStrEnum {
     FIRST = "FIRST",
     SECOND = "SECOND",
 }

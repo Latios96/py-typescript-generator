@@ -14,7 +14,7 @@ class TypescriptEmitter:
         return typescript_str
 
     def _emit_enum(self, ts_enum):
-        enum_template = "enum "
+        enum_template = "export enum "
         enum_template += ts_enum.name
         enum_template += " {\n"
 
@@ -26,7 +26,7 @@ class TypescriptEmitter:
         return enum_template
 
     def _emit_type(self, ts_type: TsObjectType) -> str:
-        type_template = "interface "
+        type_template = "export interface "
         type_template += ts_type.name
         type_template += " {\n"
 

@@ -76,7 +76,7 @@ def test_emit_class_with_optional_int(class_with_optional_int: ClassFixture) -> 
     assert (
         _emit_object(class_with_optional_int.ts_object_type)
         == """export interface ClassWithOptionalInt {
-    value: number | undefined
+    value?: number
 }
 """
     )
@@ -88,7 +88,31 @@ def test_emit_class_with_optional_empty_class(
     assert (
         _emit_object(class_with_optional_empty_class.ts_object_type)
         == """export interface ClassWithOptionalEmptyClass {
-    value: EmptyClass | undefined
+    value?: EmptyClass
+}
+"""
+    )
+
+
+def test_emit_class_with_class_with_list_of_optional_int(
+    class_with_list_of_optional_int: ClassFixture,
+) -> None:
+    assert (
+        _emit_object(class_with_list_of_optional_int.ts_object_type)
+        == """export interface ClassWithListOfOptionalInt {
+    value: (number | undefined)[]
+}
+"""
+    )
+
+
+def test_emit_class_with_class_with_list_of_optional_empty_class(
+    class_with_list_of_optional_empty_class: ClassFixture,
+) -> None:
+    assert (
+        _emit_object(class_with_list_of_optional_empty_class.ts_object_type)
+        == """export interface ClassWithListOfOptionalEmptyClass {
+    value: (EmptyClass | undefined)[]
 }
 """
     )

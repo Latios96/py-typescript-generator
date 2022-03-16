@@ -37,6 +37,5 @@ class TsArray(TsType):
         )
 
     def format_as_type_reference(self):
-        return self._format_as_optional(
-            f"{self.wrapped_type.format_as_type_reference()}[]"
-        )
+        formatted_wrapped_type = f"{self.wrapped_type.format_as_type_reference()}"
+        return self._format_as_optional(f"{formatted_wrapped_type}[]")

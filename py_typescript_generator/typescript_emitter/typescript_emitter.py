@@ -1,3 +1,4 @@
+from py_typescript_generator.typescript_model_compiler.ts_field import TsField
 from py_typescript_generator.typescript_model_compiler.ts_model import TsModel
 from py_typescript_generator.typescript_model_compiler.ts_object_type import (
     TsObjectType,
@@ -31,10 +32,22 @@ class TypescriptEmitter:
         type_template += " {\n"
 
         for field in ts_type.fields:
+            field_optional_specifier = self._emit_field_optional_specifier(field)
+            field_type = self._emit_field_type(field)
             type_template += (
-                f"    {field.name}: {field.type.format_as_type_reference()}\n"
+                f"    {field.name}{field_optional_specifier}: {field_type}\n"
             )
 
         type_template += "}\n"
 
         return type_template
+
+    def _emit_field_optional_specifier(self, field: TsField) -> str:
+        if field.type.is_optional:
+            return "?"
+        return ""
+
+    def _emit_field_type(self, field: TsField) -> str:
+        if field.type.is_optional:
+            return field.type.as_non_optional_type().format_as_type_reference()
+        return field.type.format_as_type_reference()

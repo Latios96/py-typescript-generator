@@ -37,10 +37,10 @@ class TsType:
             other and self.name == other.name and self.is_optional == other.is_optional
         )
 
-    def format_as_type_reference(self):
+    def format_as_type_reference(self) -> str:
         return self._format_as_optional(self.name)
 
     def _format_as_optional(self, the_str: str) -> str:
         if self.is_optional:
-            return f"{the_str} | undefined"
+            return f"({the_str} | undefined)"
         return the_str

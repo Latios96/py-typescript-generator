@@ -309,15 +309,15 @@ class TestEqualsAndHash:
         (TsArray(wrapped_type=TsType("TheType")), "TheType[]"),
         (TsInterface("TheType"), "TheType"),
         (TsMappedType(TsType("TheType")), "{[index: string]: TheType}"),
-        (TsType("TheType", is_optional=True), "TheType | undefined"),
+        (TsType("TheType", is_optional=True), "(TheType | undefined)"),
         (
             TsArray(wrapped_type=TsType("TheType"), is_optional=True),
-            "TheType[] | undefined",
+            "(TheType[] | undefined)",
         ),
-        (TsInterface("TheType", is_optional=True), "TheType | undefined"),
+        (TsInterface("TheType", is_optional=True), "(TheType | undefined)"),
         (
             TsMappedType(TsType("TheType"), is_optional=True),
-            "{[index: string]: TheType} | undefined",
+            "({[index: string]: TheType} | undefined)",
         ),
     ],
 )

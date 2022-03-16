@@ -15,6 +15,10 @@ class TsType:
         # type: ()->TsType
         return TsType(name=self.name, is_optional=True)
 
+    def as_non_optional_type(self):
+        # type: ()->TsType
+        return TsType(name=self.name, is_optional=False)
+
     def with_is_optional(self, is_optional):
         # type: (bool)->TsType
         return TsType(name=self.name, is_optional=is_optional)

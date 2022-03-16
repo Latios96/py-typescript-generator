@@ -68,6 +68,62 @@ class TestAsOptionalType:
         assert new_ts_type == ts_type_after
 
 
+class TestAsNonOptionalType:
+    @pytest.mark.parametrize(
+        "ts_type_before,ts_type_after",
+        [
+            (
+                TsType(name="test", is_optional=True),
+                TsType(name="test", is_optional=False),
+            ),
+            (
+                TsInterface(name="test", is_optional=True),
+                TsInterface(name="test", is_optional=False),
+            ),
+            (
+                TsArray(wrapped_type=TS_STRING, is_optional=True),
+                TsArray(wrapped_type=TS_STRING, is_optional=False),
+            ),
+            (
+                TsMappedType(wrapped_type=TS_STRING, is_optional=True),
+                TsMappedType(wrapped_type=TS_STRING, is_optional=False),
+            ),
+        ],
+    )
+    def test_optional_type_should_get_non_optional(self, ts_type_before, ts_type_after):
+        new_ts_type = ts_type_before.as_non_optional_type()
+
+        assert new_ts_type == ts_type_after
+
+    @pytest.mark.parametrize(
+        "ts_type_before,ts_type_after",
+        [
+            (
+                TsType(name="test", is_optional=False),
+                TsType(name="test", is_optional=False),
+            ),
+            (
+                TsInterface(name="test", is_optional=False),
+                TsInterface(name="test", is_optional=False),
+            ),
+            (
+                TsArray(wrapped_type=TS_STRING, is_optional=False),
+                TsArray(wrapped_type=TS_STRING, is_optional=False),
+            ),
+            (
+                TsMappedType(wrapped_type=TS_STRING, is_optional=False),
+                TsMappedType(wrapped_type=TS_STRING, is_optional=False),
+            ),
+        ],
+    )
+    def test_already_non_optional_type_should_stay_non_optional(
+        self, ts_type_before, ts_type_after
+    ):
+        new_ts_type = ts_type_before.as_non_optional_type()
+
+        assert new_ts_type == ts_type_after
+
+
 class TestWithIsOptional:
     @pytest.mark.parametrize(
         "ts_type_before,ts_type_after",

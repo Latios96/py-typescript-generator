@@ -12,6 +12,10 @@ class TsMappedType(TsType):
         # type: ()->TsMappedType
         return TsMappedType(wrapped_type=self._wrapped_type, is_optional=True)
 
+    def as_non_optional_type(self):
+        # type: ()->TsMappedType
+        return TsMappedType(wrapped_type=self._wrapped_type, is_optional=False)
+
     def with_is_optional(self, is_optional):
         # type: (bool)->TsMappedType
         return TsMappedType(wrapped_type=self._wrapped_type, is_optional=is_optional)

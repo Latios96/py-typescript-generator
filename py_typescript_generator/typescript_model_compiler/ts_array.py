@@ -10,6 +10,10 @@ class TsArray(TsType):
         # type: ()->TsArray
         return TsArray(wrapped_type=self._wrapped_type, is_optional=True)
 
+    def as_non_optional_type(self):
+        # type: ()->TsArray
+        return TsArray(wrapped_type=self._wrapped_type, is_optional=False)
+
     def with_is_optional(self, is_optional):
         # type: (bool)->TsArray
         return TsArray(wrapped_type=self._wrapped_type, is_optional=is_optional)

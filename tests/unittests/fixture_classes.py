@@ -411,7 +411,7 @@ PY_CLASS_FOR_CLASS_WITH_LIST_OF_OPTIONAL_INT = PyClass(
     fields=(PyField(name="value", type=List[Optional[int]]),),  # type: ignore
 )
 TS_OBJECT_TYPE_FOR_CLASS_WITH_LIST_OF_OPTIONAL_INT = TsObjectType(
-    name="ClassWithOptionalInt",
+    name="ClassWithListOfOptionalInt",
     fields=(TsField(name="value", type=TsArray(TS_NUMBER.as_optional_type())),),
 )
 

@@ -2,4 +2,4 @@ from py_typescript_generator.generation_pipeline.typescript_generation_pipeline_
     TypeGenerationPipelineBuilder,
 )
 
-__version__ = "0.1.1"
+__version__ = "0.1.2"

@@ -1,3 +1,4 @@
+import os
 from pathlib import Path
 from typing import List, Type, Dict, Union
 
@@ -62,5 +63,11 @@ class TypeGenerationPipeline:
         return emitted_model
 
     def _write_model(self, emitted_model: str) -> None:
+        self._create_target_folder_if_not_exists()
         with open(self.output_file, "w") as f:
             f.write(emitted_model)
+
+    def _create_target_folder_if_not_exists(self):
+        folder = os.path.dirname(self.output_file)
+        if not os.path.exists(folder):
+            os.makedirs(folder)

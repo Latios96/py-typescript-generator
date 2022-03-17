@@ -10,7 +10,7 @@ def test_build_pipeline(tmp_path):
     class MyExampleClass:
         value: int
 
-    output_file = tmp_path / "test.ts"
+    output_file = tmp_path / "some_folder" / "test.ts"
     TypeGenerationPipelineBuilder().for_types([MyExampleClass]).with_type_overrides(
         {int: str}
     ).convert_field_names_to_camel_case().to_file(output_file).build().run()

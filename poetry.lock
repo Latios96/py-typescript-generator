@@ -64,7 +64,7 @@ bump2version = "*"
 
 [[package]]
 name = "case-converter"
-version = "1.0.2"
+version = "1.0.4"
 description = "A string case conversion package."
 category = "main"
 optional = false
@@ -72,7 +72,7 @@ python-versions = "*"
 
 [[package]]
 name = "click"
-version = "8.1.0"
+version = "8.1.1"
 description = "Composable command line interface toolkit"
 category = "dev"
 optional = false
@@ -406,12 +406,12 @@ bumpversion = [
     {file = "bumpversion-0.6.0.tar.gz", hash = "sha256:4ba55e4080d373f80177b4dabef146c07ce73c7d1377aabf9d3c3ae1f94584a6"},
 ]
 case-converter = [
-    {file = "case-converter-1.0.2.tar.gz", hash = "sha256:f441019f10a777e2e8fac3b27833766851b68e1f2bdcf5cff3eeba5cffad7294"},
-    {file = "case_converter-1.0.2-py3-none-any.whl", hash = "sha256:07142bf3f569c930a0baff40cb6c2047c7ca67ca741fb4e37adae4b8f3615fe7"},
+    {file = "case-converter-1.0.4.tar.gz", hash = "sha256:455b619312f830627e20a1f84da1f4209cbe7e5d061337f7fc2f140c62850fb2"},
+    {file = "case_converter-1.0.4-py3-none-any.whl", hash = "sha256:28b988e97da6fe8964880449396633dd7d392684c5e33b206088f9a5942fd83c"},
 ]
 click = [
-    {file = "click-8.1.0-py3-none-any.whl", hash = "sha256:19a4baa64da924c5e0cd889aba8e947f280309f1a2ce0947a3e3a7bcb7cc72d6"},
-    {file = "click-8.1.0.tar.gz", hash = "sha256:977c213473c7665d3aa092b41ff12063227751c41d7b17165013e10069cc5cd2"},
+    {file = "click-8.1.1-py3-none-any.whl", hash = "sha256:5e0d195c2067da3136efb897449ec1e9e6c98282fbf30d7f9e164af9be901a6b"},
+    {file = "click-8.1.1.tar.gz", hash = "sha256:7ab900e38149c9872376e8f9b5986ddcaf68c0f413cf73678a0bca5547e6f976"},
 ]
 colorama = [
     {file = "colorama-0.4.4-py2.py3-none-any.whl", hash = "sha256:9f47eda37229f68eee03b24b9748937c7dc3868f906e8ba69fbcbdd3bc5dc3e2"},

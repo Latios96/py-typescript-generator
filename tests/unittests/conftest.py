@@ -30,4 +30,10 @@ from tests.unittests.fixture_classes import (  # noqa: F401
     simple_str_enum,
     class_with_list_of_optional_int,
     class_with_list_of_optional_empty_class,
+    class_with_tagged_union_discriminant_but_no_children,
+    class_with_tagged_union_discriminant_single_child,
+    class_with_tagged_union_discriminant_single_child_child,
+    class_with_tagged_union_discriminant_multiple_children,
+    class_with_tagged_union_discriminant_multiple_children_child_1,
+    class_with_tagged_union_discriminant_multiple_children_child_2,
 )

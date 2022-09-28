@@ -1,4 +1,5 @@
 import inspect
+import logging
 from collections import defaultdict
 from dataclasses import dataclass, field as dataclasses_field
 from datetime import datetime
@@ -11,10 +12,12 @@ from typing import (
     Generic,
     Union,
     Dict,
+    Optional,
+    cast,
+    Set,
 )
 from typing import _GenericAlias  # type: ignore
 from uuid import UUID
-
 
 from ordered_set import OrderedSet
 
@@ -22,16 +25,18 @@ from ordered_set import OrderedSet
 from typing_inspect import get_args, get_origin, is_optional_type  # type: ignore
 
 from py_typescript_generator.model.model import Model
-from py_typescript_generator.model.py_class import PyClass
+from py_typescript_generator.model.py_class import (
+    PyClass,
+    RootTaggedUnionInformation,
+    TaggedUnionInformation,
+)
 from py_typescript_generator.model.py_enum import PyEnum, PyEnumValue
 from py_typescript_generator.model_parser.class_parsers.abstract_class_parser import (
     AbstractClassParser,
 )
-
-import logging
-
 from py_typescript_generator.typing_utils.typing_utils import (
     get_wrapped_type_from_optional,
+    safe_unwrap,
 )
 
 logger = logging.getLogger(__name__)
@@ -102,6 +107,8 @@ class ModelParser:
         visited_classes: OrderedSet[PyClass],
         visited_enums: OrderedSet[PyEnum],
     ) -> None:
+        if cls in {x.type for x in visited_classes}:
+            return
         if not self._is_class(cls):
             raise IsNotAClassException(cls)
 
@@ -132,6 +139,13 @@ class ModelParser:
             if parser.accepts_class(cls):
                 py_class = parser.parse(cls)
                 visited_classes.add(py_class)
+                if self._is_tagged_union_class(cls):
+                    new_py_cls = self._parse_as_tagged_union_class(
+                        py_class, visited_classes, visited_enums
+                    )
+                    visited_classes.remove(py_class)
+                    visited_classes.add(new_py_cls)
+                    py_class = new_py_cls
                 self._parse_fields(py_class, visited_classes, visited_enums)
                 return
 
@@ -179,3 +193,79 @@ class ModelParser:
             return issubclass(cls, Enum)
         except TypeError:
             return False
+
+    def _is_tagged_union_class(self, cls: Type) -> bool:
+        return self._read_discriminant_union_attribute_name(cls) is not None
+
+    def _parse_as_tagged_union_class(
+        self,
+        py_class: PyClass,
+        visited_classes: OrderedSet[PyClass],
+        visited_enums: OrderedSet[PyEnum],
+    ) -> PyClass:
+        if self._is_tagged_union_root(py_class):
+            child_classes = self._get_child_classes(py_class.type)
+            discriminant_literals = set()
+            discriminant_literals.add(
+                self._read_discriminant_union_attribute(py_class.type)
+            )
+            for child in child_classes:
+                discriminant_literals.add(
+                    self._read_discriminant_union_attribute(child)
+                )
+                self._parse_class(child, visited_classes, visited_enums)
+            tagged_union_information: TaggedUnionInformation = (
+                RootTaggedUnionInformation(
+                    discriminant_attribute=safe_unwrap(
+                        self._read_discriminant_union_attribute_name(py_class.type)
+                    ),
+                    discriminant_literal=safe_unwrap(
+                        self._read_discriminant_union_attribute(py_class.type)
+                    ),
+                    discriminant_literals=frozenset(discriminant_literals),
+                    child_types=frozenset(child_classes),
+                )
+            )
+            return py_class.with_tagged_union_information(tagged_union_information)
+        else:
+            parent_classes = self._get_parent_classes(py_class.type)
+            for parent_class in parent_classes:
+                self._parse_class(parent_class, visited_classes, visited_enums)
+            tagged_union_information = TaggedUnionInformation(
+                discriminant_attribute=safe_unwrap(
+                    self._read_discriminant_union_attribute_name(py_class.type)
+                ),
+                discriminant_literal=safe_unwrap(
+                    self._read_discriminant_union_attribute(py_class.type)
+                ),
+            )
+            return py_class.with_tagged_union_information(tagged_union_information)
+
+    def _is_tagged_union_root(self, py_class):
+        parents = self._get_parent_classes(py_class.type)
+        if not parents:
+            return True
+        return not any(filter(lambda x: self._is_tagged_union_class(x), parents))
+
+    def _get_parent_classes(self, cls: Type) -> Set[Type]:
+        parents = {*inspect.getmro(cls)}
+        parents.remove(cls)
+        parents.remove(object)
+        return parents
+
+    def _get_child_classes(self, cls: Type) -> OrderedSet[Type]:
+        classes: OrderedSet[Type] = OrderedSet()
+        for cl in cls.__subclasses__():
+            classes.add(cl)
+            classes.update(self._get_child_classes(cl))
+        return classes
+
+    def _read_discriminant_union_attribute_name(self, cls: Type) -> Optional[str]:
+        try:
+            return cast(str, getattr(cls, "__json_type_info_attribute__"))
+        except AttributeError:
+            return None
+
+    def _read_discriminant_union_attribute(self, cls: Type) -> str:
+        attr_name = getattr(cls, "__json_type_info_attribute__")
+        return cast(str, getattr(cls, attr_name))

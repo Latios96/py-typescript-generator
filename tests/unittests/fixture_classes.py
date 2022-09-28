@@ -20,7 +20,11 @@ from uuid import UUID
 import pytest
 from ordered_set import OrderedSet
 
-from py_typescript_generator.model.py_class import PyClass
+from py_typescript_generator.model.py_class import (
+    PyClass,
+    RootTaggedUnionInformation,
+    TaggedUnionInformation,
+)
 from py_typescript_generator.model.py_enum import PyEnum, PyEnumValue
 from py_typescript_generator.model.py_field import PyField
 from py_typescript_generator.typescript_model_compiler.ts_enum import (
@@ -167,6 +171,39 @@ class SimpleIntEnum(Enum):
 class SimpleStrEnum(Enum):
     FIRST = "FIRST"
     SECOND = "SECOND"
+
+
+class ClassWithTaggedUnionDiscriminantButNoChildren:
+    __json_type_info_attribute__ = "type"
+    type = "TEST"
+
+
+class ClassWithTaggedUnionDiscriminantSingleChild:
+    __json_type_info_attribute__ = "type"
+    type = "BASE"
+
+
+class ClassWithTaggedUnionDiscriminantSingleChildChild(
+    ClassWithTaggedUnionDiscriminantSingleChild
+):
+    type = "CHILD"
+
+
+class ClassWithTaggedUnionDiscriminantMultipleChildren:
+    __json_type_info_attribute__ = "type"
+    type = "BASE"
+
+
+class ClassWithTaggedUnionDiscriminantMultipleChildrenChild1(
+    ClassWithTaggedUnionDiscriminantMultipleChildren
+):
+    type = "CHILD_1"
+
+
+class ClassWithTaggedUnionDiscriminantMultipleChildrenChild2(
+    ClassWithTaggedUnionDiscriminantMultipleChildren
+):
+    type = "CHILD_2"
 
 
 PY_CLASS_FOR_EMPTY_CLASS = PyClass(name="EmptyClass", type=EmptyClass, fields=())
@@ -456,6 +493,74 @@ TS_ENUM_FOR_SIMPLE_STR_ENUM = TsEnum(
         TsEnumValue(name="SECOND", value="SECOND"),
     ),
 )
+PY_CLASS_FOR_CLASS_WITH_TAGGED_UNION_DISCRIMINANT_BUT_NO_CHILDREN = PyClass(
+    name="ClassWithTaggedUnionDiscriminantButNoChildren",
+    type=ClassWithTaggedUnionDiscriminantButNoChildren,
+    fields=(),
+    tagged_union_information=RootTaggedUnionInformation(
+        discriminant_attribute="type",
+        discriminant_literal="TEST",
+        discriminant_literals=frozenset({"TEST"}),
+        child_types=frozenset(),
+    ),
+)
+PY_CLASS_FOR_CLASS_WITH_TAGGED_UNION_DISCRIMINANT_SINGLE_CHILD = PyClass(
+    name="ClassWithTaggedUnionDiscriminantSingleChild",
+    type=ClassWithTaggedUnionDiscriminantSingleChild,
+    fields=(),
+    tagged_union_information=RootTaggedUnionInformation(
+        discriminant_attribute="type",
+        discriminant_literal="BASE",
+        discriminant_literals=frozenset({"BASE", "CHILD"}),
+        child_types=frozenset({ClassWithTaggedUnionDiscriminantSingleChildChild}),
+    ),
+)
+PY_CLASS_FOR_CLASS_WITH_TAGGED_UNION_DISCRIMINANT_SINGLE_CHILD_CHILD = PyClass(
+    name="ClassWithTaggedUnionDiscriminantSingleChildChild",
+    type=ClassWithTaggedUnionDiscriminantSingleChildChild,
+    fields=(),
+    tagged_union_information=TaggedUnionInformation(
+        discriminant_attribute="type",
+        discriminant_literal="CHILD",
+    ),
+)
+
+PY_CLASS_FOR_CLASS_WITH_TAGGED_UNION_DISCRIMINANT_MULTIPLE_CHILDREN = PyClass(
+    name="ClassWithTaggedUnionDiscriminantMultipleChildren",
+    type=ClassWithTaggedUnionDiscriminantMultipleChildren,
+    fields=(),
+    tagged_union_information=RootTaggedUnionInformation(
+        discriminant_attribute="type",
+        discriminant_literal="BASE",
+        discriminant_literals=frozenset({"BASE", "CHILD_1", "CHILD_2"}),
+        child_types=frozenset(
+            {
+                ClassWithTaggedUnionDiscriminantMultipleChildrenChild1,
+                ClassWithTaggedUnionDiscriminantMultipleChildrenChild2,
+            }
+        ),
+    ),
+)
+
+PY_CLASS_FOR_CLASS_WITH_TAGGED_UNION_DISCRIMINANT_MULTIPLE_CHILDREN_CHILD_1 = PyClass(
+    name="ClassWithTaggedUnionDiscriminantMultipleChildrenChild1",
+    type=ClassWithTaggedUnionDiscriminantMultipleChildrenChild1,
+    fields=(),
+    tagged_union_information=TaggedUnionInformation(
+        discriminant_attribute="type",
+        discriminant_literal="CHILD_1",
+    ),
+)
+
+PY_CLASS_FOR_CLASS_WITH_TAGGED_UNION_DISCRIMINANT_MULTIPLE_CHILDREN_CHILD_2 = PyClass(
+    name="ClassWithTaggedUnionDiscriminantMultipleChildrenChild2",
+    type=ClassWithTaggedUnionDiscriminantMultipleChildrenChild2,
+    fields=(),
+    tagged_union_information=TaggedUnionInformation(
+        discriminant_attribute="type",
+        discriminant_literal="CHILD_2",
+    ),
+)
 
 
 @dataclass
@@ -739,4 +844,58 @@ def simple_str_enum():
         cls=SimpleStrEnum,
         py_enum=PY_ENUM_FOR_SIMPLE_STR_ENUM,
         ts_enum=TS_ENUM_FOR_SIMPLE_STR_ENUM,
+    )
+
+
+@pytest.fixture
+def class_with_tagged_union_discriminant_but_no_children():
+    return ClassFixture(
+        cls=ClassWithTaggedUnionDiscriminantButNoChildren,
+        py_class=PY_CLASS_FOR_CLASS_WITH_TAGGED_UNION_DISCRIMINANT_BUT_NO_CHILDREN,
+        ts_object_type=None,
+    )
+
+
+@pytest.fixture
+def class_with_tagged_union_discriminant_single_child():
+    return ClassFixture(
+        cls=ClassWithTaggedUnionDiscriminantSingleChild,
+        py_class=PY_CLASS_FOR_CLASS_WITH_TAGGED_UNION_DISCRIMINANT_SINGLE_CHILD,
+        ts_object_type=None,
+    )
+
+
+@pytest.fixture
+def class_with_tagged_union_discriminant_single_child_child():
+    return ClassFixture(
+        cls=ClassWithTaggedUnionDiscriminantSingleChildChild,
+        py_class=PY_CLASS_FOR_CLASS_WITH_TAGGED_UNION_DISCRIMINANT_SINGLE_CHILD_CHILD,
+        ts_object_type=None,
+    )
+
+
+@pytest.fixture
+def class_with_tagged_union_discriminant_multiple_children():
+    return ClassFixture(
+        cls=ClassWithTaggedUnionDiscriminantMultipleChildren,
+        py_class=PY_CLASS_FOR_CLASS_WITH_TAGGED_UNION_DISCRIMINANT_MULTIPLE_CHILDREN,
+        ts_object_type=None,
+    )
+
+
+@pytest.fixture
+def class_with_tagged_union_discriminant_multiple_children_child_1():
+    return ClassFixture(
+        cls=ClassWithTaggedUnionDiscriminantMultipleChildren,
+        py_class=PY_CLASS_FOR_CLASS_WITH_TAGGED_UNION_DISCRIMINANT_MULTIPLE_CHILDREN_CHILD_1,
+        ts_object_type=None,
+    )
+
+
+@pytest.fixture
+def class_with_tagged_union_discriminant_multiple_children_child_2():
+    return ClassFixture(
+        cls=ClassWithTaggedUnionDiscriminantMultipleChildren,
+        py_class=PY_CLASS_FOR_CLASS_WITH_TAGGED_UNION_DISCRIMINANT_MULTIPLE_CHILDREN_CHILD_2,
+        ts_object_type=None,
     )

@@ -55,6 +55,18 @@ from tests.unittests.fixture_classes import (
     ClassWithOptionalEmptyClass,
     PY_CLASS_FOR_CLASS_WITH_OPTIONAL_INT,
     PY_CLASS_FOR_CLASS_WITH_OPTIONAL_EMPTY_CLASS,
+    ClassWithTaggedUnionDiscriminantButNoChildren,
+    PY_CLASS_FOR_CLASS_WITH_TAGGED_UNION_DISCRIMINANT_BUT_NO_CHILDREN,
+    ClassWithTaggedUnionDiscriminantSingleChild,
+    PY_CLASS_FOR_CLASS_WITH_TAGGED_UNION_DISCRIMINANT_SINGLE_CHILD,
+    ClassWithTaggedUnionDiscriminantSingleChildChild,
+    PY_CLASS_FOR_CLASS_WITH_TAGGED_UNION_DISCRIMINANT_SINGLE_CHILD_CHILD,
+    ClassWithTaggedUnionDiscriminantMultipleChildren,
+    ClassWithTaggedUnionDiscriminantMultipleChildrenChild1,
+    ClassWithTaggedUnionDiscriminantMultipleChildrenChild2,
+    PY_CLASS_FOR_CLASS_WITH_TAGGED_UNION_DISCRIMINANT_MULTIPLE_CHILDREN,
+    PY_CLASS_FOR_CLASS_WITH_TAGGED_UNION_DISCRIMINANT_MULTIPLE_CHILDREN_CHILD_1,
+    PY_CLASS_FOR_CLASS_WITH_TAGGED_UNION_DISCRIMINANT_MULTIPLE_CHILDREN_CHILD_2,
 )
 
 
@@ -85,6 +97,12 @@ class DemoParser(AbstractClassParser):
             ClassWithStrStrDefaultDict,
             ClassWithOptionalInt,
             ClassWithOptionalEmptyClass,
+            ClassWithTaggedUnionDiscriminantButNoChildren,
+            ClassWithTaggedUnionDiscriminantSingleChild,
+            ClassWithTaggedUnionDiscriminantSingleChildChild,
+            ClassWithTaggedUnionDiscriminantMultipleChildren,
+            ClassWithTaggedUnionDiscriminantMultipleChildrenChild1,
+            ClassWithTaggedUnionDiscriminantMultipleChildrenChild2,
         ]
 
     def parse(self, cls: Type) -> PyClass:
@@ -136,6 +154,18 @@ class DemoParser(AbstractClassParser):
             return PY_CLASS_FOR_CLASS_WITH_OPTIONAL_INT
         elif cls == ClassWithOptionalEmptyClass:
             return PY_CLASS_FOR_CLASS_WITH_OPTIONAL_EMPTY_CLASS
+        elif cls == ClassWithTaggedUnionDiscriminantButNoChildren:
+            return PY_CLASS_FOR_CLASS_WITH_TAGGED_UNION_DISCRIMINANT_BUT_NO_CHILDREN
+        elif cls == ClassWithTaggedUnionDiscriminantSingleChild:
+            return PY_CLASS_FOR_CLASS_WITH_TAGGED_UNION_DISCRIMINANT_SINGLE_CHILD
+        elif cls == ClassWithTaggedUnionDiscriminantSingleChildChild:
+            return PY_CLASS_FOR_CLASS_WITH_TAGGED_UNION_DISCRIMINANT_SINGLE_CHILD_CHILD
+        elif cls == ClassWithTaggedUnionDiscriminantMultipleChildren:
+            return PY_CLASS_FOR_CLASS_WITH_TAGGED_UNION_DISCRIMINANT_MULTIPLE_CHILDREN
+        elif cls == ClassWithTaggedUnionDiscriminantMultipleChildrenChild1:
+            return PY_CLASS_FOR_CLASS_WITH_TAGGED_UNION_DISCRIMINANT_MULTIPLE_CHILDREN_CHILD_1
+        elif cls == ClassWithTaggedUnionDiscriminantMultipleChildrenChild2:
+            return PY_CLASS_FOR_CLASS_WITH_TAGGED_UNION_DISCRIMINANT_MULTIPLE_CHILDREN_CHILD_2
         raise ValueError(f"Unsupported class: {cls}")
 
 

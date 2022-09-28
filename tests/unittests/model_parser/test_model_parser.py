@@ -30,6 +30,11 @@ from tests.unittests.demo_parser_fixture import DemoParser
 from tests.unittests.fixture_classes import (
     ClassFixture,
     EnumFixture,
+    PY_CLASS_FOR_CLASS_WITH_TAGGED_UNION_DISCRIMINANT_SINGLE_CHILD_CHILD,
+    PY_CLASS_FOR_CLASS_WITH_TAGGED_UNION_DISCRIMINANT_SINGLE_CHILD,
+    PY_CLASS_FOR_CLASS_WITH_TAGGED_UNION_DISCRIMINANT_MULTIPLE_CHILDREN,
+    PY_CLASS_FOR_CLASS_WITH_TAGGED_UNION_DISCRIMINANT_MULTIPLE_CHILDREN_CHILD_1,
+    PY_CLASS_FOR_CLASS_WITH_TAGGED_UNION_DISCRIMINANT_MULTIPLE_CHILDREN_CHILD_2,
 )
 
 
@@ -402,3 +407,145 @@ def test_type_with_override_should_not_analyse_original_type(
     model = model_parser.parse()
 
     assert model == Model(classes=OrderedSet([class_with_empty_class.py_class]))
+
+
+class TestParseDiscriminantUnionClasses:
+
+    # parse without children
+    # parent & child, parse parent
+    # parent & child, parse child
+
+    # (parent & child) & child & child
+    # parse with string and enum discriminant value
+
+    def test_parse_class_without_children(
+        self,
+        class_with_tagged_union_discriminant_but_no_children: ClassFixture,
+        demo_parser: DemoParser,
+    ) -> None:
+        model_parser = ModelParser(
+            [class_with_tagged_union_discriminant_but_no_children.cls],
+            [demo_parser],
+            ModelParserSettings(),
+        )
+
+        model = model_parser.parse()
+
+        assert model == Model(
+            classes=OrderedSet(
+                [class_with_tagged_union_discriminant_but_no_children.py_class]
+            )
+        )
+
+    def test_parse_class_with_single_child_parse_parent(
+        self,
+        class_with_tagged_union_discriminant_single_child: ClassFixture,
+        demo_parser: DemoParser,
+    ) -> None:
+        model_parser = ModelParser(
+            [class_with_tagged_union_discriminant_single_child.cls],
+            [demo_parser],
+            ModelParserSettings(),
+        )
+
+        model = model_parser.parse()
+
+        assert model == Model(
+            classes=OrderedSet(
+                [
+                    PY_CLASS_FOR_CLASS_WITH_TAGGED_UNION_DISCRIMINANT_SINGLE_CHILD_CHILD,
+                    class_with_tagged_union_discriminant_single_child.py_class,
+                ]
+            )
+        )
+
+    def test_parse_class_with_single_child_parse_child(
+        self,
+        class_with_tagged_union_discriminant_single_child_child: ClassFixture,
+        demo_parser: DemoParser,
+    ) -> None:
+        model_parser = ModelParser(
+            [class_with_tagged_union_discriminant_single_child_child.cls],
+            [demo_parser],
+            ModelParserSettings(),
+        )
+
+        model = model_parser.parse()
+
+        assert model == Model(
+            classes=OrderedSet(
+                [
+                    PY_CLASS_FOR_CLASS_WITH_TAGGED_UNION_DISCRIMINANT_SINGLE_CHILD,
+                    class_with_tagged_union_discriminant_single_child_child.py_class,
+                ]
+            )
+        )
+
+    def test_parse_class_with_multiple_children_parse_parent(
+        self,
+        class_with_tagged_union_discriminant_multiple_children: ClassFixture,
+        demo_parser: DemoParser,
+    ) -> None:
+        model_parser = ModelParser(
+            [class_with_tagged_union_discriminant_multiple_children.cls],
+            [demo_parser],
+            ModelParserSettings(),
+        )
+
+        model = model_parser.parse()
+
+        assert model == Model(
+            classes=OrderedSet(
+                [
+                    PY_CLASS_FOR_CLASS_WITH_TAGGED_UNION_DISCRIMINANT_MULTIPLE_CHILDREN_CHILD_1,
+                    PY_CLASS_FOR_CLASS_WITH_TAGGED_UNION_DISCRIMINANT_MULTIPLE_CHILDREN_CHILD_2,
+                    class_with_tagged_union_discriminant_multiple_children.py_class,
+                ]
+            )
+        )
+
+    def test_parse_class_with_multiple_children_parse_child_1(
+        self,
+        class_with_tagged_union_discriminant_multiple_children_child_1: ClassFixture,
+        demo_parser: DemoParser,
+    ) -> None:
+        model_parser = ModelParser(
+            [class_with_tagged_union_discriminant_multiple_children_child_1.cls],
+            [demo_parser],
+            ModelParserSettings(),
+        )
+
+        model = model_parser.parse()
+
+        assert model == Model(
+            classes=OrderedSet(
+                [
+                    class_with_tagged_union_discriminant_multiple_children_child_1.py_class,
+                    PY_CLASS_FOR_CLASS_WITH_TAGGED_UNION_DISCRIMINANT_MULTIPLE_CHILDREN_CHILD_2,
+                    PY_CLASS_FOR_CLASS_WITH_TAGGED_UNION_DISCRIMINANT_MULTIPLE_CHILDREN,
+                ]
+            )
+        )
+
+    def test_parse_class_with_multiple_children_parse_child_2(
+        self,
+        class_with_tagged_union_discriminant_multiple_children_child_2: ClassFixture,
+        demo_parser: DemoParser,
+    ) -> None:
+        model_parser = ModelParser(
+            [class_with_tagged_union_discriminant_multiple_children_child_2.cls],
+            [demo_parser],
+            ModelParserSettings(),
+        )
+
+        model = model_parser.parse()
+
+        assert model == Model(
+            classes=OrderedSet(
+                [
+                    PY_CLASS_FOR_CLASS_WITH_TAGGED_UNION_DISCRIMINANT_MULTIPLE_CHILDREN_CHILD_1,
+                    class_with_tagged_union_discriminant_multiple_children_child_2.py_class,
+                    PY_CLASS_FOR_CLASS_WITH_TAGGED_UNION_DISCRIMINANT_MULTIPLE_CHILDREN,
+                ]
+            )
+        )

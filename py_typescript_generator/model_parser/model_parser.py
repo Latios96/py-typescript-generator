@@ -205,15 +205,21 @@ class ModelParser:
     ) -> PyClass:
         if self._is_tagged_union_root(py_class):
             child_classes = self._get_child_classes(py_class.type)
+
             discriminant_literals = set()
-            discriminant_literals.add(
-                self._read_discriminant_union_attribute(py_class.type)
+
+            parent_discriminator = self._read_discriminant_union_attribute(
+                py_class.type
             )
+            if parent_discriminator:
+                discriminant_literals.add(parent_discriminator)
+
             for child in child_classes:
                 discriminant_literals.add(
                     self._read_discriminant_union_attribute(child)
                 )
                 self._parse_class(child, visited_classes, visited_enums)
+
             tagged_union_information: TaggedUnionInformation = (
                 RootTaggedUnionInformation(
                     discriminant_attribute=safe_unwrap(
@@ -268,4 +274,7 @@ class ModelParser:
 
     def _read_discriminant_union_attribute(self, cls: Type) -> str:
         attr_name = getattr(cls, "__json_type_info_attribute__")
-        return cast(str, getattr(cls, attr_name))
+        try:
+            return cast(str, getattr(cls, attr_name))
+        except AttributeError:
+            return ""

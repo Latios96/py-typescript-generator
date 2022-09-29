@@ -180,6 +180,10 @@ class ClassWithTaggedUnionDiscriminantButNoChildren:
     type = "TEST"
 
 
+class ClassWithTaggedUnionDiscriminantNoDiscriminatorForRoot:
+    __json_type_info_attribute__ = "type"
+
+
 class ClassWithTaggedUnionDiscriminantSingleChild:
     __json_type_info_attribute__ = "type"
     type = "BASE"
@@ -503,6 +507,18 @@ PY_CLASS_FOR_CLASS_WITH_TAGGED_UNION_DISCRIMINANT_BUT_NO_CHILDREN = PyClass(
         discriminant_attribute="type",
         discriminant_literal="TEST",
         discriminant_literals=frozenset({"TEST"}),
+        child_types=frozenset(),
+    ),
+)
+
+PY_CLASS_FOR_CLASS_WITH_TAGGED_UNION_DISCRIMINANT_NO_DISCRIMINANT_FOR_ROOT = PyClass(
+    name="ClassWithTaggedUnionDiscriminantNoDiscriminatorForRoot",
+    type=ClassWithTaggedUnionDiscriminantNoDiscriminatorForRoot,
+    fields=(),
+    tagged_union_information=RootTaggedUnionInformation(
+        discriminant_attribute="type",
+        discriminant_literal="",
+        discriminant_literals=frozenset(),
         child_types=frozenset(),
     ),
 )
@@ -854,6 +870,18 @@ def class_with_tagged_union_discriminant_but_no_children():
     return ClassFixture(
         cls=ClassWithTaggedUnionDiscriminantButNoChildren,
         py_class=PY_CLASS_FOR_CLASS_WITH_TAGGED_UNION_DISCRIMINANT_BUT_NO_CHILDREN,
+        ts_object_type=TsUnionType(
+            name="ClassWithTaggedUnionDiscriminantSingleChild",
+            union_members=(),
+        ),
+    )
+
+
+@pytest.fixture
+def class_with_tagged_union_discriminant_no_discriminant_for_root():
+    return ClassFixture(
+        cls=ClassWithTaggedUnionDiscriminantNoDiscriminatorForRoot,
+        py_class=PY_CLASS_FOR_CLASS_WITH_TAGGED_UNION_DISCRIMINANT_NO_DISCRIMINANT_FOR_ROOT,
         ts_object_type=TsUnionType(
             name="ClassWithTaggedUnionDiscriminantSingleChild",
             union_members=(),

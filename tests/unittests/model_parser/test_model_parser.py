@@ -429,6 +429,25 @@ class TestParseDiscriminantUnionClasses:
             )
         )
 
+    def test_parse_root_no_discriminant_value(
+        self,
+        class_with_tagged_union_discriminant_no_discriminant_for_root: ClassFixture,
+        demo_parser: DemoParser,
+    ) -> None:
+        model_parser = ModelParser(
+            [class_with_tagged_union_discriminant_no_discriminant_for_root.cls],
+            [demo_parser],
+            ModelParserSettings(),
+        )
+
+        model = model_parser.parse()
+
+        assert model == Model(
+            classes=OrderedSet(
+                [class_with_tagged_union_discriminant_no_discriminant_for_root.py_class]
+            )
+        )
+
     def test_parse_class_with_single_child_parse_parent(
         self,
         class_with_tagged_union_discriminant_single_child: ClassFixture,

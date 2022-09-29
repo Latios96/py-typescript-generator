@@ -67,6 +67,8 @@ from tests.unittests.fixture_classes import (
     PY_CLASS_FOR_CLASS_WITH_TAGGED_UNION_DISCRIMINANT_MULTIPLE_CHILDREN,
     PY_CLASS_FOR_CLASS_WITH_TAGGED_UNION_DISCRIMINANT_MULTIPLE_CHILDREN_CHILD_1,
     PY_CLASS_FOR_CLASS_WITH_TAGGED_UNION_DISCRIMINANT_MULTIPLE_CHILDREN_CHILD_2,
+    ClassWithTaggedUnionDiscriminantNoDiscriminatorForRoot,
+    PY_CLASS_FOR_CLASS_WITH_TAGGED_UNION_DISCRIMINANT_NO_DISCRIMINANT_FOR_ROOT,
 )
 
 
@@ -103,6 +105,7 @@ class DemoParser(AbstractClassParser):
             ClassWithTaggedUnionDiscriminantMultipleChildren,
             ClassWithTaggedUnionDiscriminantMultipleChildrenChild1,
             ClassWithTaggedUnionDiscriminantMultipleChildrenChild2,
+            ClassWithTaggedUnionDiscriminantNoDiscriminatorForRoot,
         ]
 
     def parse(self, cls: Type) -> PyClass:
@@ -166,6 +169,8 @@ class DemoParser(AbstractClassParser):
             return PY_CLASS_FOR_CLASS_WITH_TAGGED_UNION_DISCRIMINANT_MULTIPLE_CHILDREN_CHILD_1
         elif cls == ClassWithTaggedUnionDiscriminantMultipleChildrenChild2:
             return PY_CLASS_FOR_CLASS_WITH_TAGGED_UNION_DISCRIMINANT_MULTIPLE_CHILDREN_CHILD_2
+        elif cls == ClassWithTaggedUnionDiscriminantNoDiscriminatorForRoot:
+            return PY_CLASS_FOR_CLASS_WITH_TAGGED_UNION_DISCRIMINANT_NO_DISCRIMINANT_FOR_ROOT
         raise ValueError(f"Unsupported class: {cls}")
 
 

@@ -38,11 +38,11 @@ For more details on type mapping, see [Type Mapping](##Type Mapping).
 ### Installation
 You can install `py-typescript-generator` via `pip`, currently only from Github:
 ```shell
-pip install git+https://github.com/Latios96/py-typescript-generator.git@v0.1.3
+pip install git+https://github.com/Latios96/py-typescript-generator.git@v0.2.0
 ```
 or if you are using poetry:
 ```shell
-poetry add git+ssh://git@github.com:Latios96/py-typescript-generator.git#v0.1.3
+poetry add git+ssh://git@github.com:Latios96/py-typescript-generator.git#v0.2.0
 ```
 ### Invocation
 `py-typescript-generator` is invoked by a custom Python Script, which is placed in your project. Note that `py-typescript-generator` needs to import your classes, so make sure all your imported dependencies are available when generating your types.

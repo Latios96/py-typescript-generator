@@ -27,6 +27,7 @@ from py_typescript_generator.model.py_class import (
 )
 from py_typescript_generator.model.py_enum import PyEnum, PyEnumValue
 from py_typescript_generator.model.py_field import PyField
+from py_typescript_generator.typescript_model_compiler.ts_array import TsArray
 from py_typescript_generator.typescript_model_compiler.ts_enum import (
     TsEnum,
     TsEnumValue,
@@ -37,9 +38,10 @@ from py_typescript_generator.typescript_model_compiler.ts_mapped_type import (
 )
 from py_typescript_generator.typescript_model_compiler.ts_object_type import (
     TsObjectType,
+    TsDiscriminator,
+    TsUnionType,
 )
 from py_typescript_generator.typescript_model_compiler.ts_type import TsType
-from py_typescript_generator.typescript_model_compiler.ts_array import TsArray
 from py_typescript_generator.typescript_model_compiler.well_known_types import (
     TS_NUMBER,
     TS_ANY,
@@ -852,7 +854,10 @@ def class_with_tagged_union_discriminant_but_no_children():
     return ClassFixture(
         cls=ClassWithTaggedUnionDiscriminantButNoChildren,
         py_class=PY_CLASS_FOR_CLASS_WITH_TAGGED_UNION_DISCRIMINANT_BUT_NO_CHILDREN,
-        ts_object_type=None,
+        ts_object_type=TsUnionType(
+            name="ClassWithTaggedUnionDiscriminantSingleChild",
+            union_members=(),
+        ),
     )
 
 
@@ -861,7 +866,10 @@ def class_with_tagged_union_discriminant_single_child():
     return ClassFixture(
         cls=ClassWithTaggedUnionDiscriminantSingleChild,
         py_class=PY_CLASS_FOR_CLASS_WITH_TAGGED_UNION_DISCRIMINANT_SINGLE_CHILD,
-        ts_object_type=None,
+        ts_object_type=TsUnionType(
+            name="ClassWithTaggedUnionDiscriminantSingleChild",
+            union_members=("ClassWithTaggedUnionDiscriminantSingleChildChild",),
+        ),
     )
 
 
@@ -870,7 +878,11 @@ def class_with_tagged_union_discriminant_single_child_child():
     return ClassFixture(
         cls=ClassWithTaggedUnionDiscriminantSingleChildChild,
         py_class=PY_CLASS_FOR_CLASS_WITH_TAGGED_UNION_DISCRIMINANT_SINGLE_CHILD_CHILD,
-        ts_object_type=None,
+        ts_object_type=TsObjectType(
+            name="ClassWithTaggedUnionDiscriminantSingleChildChild",
+            fields=(),
+            discriminator=TsDiscriminator(name="type", value="CHILD"),
+        ),
     )
 
 
@@ -879,7 +891,13 @@ def class_with_tagged_union_discriminant_multiple_children():
     return ClassFixture(
         cls=ClassWithTaggedUnionDiscriminantMultipleChildren,
         py_class=PY_CLASS_FOR_CLASS_WITH_TAGGED_UNION_DISCRIMINANT_MULTIPLE_CHILDREN,
-        ts_object_type=None,
+        ts_object_type=TsUnionType(
+            name="ClassWithTaggedUnionDiscriminantMultipleChildren",
+            union_members=(
+                "ClassWithTaggedUnionDiscriminantMultipleChildrenChild1",
+                "ClassWithTaggedUnionDiscriminantMultipleChildrenChild2",
+            ),
+        ),
     )
 
 

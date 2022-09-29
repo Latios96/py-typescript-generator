@@ -44,13 +44,13 @@ def _compile_py_enum(py_enum: PyEnum) -> TsModel:
 def test_should_compile_empty_class(empty_class):
     ts_model = _compile_py_class(empty_class.py_class)
 
-    assert ts_model == TsModel.of_object_types([empty_class.ts_object_type])
+    assert ts_model == TsModel.of_types([empty_class.ts_object_type])
 
 
 def test_should_compile_class_with_empty_class(class_with_empty_class):
     ts_model = _compile_py_class(class_with_empty_class.py_class)
 
-    assert ts_model == TsModel.of_object_types([class_with_empty_class.ts_object_type])
+    assert ts_model == TsModel.of_types([class_with_empty_class.ts_object_type])
 
 
 def test_should_compile_class_with_class_with_empty_class(
@@ -58,7 +58,7 @@ def test_should_compile_class_with_class_with_empty_class(
 ):
     ts_model = _compile_py_class(class_with_class_with_empty_class.py_class)
 
-    assert ts_model == TsModel.of_object_types(
+    assert ts_model == TsModel.of_types(
         [class_with_class_with_empty_class.ts_object_type]
     )
 
@@ -71,7 +71,7 @@ def test_should_compile_classes_with_cycle(first_class_in_cycle, second_class_in
 
     ts_model = model_compiler.compile(model)
 
-    assert ts_model == TsModel.of_object_types(
+    assert ts_model == TsModel.of_types(
         [first_class_in_cycle.ts_object_type, second_class_in_cycle.ts_object_type]
     )
 
@@ -92,13 +92,13 @@ def test_should_compile_class_with_scalar_types(fixture_name, request):
     class_fixture = request.getfixturevalue(fixture_name)
     ts_model = _compile_py_class(class_fixture.py_class)
 
-    assert ts_model == TsModel.of_object_types([class_fixture.ts_object_type])
+    assert ts_model == TsModel.of_types([class_fixture.ts_object_type])
 
 
 def test_should_compile_class_with_optional_int(class_with_optional_int):
     ts_model = _compile_py_class(class_with_optional_int.py_class)
 
-    assert ts_model == TsModel.of_object_types([class_with_optional_int.ts_object_type])
+    assert ts_model == TsModel.of_types([class_with_optional_int.ts_object_type])
 
 
 def test_should_compile_class_with_optional_empty_class(
@@ -106,7 +106,7 @@ def test_should_compile_class_with_optional_empty_class(
 ):
     ts_model = _compile_py_class(class_with_optional_empty_class.py_class)
 
-    assert ts_model == TsModel.of_object_types(
+    assert ts_model == TsModel.of_types(
         [class_with_optional_empty_class.ts_object_type]
     )
 
@@ -115,44 +115,40 @@ class TestTypesMappedToArray:
     def test_should_compile_class_with_str_list(self, class_with_str_list):
         ts_model = _compile_py_class(class_with_str_list.py_class)
 
-        assert ts_model == TsModel.of_object_types([class_with_str_list.ts_object_type])
+        assert ts_model == TsModel.of_types([class_with_str_list.ts_object_type])
 
     def test_should_compile_class_with_empty_class_list(
         self, class_with_empty_class_list
     ):
         ts_model = _compile_py_class(class_with_empty_class_list.py_class)
 
-        assert ts_model == TsModel.of_object_types(
+        assert ts_model == TsModel.of_types(
             [class_with_empty_class_list.ts_object_type]
         )
 
     def test_should_compile_class_with_str_set(self, class_with_str_set):
         ts_model = _compile_py_class(class_with_str_set.py_class)
 
-        assert ts_model == TsModel.of_object_types([class_with_str_set.ts_object_type])
+        assert ts_model == TsModel.of_types([class_with_str_set.ts_object_type])
 
     def test_should_compile_class_with_str_frozen_set(self, class_with_str_frozen_set):
         ts_model = _compile_py_class(class_with_str_frozen_set.py_class)
 
-        assert ts_model == TsModel.of_object_types(
-            [class_with_str_frozen_set.ts_object_type]
-        )
+        assert ts_model == TsModel.of_types([class_with_str_frozen_set.ts_object_type])
 
     def test_should_compile_class_with_str_ordered_set(
         self, class_with_str_ordered_set
     ):
         ts_model = _compile_py_class(class_with_str_ordered_set.py_class)
 
-        assert ts_model == TsModel.of_object_types(
-            [class_with_str_ordered_set.ts_object_type]
-        )
+        assert ts_model == TsModel.of_types([class_with_str_ordered_set.ts_object_type])
 
     def test_should_compile_class_with_optional_empty_class(
         self, class_with_optional_empty_class: ClassFixture
     ) -> None:
         ts_model = _compile_py_class(class_with_optional_empty_class.py_class)
 
-        assert ts_model == TsModel.of_object_types(
+        assert ts_model == TsModel.of_types(
             [class_with_optional_empty_class.ts_object_type]
         )
 
@@ -175,16 +171,14 @@ class TestTypesMappedToObject:
     ) -> None:
         ts_model = _compile_py_class(class_with_str_str_dict.py_class)
 
-        assert ts_model == TsModel.of_object_types(
-            [class_with_str_str_dict.ts_object_type]
-        )
+        assert ts_model == TsModel.of_types([class_with_str_str_dict.ts_object_type])
 
     def test_should_compile_str_str_default_dict(
         self, class_with_str_str_default_dict: ClassFixture
     ) -> None:
         ts_model = _compile_py_class(class_with_str_str_default_dict.py_class)
 
-        assert ts_model == TsModel.of_object_types(
+        assert ts_model == TsModel.of_types(
             [class_with_str_str_default_dict.ts_object_type]
         )
 
@@ -193,7 +187,7 @@ class TestTypesMappedToObject:
     ) -> None:
         ts_model = _compile_py_class(class_with_str_str_ordered_dict.py_class)
 
-        assert ts_model == TsModel.of_object_types(
+        assert ts_model == TsModel.of_types(
             [class_with_str_str_ordered_dict.ts_object_type]
         )
 
@@ -230,7 +224,7 @@ def test_should_convert_casing_to_camel_case(class_with_empty_class):
     )
     ts_model = model_compiler.compile(model)
 
-    assert ts_model == TsModel.of_object_types(
+    assert ts_model == TsModel.of_types(
         [
             TsObjectType(
                 name="ClassWithEmptyClass",
@@ -249,7 +243,7 @@ def test_type_with_override_should_compile_to_overriden_type(
     )
     ts_model = model_compiler.compile(model)
 
-    assert ts_model == TsModel.of_object_types(
+    assert ts_model == TsModel.of_types(
         [
             TsObjectType(
                 name="ClassWithEmptyClass",
@@ -260,8 +254,6 @@ def test_type_with_override_should_compile_to_overriden_type(
 
 
 class TestCompileTaggedUnion:
-    # compile parent
-    # compile child
     def test_compile_tagged_union_child(
         self, class_with_tagged_union_discriminant_single_child_child
     ):
@@ -271,7 +263,7 @@ class TestCompileTaggedUnion:
         model_compiler = TypescriptModelCompiler(TypescriptModelCompilerSettings())
         ts_model = model_compiler.compile(model)
 
-        assert ts_model == TsModel.of_object_types(
+        assert ts_model == TsModel.of_types(
             [
                 TsObjectType(
                     name="ClassWithTaggedUnionDiscriminantSingleChildChild",
@@ -290,7 +282,7 @@ class TestCompileTaggedUnion:
         model_compiler = TypescriptModelCompiler(TypescriptModelCompilerSettings())
         ts_model = model_compiler.compile(model)
 
-        assert ts_model == TsModel.of_object_types(
+        assert ts_model == TsModel.of_types(
             [
                 TsUnionType(
                     name="ClassWithTaggedUnionDiscriminantSingleChild",

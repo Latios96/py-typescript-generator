@@ -410,14 +410,6 @@ def test_type_with_override_should_not_analyse_original_type(
 
 
 class TestParseDiscriminantUnionClasses:
-
-    # parse without children
-    # parent & child, parse parent
-    # parent & child, parse child
-
-    # (parent & child) & child & child
-    # parse with string and enum discriminant value
-
     def test_parse_class_without_children(
         self,
         class_with_tagged_union_discriminant_but_no_children: ClassFixture,

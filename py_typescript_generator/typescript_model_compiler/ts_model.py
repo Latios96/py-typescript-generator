@@ -5,7 +5,6 @@ from ordered_set import OrderedSet
 
 from py_typescript_generator.typescript_model_compiler.ts_enum import TsEnum
 from py_typescript_generator.typescript_model_compiler.ts_object_type import (
-    TsObjectType,
     TsBaseType,
 )
 
@@ -16,9 +15,9 @@ class TsModel:
     enums: OrderedSet[TsEnum]
 
     @staticmethod
-    def of_object_types(object_types):
-        # type: (List[TsObjectType])->TsModel
-        return TsModel(types=OrderedSet(object_types), enums=OrderedSet())
+    def of_types(base_types):
+        # type: (List[TsBaseType])->TsModel
+        return TsModel(types=OrderedSet(base_types), enums=OrderedSet())
 
     @staticmethod
     def of_enums(ts_enum):

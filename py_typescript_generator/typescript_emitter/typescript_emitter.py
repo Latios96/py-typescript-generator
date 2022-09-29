@@ -3,6 +3,7 @@ from py_typescript_generator.typescript_model_compiler.ts_model import TsModel
 from py_typescript_generator.typescript_model_compiler.ts_object_type import (
     TsObjectType,
     TsBaseType,
+    TsUnionType,
 )
 
 
@@ -28,22 +29,27 @@ class TypescriptEmitter:
         return enum_template
 
     def _emit_type(self, ts_type: TsBaseType) -> str:
-        if not isinstance(ts_type, TsObjectType):
-            raise NotImplementedError()
+        if isinstance(ts_type, TsObjectType):
+            return self._compile_object_type(ts_type)
+        if isinstance(ts_type, TsUnionType):
+            return self._compile_union_type(ts_type)
+        raise NotImplementedError()
 
+    def _compile_object_type(self, ts_type: TsObjectType) -> str:
         type_template = "export interface "
         type_template += ts_type.name
         type_template += " {\n"
-
         for field in ts_type.fields:
             field_optional_specifier = self._emit_field_optional_specifier(field)
             field_type = self._emit_field_type(field)
             type_template += (
                 f"    {field.name}{field_optional_specifier}: {field_type}\n"
             )
-
+        if ts_type.discriminator:
+            type_template += (
+                f'    {ts_type.discriminator.name}: "{ts_type.discriminator.value}"\n'
+            )
         type_template += "}\n"
-
         return type_template
 
     def _emit_field_optional_specifier(self, field: TsField) -> str:
@@ -55,3 +61,14 @@ class TypescriptEmitter:
         if field.type.is_optional:
             return field.type.as_non_optional_type().format_as_type_reference()
         return field.type.format_as_type_reference()
+
+    def _compile_union_type(self, ts_type: TsUnionType) -> str:
+        type_template = "export type "
+        type_template += ts_type.name
+        type_template += " = "
+        if not ts_type.union_members:
+            return type_template + "{};\n"
+
+        type_template += " | ".join(ts_type.union_members)
+        type_template += ";\n"
+        return type_template

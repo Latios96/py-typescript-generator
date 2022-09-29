@@ -1,3 +1,5 @@
+from typing import List
+
 from py_typescript_generator.typescript_emitter.typescript_emitter import (
     TypescriptEmitter,
 )
@@ -5,12 +7,18 @@ from py_typescript_generator.typescript_model_compiler.ts_enum import TsEnum
 from py_typescript_generator.typescript_model_compiler.ts_model import TsModel
 from py_typescript_generator.typescript_model_compiler.ts_object_type import (
     TsObjectType,
+    TsBaseType,
 )
 from tests.unittests.fixture_classes import ClassFixture, EnumFixture
 
 
 def _emit_object(ts_object_type: TsObjectType) -> str:
-    ts_model = TsModel.of_object_types([ts_object_type])
+    ts_model = TsModel.of_types([ts_object_type])
+    return TypescriptEmitter().emit(ts_model)
+
+
+def _emit_objects(ts_base_types: List[TsBaseType]) -> str:
+    ts_model = TsModel.of_types(ts_base_types)
     return TypescriptEmitter().emit(ts_model)
 
 
@@ -138,3 +146,54 @@ def test_emit_simple_str_enum(simple_str_enum: EnumFixture) -> None:
 }
 """
     )
+
+
+# parse without children
+# parent & child, parse parent
+# parent & child, parse child
+
+
+class TestEmitDiscriminantUnion:
+    def test_no_children(self, class_with_tagged_union_discriminant_but_no_children):
+        assert (
+            _emit_object(
+                class_with_tagged_union_discriminant_but_no_children.ts_object_type
+            )
+            == """export type ClassWithTaggedUnionDiscriminantSingleChild = {};
+"""
+        )
+
+    def test_single_child_emit_root(
+        self, class_with_tagged_union_discriminant_single_child
+    ):
+        assert (
+            _emit_object(
+                class_with_tagged_union_discriminant_single_child.ts_object_type
+            )
+            == """export type ClassWithTaggedUnionDiscriminantSingleChild = ClassWithTaggedUnionDiscriminantSingleChildChild;
+"""
+        )
+
+    def test_multiple_children_emit_root(
+        self, class_with_tagged_union_discriminant_multiple_children
+    ):
+        assert (
+            _emit_object(
+                class_with_tagged_union_discriminant_multiple_children.ts_object_type
+            )
+            == """export type ClassWithTaggedUnionDiscriminantMultipleChildren = ClassWithTaggedUnionDiscriminantMultipleChildrenChild1 | ClassWithTaggedUnionDiscriminantMultipleChildrenChild2;
+"""
+        )
+
+    def test_single_child_emit_child(
+        self, class_with_tagged_union_discriminant_single_child_child
+    ):
+        assert (
+            _emit_object(
+                class_with_tagged_union_discriminant_single_child_child.ts_object_type
+            )
+            == """export interface ClassWithTaggedUnionDiscriminantSingleChildChild {
+    type: "CHILD"
+}
+"""
+        )

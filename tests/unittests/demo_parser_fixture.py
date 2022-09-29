@@ -69,6 +69,10 @@ from tests.unittests.fixture_classes import (
     PY_CLASS_FOR_CLASS_WITH_TAGGED_UNION_DISCRIMINANT_MULTIPLE_CHILDREN_CHILD_2,
     ClassWithTaggedUnionDiscriminantNoDiscriminatorForRoot,
     PY_CLASS_FOR_CLASS_WITH_TAGGED_UNION_DISCRIMINANT_NO_DISCRIMINANT_FOR_ROOT,
+    ClassWithTaggedUnionDiscriminantEnumDiscriminator,
+    PY_CLASS_FOR_CLASS_WITH_TAGGED_UNION_DISCRIMINANT_ENUM_DISCRIMINATOR,
+    PY_CLASS_FOR_CLASS_WITH_TAGGED_UNION_DISCRIMINANT_ENUM_DISCRIMINATOR_CHILD,
+    ClassWithTaggedUnionDiscriminantEnumDiscriminatorChild,
 )
 
 
@@ -106,6 +110,8 @@ class DemoParser(AbstractClassParser):
             ClassWithTaggedUnionDiscriminantMultipleChildrenChild1,
             ClassWithTaggedUnionDiscriminantMultipleChildrenChild2,
             ClassWithTaggedUnionDiscriminantNoDiscriminatorForRoot,
+            ClassWithTaggedUnionDiscriminantEnumDiscriminator,
+            ClassWithTaggedUnionDiscriminantEnumDiscriminatorChild,
         ]
 
     def parse(self, cls: Type) -> PyClass:
@@ -171,6 +177,10 @@ class DemoParser(AbstractClassParser):
             return PY_CLASS_FOR_CLASS_WITH_TAGGED_UNION_DISCRIMINANT_MULTIPLE_CHILDREN_CHILD_2
         elif cls == ClassWithTaggedUnionDiscriminantNoDiscriminatorForRoot:
             return PY_CLASS_FOR_CLASS_WITH_TAGGED_UNION_DISCRIMINANT_NO_DISCRIMINANT_FOR_ROOT
+        elif cls == ClassWithTaggedUnionDiscriminantEnumDiscriminator:
+            return PY_CLASS_FOR_CLASS_WITH_TAGGED_UNION_DISCRIMINANT_ENUM_DISCRIMINATOR
+        elif cls == ClassWithTaggedUnionDiscriminantEnumDiscriminatorChild:
+            return PY_CLASS_FOR_CLASS_WITH_TAGGED_UNION_DISCRIMINANT_ENUM_DISCRIMINATOR_CHILD
         raise ValueError(f"Unsupported class: {cls}")
 
 

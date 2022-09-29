@@ -212,6 +212,22 @@ class ClassWithTaggedUnionDiscriminantMultipleChildrenChild2(
     type = "CHILD_2"
 
 
+class ClassWithTaggedUnionDiscriminantEnumDiscriminatorDiscriminator(Enum):
+    BASE = "BASE"
+    CHILD = "CHILD"
+
+
+class ClassWithTaggedUnionDiscriminantEnumDiscriminator:
+    __json_type_info_attribute__ = "type"
+    type = ClassWithTaggedUnionDiscriminantEnumDiscriminatorDiscriminator.BASE
+
+
+class ClassWithTaggedUnionDiscriminantEnumDiscriminatorChild(
+    ClassWithTaggedUnionDiscriminantEnumDiscriminator
+):
+    type = ClassWithTaggedUnionDiscriminantEnumDiscriminatorDiscriminator.CHILD
+
+
 PY_CLASS_FOR_EMPTY_CLASS = PyClass(name="EmptyClass", type=EmptyClass, fields=())
 TS_OBJECT_TYPE_FOR_EMPTY_CLASS = TsObjectType(
     name="EmptyClass",
@@ -581,6 +597,32 @@ PY_CLASS_FOR_CLASS_WITH_TAGGED_UNION_DISCRIMINANT_MULTIPLE_CHILDREN_CHILD_2 = Py
 )
 
 
+PY_CLASS_FOR_CLASS_WITH_TAGGED_UNION_DISCRIMINANT_ENUM_DISCRIMINATOR = PyClass(
+    name="ClassWithTaggedUnionDiscriminantEnumDiscriminator",
+    type=ClassWithTaggedUnionDiscriminantEnumDiscriminator,
+    fields=(),
+    tagged_union_information=RootTaggedUnionInformation(
+        discriminant_attribute="type",
+        discriminant_literal="BASE",
+        discriminant_literals=frozenset({"BASE", "CHILD"}),
+        child_types=frozenset(
+            {
+                ClassWithTaggedUnionDiscriminantEnumDiscriminatorChild,
+            }
+        ),
+    ),
+)
+PY_CLASS_FOR_CLASS_WITH_TAGGED_UNION_DISCRIMINANT_ENUM_DISCRIMINATOR_CHILD = PyClass(
+    name="ClassWithTaggedUnionDiscriminantEnumDiscriminatorChild",
+    type=ClassWithTaggedUnionDiscriminantEnumDiscriminatorChild,
+    fields=(),
+    tagged_union_information=TaggedUnionInformation(
+        discriminant_attribute="type",
+        discriminant_literal="CHILD",
+    ),
+)
+
+
 @dataclass
 class ClassFixture:
     cls: Type
@@ -943,5 +985,14 @@ def class_with_tagged_union_discriminant_multiple_children_child_2():
     return ClassFixture(
         cls=ClassWithTaggedUnionDiscriminantMultipleChildren,
         py_class=PY_CLASS_FOR_CLASS_WITH_TAGGED_UNION_DISCRIMINANT_MULTIPLE_CHILDREN_CHILD_2,
+        ts_object_type=None,
+    )
+
+
+@pytest.fixture
+def class_with_tagged_union_discriminant_enum_discriminant():
+    return ClassFixture(
+        cls=ClassWithTaggedUnionDiscriminantEnumDiscriminator,
+        py_class=PY_CLASS_FOR_CLASS_WITH_TAGGED_UNION_DISCRIMINANT_ENUM_DISCRIMINATOR,
         ts_object_type=None,
     )

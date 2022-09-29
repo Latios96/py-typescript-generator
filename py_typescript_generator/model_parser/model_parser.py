@@ -275,6 +275,9 @@ class ModelParser:
     def _read_discriminant_union_attribute(self, cls: Type) -> str:
         attr_name = getattr(cls, "__json_type_info_attribute__")
         try:
-            return cast(str, getattr(cls, attr_name))
+            attr = getattr(cls, attr_name)
         except AttributeError:
             return ""
+        if isinstance(attr, Enum):
+            return attr.name
+        return cast(str, attr)

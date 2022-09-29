@@ -37,4 +37,5 @@ from tests.unittests.fixture_classes import (  # noqa: F401
     class_with_tagged_union_discriminant_multiple_children_child_1,
     class_with_tagged_union_discriminant_multiple_children_child_2,
     class_with_tagged_union_discriminant_no_discriminant_for_root,
+    class_with_tagged_union_discriminant_enum_discriminant,
 )

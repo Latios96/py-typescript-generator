@@ -35,6 +35,7 @@ from tests.unittests.fixture_classes import (
     PY_CLASS_FOR_CLASS_WITH_TAGGED_UNION_DISCRIMINANT_MULTIPLE_CHILDREN,
     PY_CLASS_FOR_CLASS_WITH_TAGGED_UNION_DISCRIMINANT_MULTIPLE_CHILDREN_CHILD_1,
     PY_CLASS_FOR_CLASS_WITH_TAGGED_UNION_DISCRIMINANT_MULTIPLE_CHILDREN_CHILD_2,
+    PY_CLASS_FOR_CLASS_WITH_TAGGED_UNION_DISCRIMINANT_ENUM_DISCRIMINATOR_CHILD,
 )
 
 
@@ -445,6 +446,28 @@ class TestParseDiscriminantUnionClasses:
         assert model == Model(
             classes=OrderedSet(
                 [class_with_tagged_union_discriminant_no_discriminant_for_root.py_class]
+            )
+        )
+
+    def test_parse_enum_discriminant(
+        self,
+        class_with_tagged_union_discriminant_enum_discriminant: ClassFixture,
+        demo_parser: DemoParser,
+    ) -> None:
+        model_parser = ModelParser(
+            [class_with_tagged_union_discriminant_enum_discriminant.cls],
+            [demo_parser],
+            ModelParserSettings(),
+        )
+
+        model = model_parser.parse()
+
+        assert model == Model(
+            classes=OrderedSet(
+                [
+                    PY_CLASS_FOR_CLASS_WITH_TAGGED_UNION_DISCRIMINANT_ENUM_DISCRIMINATOR_CHILD,
+                    class_with_tagged_union_discriminant_enum_discriminant.py_class,
+                ]
             )
         )
 

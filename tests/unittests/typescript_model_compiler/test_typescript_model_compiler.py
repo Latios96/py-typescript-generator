@@ -12,6 +12,8 @@ from py_typescript_generator.typescript_model_compiler.ts_field import TsField
 from py_typescript_generator.typescript_model_compiler.ts_model import TsModel
 from py_typescript_generator.typescript_model_compiler.ts_object_type import (
     TsObjectType,
+    TsDiscriminator,
+    TsUnionType,
 )
 from py_typescript_generator.typescript_model_compiler.ts_type import TsType
 from py_typescript_generator.typescript_model_compiler.typescript_model_compiler import (
@@ -255,3 +257,44 @@ def test_type_with_override_should_compile_to_overriden_type(
             )
         ]
     )
+
+
+class TestCompileTaggedUnion:
+    # compile parent
+    # compile child
+    def test_compile_tagged_union_child(
+        self, class_with_tagged_union_discriminant_single_child_child
+    ):
+        model = Model.of_classes(
+            [class_with_tagged_union_discriminant_single_child_child.py_class]
+        )
+        model_compiler = TypescriptModelCompiler(TypescriptModelCompilerSettings())
+        ts_model = model_compiler.compile(model)
+
+        assert ts_model == TsModel.of_object_types(
+            [
+                TsObjectType(
+                    name="ClassWithTaggedUnionDiscriminantSingleChildChild",
+                    fields=(),
+                    discriminator=TsDiscriminator(name="type", value="CHILD"),
+                )
+            ]
+        )
+
+    def test_compile_tagged_union_parent(
+        self, class_with_tagged_union_discriminant_single_child
+    ):
+        model = Model.of_classes(
+            [class_with_tagged_union_discriminant_single_child.py_class]
+        )
+        model_compiler = TypescriptModelCompiler(TypescriptModelCompilerSettings())
+        ts_model = model_compiler.compile(model)
+
+        assert ts_model == TsModel.of_object_types(
+            [
+                TsUnionType(
+                    name="ClassWithTaggedUnionDiscriminantSingleChild",
+                    union_members=("ClassWithTaggedUnionDiscriminantSingleChildChild",),
+                )
+            ]
+        )

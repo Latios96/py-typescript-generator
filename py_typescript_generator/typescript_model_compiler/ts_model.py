@@ -6,12 +6,13 @@ from ordered_set import OrderedSet
 from py_typescript_generator.typescript_model_compiler.ts_enum import TsEnum
 from py_typescript_generator.typescript_model_compiler.ts_object_type import (
     TsObjectType,
+    TsBaseType,
 )
 
 
 @dataclass
 class TsModel:
-    types: OrderedSet[TsObjectType]
+    types: OrderedSet[TsBaseType]
     enums: OrderedSet[TsEnum]
 
     @staticmethod

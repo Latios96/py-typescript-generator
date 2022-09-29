@@ -10,7 +10,7 @@ from typing_extensions import get_args
 from typing_inspect import is_optional_type, get_origin  # type: ignore
 
 from py_typescript_generator.model.model import Model
-from py_typescript_generator.model.py_class import PyClass
+from py_typescript_generator.model.py_class import PyClass, RootTaggedUnionInformation
 from py_typescript_generator.model.py_enum import PyEnum
 from py_typescript_generator.model.py_field import PyField
 from py_typescript_generator.typescript_model_compiler.ts_array import TsArray
@@ -25,6 +25,9 @@ from py_typescript_generator.typescript_model_compiler.ts_mapped_type import (
 from py_typescript_generator.typescript_model_compiler.ts_model import TsModel
 from py_typescript_generator.typescript_model_compiler.ts_object_type import (
     TsObjectType,
+    TsDiscriminator,
+    TsBaseType,
+    TsUnionType,
 )
 from py_typescript_generator.typescript_model_compiler.ts_type import TsType
 from py_typescript_generator.typescript_model_compiler.well_known_types import (
@@ -69,7 +72,7 @@ class TypescriptModelCompiler:
         self.typescript_compiler_settings = typescript_compiler_settings
 
     def compile(self, model: Model) -> TsModel:
-        types: OrderedSet[TsObjectType] = OrderedSet()
+        types: OrderedSet[TsBaseType] = OrderedSet()
         for py_class in model.classes:
             types.append(self._compile_class(py_class))
 
@@ -79,7 +82,16 @@ class TypescriptModelCompiler:
 
         return TsModel(types=types, enums=enums)
 
-    def _compile_class(self, py_class: PyClass) -> TsObjectType:
+    def _compile_class(self, py_class: PyClass) -> TsBaseType:
+        if py_class.tagged_union_information and isinstance(
+            py_class.tagged_union_information, RootTaggedUnionInformation
+        ):
+            return TsUnionType(
+                name=py_class.name,
+                union_members=tuple(
+                    x.__name__ for x in py_class.tagged_union_information.child_types
+                ),
+            )
         fields = []
         for py_field in py_class.fields:
             fields.append(
@@ -88,7 +100,16 @@ class TypescriptModelCompiler:
                     type=self._compile_type(py_field.type),
                 )
             )
-        return TsObjectType(name=py_class.name, fields=tuple(fields))
+        if not py_class.tagged_union_information:
+            return TsObjectType(name=py_class.name, fields=tuple(fields))
+        return TsObjectType(
+            name=py_class.name,
+            fields=tuple(fields),
+            discriminator=TsDiscriminator(
+                name=py_class.tagged_union_information.discriminant_attribute,
+                value=py_class.tagged_union_information.discriminant_literal,
+            ),
+        )
 
     def _compile_type(self, cls: Type, optional: bool = False) -> TsType:
         type_override = self.typescript_compiler_settings.type_mapping_overrides.get(

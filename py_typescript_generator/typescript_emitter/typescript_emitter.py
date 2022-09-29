@@ -2,6 +2,7 @@ from py_typescript_generator.typescript_model_compiler.ts_field import TsField
 from py_typescript_generator.typescript_model_compiler.ts_model import TsModel
 from py_typescript_generator.typescript_model_compiler.ts_object_type import (
     TsObjectType,
+    TsBaseType,
 )
 
 
@@ -26,7 +27,10 @@ class TypescriptEmitter:
 
         return enum_template
 
-    def _emit_type(self, ts_type: TsObjectType) -> str:
+    def _emit_type(self, ts_type: TsBaseType) -> str:
+        if not isinstance(ts_type, TsObjectType):
+            raise NotImplementedError()
+
         type_template = "export interface "
         type_template += ts_type.name
         type_template += " {\n"

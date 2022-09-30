@@ -268,7 +268,7 @@ class TestCompileTaggedUnion:
                 TsObjectType(
                     name="ClassWithTaggedUnionDiscriminantSingleChildChild",
                     fields=(),
-                    discriminator=TsDiscriminator(name="type", value="CHILD"),
+                    discriminator=TsDiscriminator(name="my_type", value="CHILD"),
                 )
             ]
         )

@@ -105,7 +105,9 @@ class TypescriptModelCompiler:
             name=py_class.name,
             fields=tuple(fields),
             discriminator=TsDiscriminator(
-                name=py_class.tagged_union_information.discriminant_attribute,
+                name=self._adjust_casing(
+                    py_class.tagged_union_information.discriminant_attribute
+                ),
                 value=py_class.tagged_union_information.discriminant_literal,
             ),
         )

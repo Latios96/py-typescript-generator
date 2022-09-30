@@ -193,7 +193,7 @@ class TestEmitDiscriminantUnion:
                 class_with_tagged_union_discriminant_single_child_child.ts_object_type
             )
             == """export interface ClassWithTaggedUnionDiscriminantSingleChildChild {
-    type: "CHILD"
+    myType: "CHILD"
 }
 """
         )

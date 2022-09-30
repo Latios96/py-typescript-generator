@@ -185,14 +185,14 @@ class ClassWithTaggedUnionDiscriminantNoDiscriminatorForRoot:
 
 
 class ClassWithTaggedUnionDiscriminantSingleChild:
-    __json_type_info_attribute__ = "type"
-    type = "BASE"
+    __json_type_info_attribute__ = "my_type"
+    my_type = "BASE"
 
 
 class ClassWithTaggedUnionDiscriminantSingleChildChild(
     ClassWithTaggedUnionDiscriminantSingleChild
 ):
-    type = "CHILD"
+    my_type = "CHILD"
 
 
 class ClassWithTaggedUnionDiscriminantMultipleChildren:
@@ -543,7 +543,7 @@ PY_CLASS_FOR_CLASS_WITH_TAGGED_UNION_DISCRIMINANT_SINGLE_CHILD = PyClass(
     type=ClassWithTaggedUnionDiscriminantSingleChild,
     fields=(),
     tagged_union_information=RootTaggedUnionInformation(
-        discriminant_attribute="type",
+        discriminant_attribute="my_type",
         discriminant_literal="BASE",
         discriminant_literals=frozenset({"BASE", "CHILD"}),
         child_types=frozenset({ClassWithTaggedUnionDiscriminantSingleChildChild}),
@@ -554,7 +554,7 @@ PY_CLASS_FOR_CLASS_WITH_TAGGED_UNION_DISCRIMINANT_SINGLE_CHILD_CHILD = PyClass(
     type=ClassWithTaggedUnionDiscriminantSingleChildChild,
     fields=(),
     tagged_union_information=TaggedUnionInformation(
-        discriminant_attribute="type",
+        discriminant_attribute="my_type",
         discriminant_literal="CHILD",
     ),
 )
@@ -951,7 +951,7 @@ def class_with_tagged_union_discriminant_single_child_child():
         ts_object_type=TsObjectType(
             name="ClassWithTaggedUnionDiscriminantSingleChildChild",
             fields=(),
-            discriminator=TsDiscriminator(name="type", value="CHILD"),
+            discriminator=TsDiscriminator(name="myType", value="CHILD"),
         ),
     )
 

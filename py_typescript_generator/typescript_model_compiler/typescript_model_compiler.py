@@ -12,7 +12,6 @@ from typing_inspect import is_optional_type, get_origin  # type: ignore
 from py_typescript_generator.model.model import Model
 from py_typescript_generator.model.py_class import PyClass, RootTaggedUnionInformation
 from py_typescript_generator.model.py_enum import PyEnum
-from py_typescript_generator.model.py_field import PyField
 from py_typescript_generator.typescript_model_compiler.ts_array import TsArray
 from py_typescript_generator.typescript_model_compiler.ts_enum import (
     TsEnum,
@@ -96,7 +95,7 @@ class TypescriptModelCompiler:
         for py_field in py_class.fields:
             fields.append(
                 TsField(
-                    name=self._adjust_field_casing(py_field),
+                    name=self._adjust_casing(py_field.name),
                     type=self._compile_type(py_field.type),
                 )
             )
@@ -180,7 +179,7 @@ class TypescriptModelCompiler:
         values: Tuple[TsEnumValue, ...] = [TsEnumValue(x.name, x.value) for x in enum.values]  # type: ignore
         return TsEnum(name=enum.name, values=tuple(values))
 
-    def _adjust_field_casing(self, py_field: PyField) -> str:
+    def _adjust_casing(self, name: str) -> str:
         if self.typescript_compiler_settings.field_case_format == CaseFormat.CAMEL_CASE:
-            return cast(str, camelcase(py_field.name))
-        return py_field.name
+            return cast(str, camelcase(name))
+        return name

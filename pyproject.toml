@@ -6,7 +6,7 @@ authors = ["Jan Honsbrok <jan.honsbrok@gmail.com>"]
 license = "MIT"
 
 [tool.poetry.dependencies]
-python = ">=3.7"
+python = ">=3.10"
 ordered-set = "^4.1.0"
 typing-inspect = "^0.8.0"
 case-converter = "^1.1.0"

@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import List
 
 from ordered_set import OrderedSet
@@ -9,8 +9,8 @@ from py_typescript_generator.model.py_enum import PyEnum
 
 @dataclass
 class Model:  # todo rename to PyModel
-    classes: OrderedSet[PyClass] = OrderedSet()
-    enums: OrderedSet[PyEnum] = OrderedSet()
+    classes: OrderedSet[PyClass] = field(default_factory=OrderedSet)
+    enums: OrderedSet[PyEnum] = field(default_factory=OrderedSet)
 
     @staticmethod
     def of_classes(classes):

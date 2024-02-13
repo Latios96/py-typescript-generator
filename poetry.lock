@@ -251,7 +251,7 @@ pytest-metadata = "*"
 
 [[package]]
 name = "pytest-metadata"
-version = "3.1.0"
+version = "3.1.1"
 description = "pytest plugin for test session metadata"
 category = "dev"
 optional = false
@@ -478,8 +478,8 @@ pytest-html = [
     {file = "pytest_html-3.2.0-py3-none-any.whl", hash = "sha256:868c08564a68d8b2c26866f1e33178419bb35b1e127c33784a28622eb827f3f3"},
 ]
 pytest-metadata = [
-    {file = "pytest_metadata-3.1.0-py3-none-any.whl", hash = "sha256:54ce21108708d0f2fdb30c7056ce5789ce052262efff4832892aa92df4a76291"},
-    {file = "pytest_metadata-3.1.0.tar.gz", hash = "sha256:53dcd8bbd101cf6ca97efb4a42a72fcbee5de173bddad4850f4ce9bb27e9f0f2"},
+    {file = "pytest_metadata-3.1.1-py3-none-any.whl", hash = "sha256:c8e0844db684ee1c798cfa38908d20d67d0463ecb6137c72e91f418558dd5f4b"},
+    {file = "pytest_metadata-3.1.1.tar.gz", hash = "sha256:d2a29b0355fbc03f168aa96d41ff88b1a3b44a3b02acbe491801c98a048017c8"},
 ]
 tomli = [
     {file = "tomli-2.0.1-py3-none-any.whl", hash = "sha256:939de3e7a6161af0c887ef91b7d41a53e7c5a1ca976325f429cb46ea9bc30ecc"},

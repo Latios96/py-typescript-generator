@@ -40,7 +40,7 @@ bump2version = "*"
 
 [[package]]
 name = "case-converter"
-version = "1.1.0"
+version = "1.2.0"
 description = "A string case conversion package."
 category = "main"
 optional = false
@@ -329,8 +329,8 @@ bumpversion = [
     {file = "bumpversion-0.6.0.tar.gz", hash = "sha256:4ba55e4080d373f80177b4dabef146c07ce73c7d1377aabf9d3c3ae1f94584a6"},
 ]
 case-converter = [
-    {file = "case-converter-1.1.0.tar.gz", hash = "sha256:2ed3fc6e3ffa8d601f9a31ffcbc8fbd19eaeb48671a79a8ef16394672824510e"},
-    {file = "case_converter-1.1.0-py3-none-any.whl", hash = "sha256:d0fbc665a4fd410e454630bcf5168dce62e147a98512647ed48b0a6b556986e3"},
+    {file = "case_converter-1.2.0-py3-none-any.whl", hash = "sha256:bb5bc6b1e121c394a6de6526cd3f8be0f5c5817c40d32251cce28a2cf4a72d8c"},
+    {file = "case_converter-1.2.0.tar.gz", hash = "sha256:4e0281ae60d4335e57300bafd61cfb3fa65734587fe9efd32f6cec1a506685c5"},
 ]
 click = [
     {file = "click-8.1.8-py3-none-any.whl", hash = "sha256:63c132bbbed01578a06712a2d1f497bb62d9c1c0d329b7903a866228027263b2"},

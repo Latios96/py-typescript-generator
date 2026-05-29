@@ -48,7 +48,7 @@ python-versions = "*"
 
 [[package]]
 name = "click"
-version = "8.4.0"
+version = "8.4.1"
 description = "Composable command line interface toolkit"
 category = "dev"
 optional = false
@@ -179,7 +179,7 @@ re2 = ["google-re2 (>=1.1)"]
 
 [[package]]
 name = "platformdirs"
-version = "4.9.6"
+version = "4.10.0"
 description = "A small Python package for determining appropriate platform-specific dirs, e.g. a `user data dir`."
 category = "dev"
 optional = false
@@ -336,8 +336,8 @@ case-converter = [
     {file = "case_converter-1.2.0.tar.gz", hash = "sha256:4e0281ae60d4335e57300bafd61cfb3fa65734587fe9efd32f6cec1a506685c5"},
 ]
 click = [
-    {file = "click-8.4.0-py3-none-any.whl", hash = "sha256:40c50b7c6c6adac2823d411041ec84f3f103f1b280d5e9ce0d7f998995832f81"},
-    {file = "click-8.4.0.tar.gz", hash = "sha256:638f1338fe1235c8f4e008e4a8a254fb5c5fbdcbb40ece3c9142ebb78e792973"},
+    {file = "click-8.4.1-py3-none-any.whl", hash = "sha256:482be17c6991b8c19c5429a1e995d9b0efdbb63172824c41f99965dc0ade8ec2"},
+    {file = "click-8.4.1.tar.gz", hash = "sha256:918b5633eddf6b41c32d4f454bf0de810065c74e3f7dbf8ee5452f8be88d3e96"},
 ]
 colorama = [
     {file = "colorama-0.4.6-py2.py3-none-any.whl", hash = "sha256:4f1d9991f5acc0ca119f9d443620b77f9d6b33703e51011c16baf57afb285fc6"},
@@ -454,8 +454,8 @@ pathspec = [
     {file = "pathspec-1.1.1.tar.gz", hash = "sha256:17db5ecd524104a120e173814c90367a96a98d07c45b2e10c2f3919fff91bf5a"},
 ]
 platformdirs = [
-    {file = "platformdirs-4.9.6-py3-none-any.whl", hash = "sha256:e61adb1d5e5cb3441b4b7710bea7e4c12250ca49439228cc1021c00dcfac0917"},
-    {file = "platformdirs-4.9.6.tar.gz", hash = "sha256:3bfa75b0ad0db84096ae777218481852c0ebc6c727b3168c1b9e0118e458cf0a"},
+    {file = "platformdirs-4.10.0-py3-none-any.whl", hash = "sha256:fb516cdb12eb0d857d0cd85a7c57cea4d060bee4578d6cf5a14dfdf8cbf8784a"},
+    {file = "platformdirs-4.10.0.tar.gz", hash = "sha256:31e761a6a0ca04faf7353ea759bdba55652be214725111e5aac52dfa29d4bef7"},
 ]
 pluggy = [
     {file = "pluggy-1.6.0-py3-none-any.whl", hash = "sha256:e920276dd6813095e9377c0bc5566d94c932c33b27a3e3945d8389c374dd4746"},
